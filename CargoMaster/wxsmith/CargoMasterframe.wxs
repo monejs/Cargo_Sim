@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxFrame" name="CargoMasterFrame">
+		<size>920,713</size>
+		<object class="wxNotebook" name="ID_NOTEBOOK1" variable="Notebook1" member="yes">
+			<pos>152,176</pos>
+			<size>1088,728</size>
+			<object class="notebookpage">
+				<object class="wxPanel" name="ID_PANEL1" variable="Panel1" member="yes">
+					<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+						<object class="sizeritem">
+							<object class="wxGrid" name="ID_GRID1" variable="Grid1" member="yes">
+								<cols>5</cols>
+								<rows>8</rows>
+								<labelcolwidth>200</labelcolwidth>
+								<defaultcolsize>150</defaultcolsize>
+								<collabels>
+									<item>Weight, t</item>
+									<item>LCG, m</item>
+									<item>VCG, m</item>
+									<item>TCG, m</item>
+									<item>Fs, m*t</item>
+								</collabels>
+								<rowlabels>
+									<item>Constants</item>
+									<item>Tanks</item>
+									<item>Cargo Tanks</item>
+									<item>Deadweight</item>
+									<item>Dead Load</item>
+									<item>Light Ship</item>
+									<item>Displacement</item>
+									<item>Deadw. Reserve</item>
+								</rowlabels>
+							</object>
+							<flag>wxALL|wxEXPAND</flag>
+							<border>5</border>
+							<option>1</option>
+						</object>
+					</object>
+				</object>
+				<label>General</label>
+			</object>
+			<object class="notebookpage">
+				<object class="wxPanel" name="ID_PANEL2" variable="Panel2" member="yes">
+					<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+						<object class="sizeritem">
+							<object class="wxGrid" name="ID_GRID2" variable="Grid2" member="yes">
+								<cols>5</cols>
+								<rows>50</rows>
+								<defaultcolsize>150</defaultcolsize>
+								<collabels>
+									<item>Item</item>
+									<item>Weight, t</item>
+									<item>LCG, m</item>
+									<item>VCG, m</item>
+									<item>TCG, m</item>
+								</collabels>
+							</object>
+							<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+							<border>5</border>
+							<option>1</option>
+						</object>
+					</object>
+				</object>
+				<label>Constants</label>
+			</object>
+			<object class="notebookpage">
+				<object class="wxPanel" name="ID_PANEL8" variable="Panel8" member="yes">
+					<object class="wxBoxSizer" variable="BoxSizer4" member="no">
+						<orient>wxVERTICAL</orient>
+						<object class="sizeritem">
+							<object class="wxGrid" name="ID_GRID4" variable="Grid4" member="yes">
+								<cols>10</cols>
+								<defaultcolsize>120</defaultcolsize>
+								<collabels>
+									<item>Name</item>
+									<item>Weight, t</item>
+									<item>LCG, m</item>
+									<item>VCG, m</item>
+									<item>TCG, m</item>
+									<item>Fs, m*t</item>
+									<item>Fs max</item>
+									<item>Vol %</item>
+									<item>Volume, m3</item>
+									<item>Max Vol, m3</item>
+								</collabels>
+							</object>
+							<flag>wxALL|wxEXPAND</flag>
+							<border>5</border>
+							<option>1</option>
+						</object>
+						<object class="sizeritem">
+							<object class="wxGLCanvas" name="ID_GLCANVAS2" variable="GLCanvas2" member="yes">
+								<mLevel>-216454252795527168</mLevel>
+								<mMinAlpha>68719476736</mMinAlpha>
+								<mDepthSize>16</mDepthSize>
+							</object>
+							<flag>wxALL|wxEXPAND</flag>
+							<border>5</border>
+							<option>1</option>
+						</object>
+					</object>
+				</object>
+				<label>Cargo Tanks</label>
+			</object>
+			<object class="notebookpage">
+				<object class="wxPanel" name="ID_PANEL3" variable="Panel3" member="yes">
+					<object class="wxBoxSizer" variable="BoxSizer3" member="no">
+						<orient>wxVERTICAL</orient>
+						<object class="sizeritem">
+							<object class="wxGrid" name="ID_GRID3" variable="Grid3" member="yes">
+								<cols>10</cols>
+								<defaultcolsize>120</defaultcolsize>
+								<collabels>
+									<item>Name</item>
+									<item>Weight, t</item>
+									<item>LCG, m</item>
+									<item>VCG, m</item>
+									<item>TCG, m</item>
+									<item>Fs, m*t</item>
+									<item>Fs max</item>
+									<item>Vol %</item>
+									<item>Vo,l m3</item>
+									<item>Max Vol m3</item>
+								</collabels>
+							</object>
+							<flag>wxALL|wxEXPAND</flag>
+							<border>5</border>
+							<option>1</option>
+						</object>
+						<object class="sizeritem">
+							<object class="wxGLCanvas" name="ID_GLCANVAS1" variable="GLCanvas1" member="yes">
+								<mLevel>-216454252795527168</mLevel>
+								<mMinAlpha>68719476736</mMinAlpha>
+								<mDepthSize>16</mDepthSize>
+								<size>64,326</size>
+							</object>
+							<flag>wxALL|wxEXPAND</flag>
+							<border>5</border>
+							<option>1</option>
+						</object>
+					</object>
+				</object>
+				<label>Ballast Tanks</label>
+			</object>
+			<object class="notebookpage">
+				<object class="wxPanel" name="ID_PANEL4" variable="Panel4" member="yes">
+					<object class="wxBoxSizer" variable="BoxSizer5" member="no">
+						<orient>wxVERTICAL</orient>
+						<object class="sizeritem">
+							<object class="wxGrid" name="ID_GRID5" variable="Grid5" member="yes">
+								<cols>10</cols>
+								<defaultcolsize>120</defaultcolsize>
+								<collabels>
+									<item>Name</item>
+									<item>Weight, t</item>
+									<item>LCG, m</item>
+									<item>VCG, m</item>
+									<item>TCG, m</item>
+									<item>Fs, m*t</item>
+									<item>Fs max</item>
+									<item>Vol %</item>
+									<item>Volume, m3</item>
+									<item>Max Vol, m3</item>
+								</collabels>
+							</object>
+							<flag>wxALL|wxEXPAND</flag>
+							<border>5</border>
+							<option>1</option>
+						</object>
+						<object class="sizeritem">
+							<object class="wxGLCanvas" name="ID_GLCANVAS3" variable="GLCanvas3" member="yes">
+								<mLevel>8234268972988497920</mLevel>
+								<mMinAlpha>68719476736</mMinAlpha>
+								<mDepthSize>16</mDepthSize>
+								<mMinAccumAlpha>108851651149824</mMinAccumAlpha>
+							</object>
+							<flag>wxALL|wxEXPAND</flag>
+							<border>5</border>
+							<option>1</option>
+						</object>
+					</object>
+				</object>
+				<label>Tanks</label>
+			</object>
+			<object class="notebookpage">
+				<object class="wxPanel" name="ID_PANEL5" variable="Panel5" member="yes" />
+				<label>Stability</label>
+			</object>
+			<object class="notebookpage">
+				<object class="wxPanel" name="ID_PANEL6" variable="Panel6" member="yes" />
+				<label>Strength</label>
+			</object>
+			<object class="notebookpage">
+				<object class="wxPanel" name="ID_PANEL7" variable="Panel7" member="yes">
+					<object class="wxBoxSizer" variable="BoxSizer6" member="no">
+						<orient>wxVERTICAL</orient>
+						<object class="sizeritem">
+							<object class="wxGrid" name="ID_GRID6" variable="Grid6" member="yes">
+								<cols>8</cols>
+								<rows>50</rows>
+								<defaultcolsize>150</defaultcolsize>
+								<collabels>
+									<item>Item</item>
+									<item>Weight, t</item>
+									<item>LCG, m</item>
+									<item>VCG, m</item>
+									<item>TCG, m</item>
+									<item>Length, m</item>
+									<item>Breadth, m</item>
+									<item>Height, m</item>
+								</collabels>
+							</object>
+							<flag>wxALL|wxEXPAND</flag>
+							<border>5</border>
+							<option>1</option>
+						</object>
+					</object>
+				</object>
+				<label>Dead Load</label>
+			</object>
+		</object>
+		<object class="wxMenuBar" variable="MenuBar1" member="no">
+			<object class="wxMenu" variable="Menu1" member="no">
+				<label>&amp;File</label>
+				<object class="wxMenuItem" name="idMenuQuit" variable="MenuItem1" member="no">
+					<label>Quit</label>
+					<accel>Alt-F4</accel>
+					<help>Quit the application</help>
+					<handler function="OnQuit" entry="EVT_MENU" />
+				</object>
+			</object>
+			<object class="wxMenu" variable="Menu2" member="no">
+				<label>Help</label>
+				<object class="wxMenuItem" name="idMenuAbout" variable="MenuItem2" member="no">
+					<label>About</label>
+					<accel>F1</accel>
+					<help>Show info about this application</help>
+					<handler function="OnAbout" entry="EVT_MENU" />
+				</object>
+			</object>
+		</object>
+		<object class="wxStatusBar" name="ID_STATUSBAR1" variable="StatusBar1" member="yes">
+			<fields>1</fields>
+			<widths>-1</widths>
+			<styles>wxSB_NORMAL</styles>
+		</object>
+	</object>
+</wxsmith>
