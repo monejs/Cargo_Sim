@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package ship;
+
+message ShipData {
+    string ShipName = 1;
+    float LOA = 2;
+    float height = 3;
+    float beam = 4;
+    float deckStr = 5;
+    float MinDraft = 6;
+    float MaxDraft = 7;
+    int32 MaxDWT = 8;
+    float LCGLight = 9;
+    float TCGLight = 10;
+    float VCGLight = 11;
+    int32 lightShip = 12;
+    float waterCondition = 13;
+    float tankStr = 14;
+}
+
+message Unit {
+    string Name = 1;
+    float lcg = 2;
+    float tcg = 3;
+    float vcg = 4;
+    float length = 5;
+    float breadth = 6;
+    float height = 7;
+    float density = 8;
+    float volume = 9;
+    
+    enum UnitType {
+        BALLAST = 0;
+        CARGODRY = 1;
+        CARGOTANK = 2;
+        HFO = 3;
+        DO = 4;
+        LO = 5;
+        FW = 6;
+        VA = 7;
+    }
+    UnitType type = 12;
+}
+message Hydrostat {
+    float draft = 1;
+    float weight = 2;
+    float volume = 3;
+    float tpc = 4;
+    float mct = 5;
+    float kmt = 6;
+    float lcf = 7;
+    float lcb = 8;
+}
+message crossCurves {
+    int32 volume = 1;
+    float ten = 2;
+    float twenty = 3;
+    float thirty = 4;
+    float forty = 5;
+    float sixty = 6;
+    float eighty = 7;
+}
+message Stability {
+    float lcg = 1;
+    float tcg = 2;
+    float vcg = 3;
+    float GZ = 4;
+}
+message BulkCargo {
+    string Name = 1;
+    float lcg = 2;
+    float tcg = 3;
+    float vcg = 4;
+    float length = 5;
+    float breadth = 6;
+    float height = 7;
+    float weight = 9;
+}
+message ShipBodyData {
+    repeated ShipData shipdata = 1;
+    repeated Unit unit = 2;
+    repeated Hydrostat hydrostat = 3;
+    repeated crossCurves crosscurves = 4;
+    repeated Stability stability = 5;
+    repeated BulkCargo bulk = 6;
+}
