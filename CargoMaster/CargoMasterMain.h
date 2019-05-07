@@ -53,6 +53,7 @@ class CargoMasterFrame: public wxFrame
         static const long ID_GRID6;
         static const long ID_PANEL7;
         static const long ID_NOTEBOOK1;
+        static const long ID_MENUITEM2;
         static const long ID_MENUITEM1;
         static const long idMenuQuit;
         static const long idMenuAbout;
@@ -60,13 +61,15 @@ class CargoMasterFrame: public wxFrame
         //*)
 
         //(*Declarations(CargoMasterFrame)
-        wxGrid* Grid1;
-        wxGrid* Grid2;
-        wxGrid* Grid3;
+        wxGrid* BallastGrid;
+        wxGrid* ConstantsGrid;
+        wxGrid* DeadLoadGrid;
+        wxGrid* GeneralGrid;
         wxGrid* Grid4;
-        wxGrid* Grid5;
-        wxGrid* Grid6;
+        wxGrid* TankGrid;
+        wxMenu* Menu3;
         wxMenuItem* LoadButton;
+        wxMenuItem* ParticularsOpen;
         wxNotebook* Notebook1;
         wxPanel* Panel1;
         wxPanel* Panel2;
