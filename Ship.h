@@ -48,7 +48,13 @@ public:
     bool set_unit (int, int, std::string);
     std::string& read_unit_name (int);
     std::string read_unit_type (int);
-    float& read_unit_param (int, int);
+    float& read_u_LCG(int x);
+    float& read_u_VCG(int x);
+    float& read_u_TCG(int x);
+    float& read_u_weight(int x);
+    float& read_u_volume(int x);
+    float& read_u_dencity(int x);
+    float read_u_maxvol (int);
     int unit_count();
 
     void new_unit(u_types);

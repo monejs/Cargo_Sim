@@ -293,7 +293,22 @@ std::string& Ship::read_unit_name (int x){
 std::string Ship::read_unit_type(int x){
     return u_type_strings[UnitVec[x].u_type];}
 
-//float& Ship::read_unit_param(int x, int y)
+float& Ship::read_u_LCG(int x){ //Returns the values of particular units
+    return UnitVec[x].u_LCG;}
+float& Ship::read_u_VCG(int x){
+    return UnitVec[x].u_VCG;}
+float& Ship::read_u_TCG(int x){
+    return UnitVec[x].u_TCG;}
+float& Ship::read_u_weight(int x){
+    return UnitVec[x].u_VCG;}
+float& Ship::read_u_volume(int x){
+    return UnitVec[x].u_volume;}
+
+float& Ship::read_u_dencity(int x){
+    return UnitVec[x].u_density;}
+
+float Ship::read_u_maxvol(int i){
+return (UnitVec[i].u_length * UnitVec[i].u_breadth * UnitVec[i].u_height);}
 
 void Ship::new_unit(u_types choice){
     Unit unit;
