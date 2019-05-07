@@ -9,10 +9,11 @@
 
 #ifndef CARGOMASTERMAIN_H
 #define CARGOMASTERMAIN_H
+#include "../Ship.h"
+#include "wx/filedlg.h"
 
 //(*Headers(CargoMasterFrame)
 #include <wx/frame.h>
-#include <wx/glcanvas.h>
 #include <wx/grid.h>
 #include <wx/menu.h>
 #include <wx/notebook.h>
@@ -33,6 +34,7 @@ class CargoMasterFrame: public wxFrame
         //(*Handlers(CargoMasterFrame)
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
+        void OnLoadButtonSelected(wxCommandEvent& event);
         //*)
 
         //(*Identifiers(CargoMasterFrame)
@@ -41,34 +43,30 @@ class CargoMasterFrame: public wxFrame
         static const long ID_GRID2;
         static const long ID_PANEL2;
         static const long ID_GRID4;
-        static const long ID_GLCANVAS2;
         static const long ID_PANEL8;
         static const long ID_GRID3;
-        static const long ID_GLCANVAS1;
         static const long ID_PANEL3;
         static const long ID_GRID5;
-        static const long ID_GLCANVAS3;
         static const long ID_PANEL4;
         static const long ID_PANEL5;
         static const long ID_PANEL6;
         static const long ID_GRID6;
         static const long ID_PANEL7;
         static const long ID_NOTEBOOK1;
+        static const long ID_MENUITEM1;
         static const long idMenuQuit;
         static const long idMenuAbout;
         static const long ID_STATUSBAR1;
         //*)
 
         //(*Declarations(CargoMasterFrame)
-        wxGLCanvas* GLCanvas1;
-        wxGLCanvas* GLCanvas2;
-        wxGLCanvas* GLCanvas3;
         wxGrid* Grid1;
         wxGrid* Grid2;
         wxGrid* Grid3;
         wxGrid* Grid4;
         wxGrid* Grid5;
         wxGrid* Grid6;
+        wxMenuItem* LoadButton;
         wxNotebook* Notebook1;
         wxPanel* Panel1;
         wxPanel* Panel2;

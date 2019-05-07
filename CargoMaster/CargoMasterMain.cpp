@@ -16,30 +16,9 @@
 //*)
 
 //helper functions
-enum wxbuildinfoformat {
-    short_f, long_f };
+Ship ShipBody;  //Defining the class Ship with its all attributes
 
-wxString wxbuildinfo(wxbuildinfoformat format)
-{
-    wxString wxbuild(wxVERSION_STRING);
-
-    if (format == long_f )
-    {
-#if defined(__WXMSW__)
-        wxbuild << _T("-Windows");
-#elif defined(__UNIX__)
-        wxbuild << _T("-Linux");
-#endif
-
-#if wxUSE_UNICODE
-        wxbuild << _T("-Unicode build");
-#else
-        wxbuild << _T("-ANSI build");
-#endif // wxUSE_UNICODE
-    }
-
-    return wxbuild;
-}
+//Automatically generated code
 
 //(*IdInit(CargoMasterFrame)
 const long CargoMasterFrame::ID_GRID1 = wxNewId();
@@ -47,19 +26,17 @@ const long CargoMasterFrame::ID_PANEL1 = wxNewId();
 const long CargoMasterFrame::ID_GRID2 = wxNewId();
 const long CargoMasterFrame::ID_PANEL2 = wxNewId();
 const long CargoMasterFrame::ID_GRID4 = wxNewId();
-const long CargoMasterFrame::ID_GLCANVAS2 = wxNewId();
 const long CargoMasterFrame::ID_PANEL8 = wxNewId();
 const long CargoMasterFrame::ID_GRID3 = wxNewId();
-const long CargoMasterFrame::ID_GLCANVAS1 = wxNewId();
 const long CargoMasterFrame::ID_PANEL3 = wxNewId();
 const long CargoMasterFrame::ID_GRID5 = wxNewId();
-const long CargoMasterFrame::ID_GLCANVAS3 = wxNewId();
 const long CargoMasterFrame::ID_PANEL4 = wxNewId();
 const long CargoMasterFrame::ID_PANEL5 = wxNewId();
 const long CargoMasterFrame::ID_PANEL6 = wxNewId();
 const long CargoMasterFrame::ID_GRID6 = wxNewId();
 const long CargoMasterFrame::ID_PANEL7 = wxNewId();
 const long CargoMasterFrame::ID_NOTEBOOK1 = wxNewId();
+const long CargoMasterFrame::ID_MENUITEM1 = wxNewId();
 const long CargoMasterFrame::idMenuQuit = wxNewId();
 const long CargoMasterFrame::idMenuAbout = wxNewId();
 const long CargoMasterFrame::ID_STATUSBAR1 = wxNewId();
@@ -153,14 +130,6 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     Grid4->SetDefaultCellFont( Grid4->GetFont() );
     Grid4->SetDefaultCellTextColour( Grid4->GetForegroundColour() );
     BoxSizer4->Add(Grid4, 1, wxALL|wxEXPAND, 5);
-    int GLCanvasAttributes_1[] = {
-    	WX_GL_RGBA,
-    	WX_GL_DOUBLEBUFFER,
-    	WX_GL_DEPTH_SIZE,      16,
-    	WX_GL_STENCIL_SIZE,    0,
-    	0, 0 };
-    GLCanvas2 = new wxGLCanvas(Panel8, ID_GLCANVAS2, wxDefaultPosition, wxDefaultSize, 0, _T("ID_GLCANVAS2"), GLCanvasAttributes_1);
-    BoxSizer4->Add(GLCanvas2, 1, wxALL|wxEXPAND, 5);
     Panel8->SetSizer(BoxSizer4);
     BoxSizer4->Fit(Panel8);
     BoxSizer4->SetSizeHints(Panel8);
@@ -184,14 +153,6 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     Grid3->SetDefaultCellFont( Grid3->GetFont() );
     Grid3->SetDefaultCellTextColour( Grid3->GetForegroundColour() );
     BoxSizer3->Add(Grid3, 1, wxALL|wxEXPAND, 5);
-    int GLCanvasAttributes_2[] = {
-    	WX_GL_RGBA,
-    	WX_GL_DOUBLEBUFFER,
-    	WX_GL_DEPTH_SIZE,      16,
-    	WX_GL_STENCIL_SIZE,    0,
-    	0, 0 };
-    GLCanvas1 = new wxGLCanvas(Panel3, ID_GLCANVAS1, wxDefaultPosition, wxSize(64,326), 0, _T("ID_GLCANVAS1"), GLCanvasAttributes_2);
-    BoxSizer3->Add(GLCanvas1, 1, wxALL|wxEXPAND, 5);
     Panel3->SetSizer(BoxSizer3);
     BoxSizer3->Fit(Panel3);
     BoxSizer3->SetSizeHints(Panel3);
@@ -215,14 +176,6 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     Grid5->SetDefaultCellFont( Grid5->GetFont() );
     Grid5->SetDefaultCellTextColour( Grid5->GetForegroundColour() );
     BoxSizer5->Add(Grid5, 1, wxALL|wxEXPAND, 5);
-    int GLCanvasAttributes_3[] = {
-    	WX_GL_RGBA,
-    	WX_GL_DOUBLEBUFFER,
-    	WX_GL_DEPTH_SIZE,      16,
-    	WX_GL_STENCIL_SIZE,    0,
-    	0, 0 };
-    GLCanvas3 = new wxGLCanvas(Panel4, ID_GLCANVAS3, wxDefaultPosition, wxDefaultSize, 0, _T("ID_GLCANVAS3"), GLCanvasAttributes_3);
-    BoxSizer5->Add(GLCanvas3, 1, wxALL|wxEXPAND, 5);
     Panel4->SetSizer(BoxSizer5);
     BoxSizer5->Fit(Panel4);
     BoxSizer5->SetSizeHints(Panel4);
@@ -259,6 +212,8 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     Notebook1->AddPage(Panel7, _("Dead Load"), false);
     MenuBar1 = new wxMenuBar();
     Menu1 = new wxMenu();
+    LoadButton = new wxMenuItem(Menu1, ID_MENUITEM1, _("Load"), wxEmptyString, wxITEM_NORMAL);
+    Menu1->Append(LoadButton);
     MenuItem1 = new wxMenuItem(Menu1, idMenuQuit, _("Quit\tAlt-F4"), _("Quit the application"), wxITEM_NORMAL);
     Menu1->Append(MenuItem1);
     MenuBar1->Append(Menu1, _("&File"));
@@ -274,10 +229,12 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     StatusBar1->SetStatusStyles(1,__wxStatusBarStyles_1);
     SetStatusBar(StatusBar1);
 
+    Connect(ID_MENUITEM1,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnLoadButtonSelected);
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnQuit);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnAbout);
     //*)
 }
+//Automatically generated code end
 
 CargoMasterFrame::~CargoMasterFrame()
 {
@@ -292,6 +249,14 @@ void CargoMasterFrame::OnQuit(wxCommandEvent& event)
 
 void CargoMasterFrame::OnAbout(wxCommandEvent& event)
 {
-    wxString msg = wxbuildinfo(long_f);
-    wxMessageBox(msg, _("Welcome to..."));
+
+}
+
+void CargoMasterFrame::OnLoadButtonSelected(wxCommandEvent& event)
+{
+    wxFileDialog dialog(NULL, wxT("Choose a File"));
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        ShipBody.load(dialog.GetPath().ToStdString());
+    }
 }

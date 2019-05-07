@@ -1,13 +1,19 @@
 # depslib dependency file v1.0
-1557184057 source:/home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.cpp
+1557187015 source:/home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.cpp
 	"CargoMasterMain.h"
 	<wx/msgdlg.h>
 	<wx/intl.h>
 	<wx/string.h>
 
-1557184105 /home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.h
+1557187168 /home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.h
+	"../Ship.h"
+	"wx/filedlg.h"
 	<wx/frame.h>
+	<wx/grid.h>
 	<wx/menu.h>
+	<wx/notebook.h>
+	<wx/panel.h>
+	<wx/sizer.h>
 	<wx/statusbr.h>
 
 1555492885 /usr/include/wx-3.1/wx/frame.h
@@ -919,4 +925,325 @@
 1555492885 /usr/include/wx-3.1/wx/generic/msgdlgg.h
 
 1555492887 /usr/include/wx-3.1/wx/gtk/msgdlg.h
+
+1557184105 source:/home/vilis/Cargo_Sim/CargoMaster/CargoMasterApp.cpp
+	"CargoMasterApp.h"
+	"CargoMasterMain.h"
+	<wx/image.h>
+
+1557184105 /home/vilis/Cargo_Sim/CargoMaster/CargoMasterApp.h
+	<wx/app.h>
+
+1555492884 /usr/include/wx-3.1/wx/app.h
+	"wx/event.h"
+	"wx/eventfilter.h"
+	"wx/build.h"
+	"wx/cmdargs.h"
+	"wx/init.h"
+	"wx/intl.h"
+	"wx/log.h"
+	"wx/unix/app.h"
+	"wx/msw/app.h"
+	"wx/motif/app.h"
+	"wx/dfb/app.h"
+	"wx/gtk/app.h"
+	"wx/gtk1/app.h"
+	"wx/x11/app.h"
+	"wx/osx/app.h"
+	"wx/qt/app.h"
+	"wx/univ/theme.h"
+
+1555492884 /usr/include/wx-3.1/wx/eventfilter.h
+	"wx/defs.h"
+
+1555492884 /usr/include/wx-3.1/wx/build.h
+	"wx/version.h"
+
+1555492884 /usr/include/wx-3.1/wx/cmdargs.h
+	"wx/arrstr.h"
+
+1555492884 /usr/include/wx-3.1/wx/init.h
+	"wx/defs.h"
+	"wx/chartype.h"
+	"wx/msw/init.h"
+
+1555492885 /usr/include/wx-3.1/wx/unix/app.h
+	<signal.h>
+
+1555492886 /usr/include/wx-3.1/wx/gtk/app.h
+
+1555492887 /usr/include/wx-3.1/wx/glcanvas.h
+	"wx/defs.h"
+	"wx/app.h"
+	"wx/palette.h"
+	"wx/window.h"
+	"wx/msw/glcanvas.h"
+	"wx/x11/glcanvas.h"
+	"wx/gtk/glcanvas.h"
+	"wx/gtk1/glcanvas.h"
+	"wx/osx/glcanvas.h"
+	"wx/qt/glcanvas.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/glcanvas.h
+	"wx/unix/glx11.h"
+
+1555492887 /usr/include/wx-3.1/wx/unix/glx11.h
+	<GL/glx.h>
+
+1555492886 /usr/include/wx-3.1/wx/grid.h
+	"wx/generic/grid.h"
+	"wx/generic/grideditors.h"
+	"wx/generic/gridctrl.h"
+
+1555492886 /usr/include/wx-3.1/wx/generic/grid.h
+	"wx/defs.h"
+	"wx/hashmap.h"
+	"wx/scrolwin.h"
+
+1555492885 /usr/include/wx-3.1/wx/scrolwin.h
+	"wx/panel.h"
+	"wx/gtk/scrolwin.h"
+	"wx/gtk1/scrolwin.h"
+	"wx/generic/scrolwin.h"
+
+1555492885 /usr/include/wx-3.1/wx/panel.h
+	"wx/window.h"
+	"wx/containr.h"
+	"wx/univ/panel.h"
+	"wx/msw/panel.h"
+	"wx/generic/panelg.h"
+
+1555492885 /usr/include/wx-3.1/wx/generic/panelg.h
+	"wx/bitmap.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/scrolwin.h
+
+1555492885 /usr/include/wx-3.1/wx/generic/scrolwin.h
+	"wx/recguard.h"
+
+1555492884 /usr/include/wx-3.1/wx/recguard.h
+	"wx/defs.h"
+
+1555492886 /usr/include/wx-3.1/wx/generic/grideditors.h
+	"wx/defs.h"
+	"wx/scopedptr.h"
+
+1555492886 /usr/include/wx-3.1/wx/generic/gridctrl.h
+	"wx/grid.h"
+	"wx/datetime.h"
+
+1555492886 /usr/include/wx-3.1/wx/notebook.h
+	"wx/defs.h"
+	"wx/bookctrl.h"
+	"wx/univ/notebook.h"
+	"wx/msw/notebook.h"
+	"wx/generic/notebook.h"
+	"wx/gtk/notebook.h"
+	"wx/gtk1/notebook.h"
+	"wx/osx/notebook.h"
+	"wx/qt/notebook.h"
+
+1555492886 /usr/include/wx-3.1/wx/bookctrl.h
+	"wx/defs.h"
+	"wx/control.h"
+	"wx/vector.h"
+	"wx/withimages.h"
+	"wx/notebook.h"
+	"wx/choicebk.h"
+
+1555492885 /usr/include/wx-3.1/wx/withimages.h
+	"wx/defs.h"
+	"wx/icon.h"
+	"wx/imaglist.h"
+
+1555492886 /usr/include/wx-3.1/wx/imaglist.h
+	"wx/defs.h"
+	"wx/msw/imaglist.h"
+	"wx/generic/imaglist.h"
+
+1555492886 /usr/include/wx-3.1/wx/generic/imaglist.h
+	"wx/bitmap.h"
+	"wx/gdicmn.h"
+	"wx/vector.h"
+
+1555492886 /usr/include/wx-3.1/wx/choicebk.h
+	"wx/defs.h"
+	"wx/bookctrl.h"
+	"wx/choice.h"
+	"wx/containr.h"
+
+1555492885 /usr/include/wx-3.1/wx/choice.h
+	"wx/defs.h"
+	"wx/ctrlsub.h"
+	"wx/univ/choice.h"
+	"wx/msw/choice.h"
+	"wx/motif/choice.h"
+	"wx/gtk/choice.h"
+	"wx/gtk1/choice.h"
+	"wx/osx/choice.h"
+	"wx/qt/choice.h"
+
+1555492885 /usr/include/wx-3.1/wx/ctrlsub.h
+	"wx/defs.h"
+	"wx/arrstr.h"
+	"wx/control.h"
+	<vector>
+	"wx/msw/ctrlsub.h"
+	"wx/motif/ctrlsub.h"
+	"wx/qt/ctrlsub.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/choice.h
+
+1555492885 /usr/include/wx-3.1/wx/generic/notebook.h
+	"wx/event.h"
+	"wx/control.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/notebook.h
+	"wx/list.h"
+
+1555492885 /usr/include/wx-3.1/wx/sizer.h
+	"wx/defs.h"
+	"wx/window.h"
+
+1557183376 source:/home/vilis/Cargo_Sim/Ship.cpp
+	"Ship.h"
+
+1557183371 /home/vilis/Cargo_Sim/Ship.h
+	<string>
+	<vector>
+	<fstream>
+	<ios>
+	"Ship.pb.h"
+
+1557183387 /home/vilis/Cargo_Sim/Ship.pb.h
+	<limits>
+	<string>
+	<google/protobuf/port_def.inc>
+	<google/protobuf/port_undef.inc>
+	<google/protobuf/io/coded_stream.h>
+	<google/protobuf/arena.h>
+	<google/protobuf/arenastring.h>
+	<google/protobuf/generated_message_table_driven.h>
+	<google/protobuf/generated_message_util.h>
+	<google/protobuf/inlined_string_field.h>
+	<google/protobuf/metadata.h>
+	<google/protobuf/message.h>
+	<google/protobuf/repeated_field.h>
+	<google/protobuf/extension_set.h>
+	<google/protobuf/generated_enum_reflection.h>
+	<google/protobuf/unknown_field_set.h>
+	<google/protobuf/port_def.inc>
+	<google/protobuf/port_undef.inc>
+
+1555492885 /usr/include/wx-3.1/wx/filedlg.h
+	"wx/defs.h"
+	"wx/dialog.h"
+	"wx/arrstr.h"
+	"wx/generic/filedlgg.h"
+	"wx/msw/filedlg.h"
+	"wx/motif/filedlg.h"
+	"wx/gtk/filedlg.h"
+	"wx/gtk1/filedlg.h"
+	"wx/osx/filedlg.h"
+	"wx/qt/filedlg.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/filedlg.h
+	"wx/gtk/filectrl.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/filectrl.h
+	"wx/control.h"
+	"wx/filectrl.h"
+
+1555492886 /usr/include/wx-3.1/wx/filectrl.h
+	"wx/defs.h"
+	"wx/string.h"
+	"wx/event.h"
+	"wx/gtk/filectrl.h"
+	"wx/generic/filectrlg.h"
+
+1555492885 /usr/include/wx-3.1/wx/generic/filectrlg.h
+	"wx/containr.h"
+	"wx/listctrl.h"
+	"wx/filectrl.h"
+	"wx/filename.h"
+
+1555492886 /usr/include/wx-3.1/wx/listctrl.h
+	"wx/defs.h"
+	"wx/listbase.h"
+	"wx/msw/listctrl.h"
+	"wx/qt/listctrl.h"
+	"wx/generic/listctrl.h"
+
+1555492886 /usr/include/wx-3.1/wx/listbase.h
+	"wx/colour.h"
+	"wx/font.h"
+	"wx/gdicmn.h"
+	"wx/event.h"
+	"wx/control.h"
+	"wx/itemattr.h"
+	"wx/systhemectrl.h"
+
+1555492886 /usr/include/wx-3.1/wx/itemattr.h
+
+1555492886 /usr/include/wx-3.1/wx/systhemectrl.h
+	"wx/defs.h"
+
+1555492887 /usr/include/wx-3.1/wx/generic/listctrl.h
+	"wx/containr.h"
+	"wx/scrolwin.h"
+	"wx/textctrl.h"
+
+1555492885 /usr/include/wx-3.1/wx/textctrl.h
+	"wx/defs.h"
+	"wx/control.h"
+	"wx/textentry.h"
+	"wx/dynarray.h"
+	"wx/gdicmn.h"
+	"wx/ioswrap.h"
+	"wx/x11/textctrl.h"
+	"wx/univ/textctrl.h"
+	"wx/msw/textctrl.h"
+	"wx/motif/textctrl.h"
+	"wx/gtk/textctrl.h"
+	"wx/gtk1/textctrl.h"
+	"wx/osx/textctrl.h"
+	"wx/qt/textctrl.h"
+
+1555492885 /usr/include/wx-3.1/wx/textentry.h
+	"wx/filefn.h"
+	"wx/gdicmn.h"
+	"wx/gtk/textentry.h"
+	"wx/osx/textentry.h"
+	"wx/msw/textentry.h"
+	"wx/motif/textentry.h"
+	"wx/qt/textentry.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/textentry.h
+
+1555492884 /usr/include/wx-3.1/wx/ioswrap.h
+	"wx/beforestd.h"
+	<iostream.h>
+	<iostream>
+	"wx/afterstd.h"
+	"wx/msw/winundef.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/textctrl.h
+
+1555492884 /usr/include/wx-3.1/wx/filename.h
+	"wx/arrstr.h"
+	"wx/filefn.h"
+	"wx/datetime.h"
+	"wx/intl.h"
+	"wx/longlong.h"
+	"wx/file.h"
+
+1555492884 /usr/include/wx-3.1/wx/file.h
+	"wx/defs.h"
+	"wx/string.h"
+	"wx/filefn.h"
+	"wx/convauto.h"
+
+1555492884 /usr/include/wx-3.1/wx/convauto.h
+	"wx/strconv.h"
+	"wx/fontenc.h"
 
