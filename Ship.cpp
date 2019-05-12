@@ -14,9 +14,83 @@ bool Ship::assign_val(std::string& in_t, float& var)
 
 void Ship::calculate()
 {
-     std::string text = "Bulki.txt";
-   // model.read_data(text);
+
 }
+
+void Ship::autoParticulars()
+{
+    float xmax = 0, ymax = 0, zmax = 0;
+    for (long unsigned int i=0; i<UnitVec.size(); i++)
+    {
+        if(xmax < UnitVec[i].u_LCG + UnitVec[i].u_length) xmax = UnitVec[i].u_LCG + UnitVec[i].u_length;
+        if(ymax < UnitVec[i].u_TCG + UnitVec[i].u_breadth) ymax = UnitVec[i].u_TCG + UnitVec[i].u_breadth;
+        if(zmax < UnitVec[i].u_VCG + UnitVec[i].u_height) zmax = UnitVec[i].u_VCG + UnitVec[i].u_height;
+    }
+    s_LOA = xmax+10;
+    s_beam = ymax+0.1;
+    s_height = zmax+0.5;
+
+
+}
+
+void Ship::modelLoad()
+{
+    std::ifstream file;             // Declares where the model file is with its point coordinates.
+    file.open("Model.txt", std::ios_base::in); // Opens file
+    if (file.is_open())             // If file found, read the coordinates
+    {
+        int i=0;                    // For the point vector
+        for (std::string line; std::getline(file, line); ) // Reads the text file line for line
+        {
+            points.push_back(std::vector<float>()); // Adds a vector to the vector (It's a 2D vector)
+            points[i].push_back(3);                 // Pushing back 3 spaces in the vector for x, y and z
+            std::istringstream in(line);            // Turns the read line into a stream for easier conversion.
+            in >> points[i][0] >> points[i][1] >> points[i][2]; // Converts the string stream into floating points
+            i++;                                    // Next section for the floating point vector
+        }
+    }
+    file.close(); // When all done, close file.
+    std::stable_sort(points.begin(), points.end());       // Sorts the vector according to x
+    rib dumdum;                                     // A dummy to add on the ribs vector
+    // The vector ribs consists of a class rib. This class contains a single float for the x coordinate and a float vector for the zy coordinates
+    // This provides the ribs of the ship
+    ribs.push_back(dumdum);                         // Adding the dummy
+    int j=0, l=0;                                   // Iteration help for the vectors
+    /* Iterate through all points starting with x = 0 through the length of model ship
+    and getting all the point in a single rib */
+    for (long unsigned int i=0; i<points.size(); i++)
+    {
+        if (i+1 != points.size()){ // Checking if there is a next vector float
+            ribs[j].x=points[i][0]; // Sets the x so it is known later for math
+            ribs[j].zy.push_back(std::vector<float>()); // Adds a new object of vector to the zy vector in ribs class.
+            ribs[j].zy[l].push_back(2);
+            ribs[j].zy[l][0] = points[i][2];
+            ribs[j].zy[l][1] = points[i][1];
+            ribs[j].zy[l].push_back(2);
+            ribs[j].zy[l][0] = points[i][2];
+            ribs[j].zy[l][1] = - points[i][1];
+            l++;
+            if (points[i][0] != points[i+1][0]) // If the next x is different, then go to next iteration of the rib vector
+            {
+                l=0;
+                j++;
+                rib dummy;
+                ribs.push_back(dummy);
+            }
+        }else{
+            ribs[j].x=points[i][0];
+            ribs[j].zy.push_back(std::vector<float>());
+            ribs[j].zy[l].push_back(2);
+            ribs[j].zy[l][0] = points[i][2];
+            ribs[j].zy[l][1] = points[i][1];
+        }
+    }
+    for (long unsigned int i=0; i<ribs.size(); i++)
+    {
+        std::stable_sort(ribs[i].zy.begin(), ribs[i].zy.end());
+    }
+}
+
 void Ship::save()
 {
     ship::ShipBodyData SaveShip;

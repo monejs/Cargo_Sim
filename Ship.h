@@ -1,12 +1,14 @@
+#ifndef SHIP_H
+#define SHIP_H
+
 #include <string>
 #include <vector>
 #include <fstream>
 #include <ios>
-#include "Ship.pb.h"
-//#include "Model.h"
+#include <iostream>
+#include <sstream>
 
-#ifndef SHIP_H
-#define SHIP_H
+#include "Ship.pb.h"
 
 class Ship
 {
@@ -56,12 +58,14 @@ public:
     float& read_u_dencity(int x);
     float read_u_maxvol (int);
     int unit_count();
+    void autoParticulars();
 
     void new_unit(u_types);
     void delete_unit(int);
     void calculate();
     void save();
     bool load(std::string);
+    void modelLoad();
 
     virtual ~Ship();
 
@@ -148,14 +152,16 @@ private:
         float s_VCG;
         float s_GZ;
     };
+    std::vector<std::vector<float>> points;
     std::vector<Unit> UnitVec;
     std::vector<BulkCargo> BulkVec;
     std::vector<Hydrostatistics> HydroVec;
     std::vector<crossCurves> CrossVec;
-
-    class Model
+    struct rib
     {
-
+        float x;
+        std::vector<std::vector<float>> zy;
     };
+    std::vector<rib> ribs;
 };
 #endif // SHIP_H
