@@ -1,8 +1,9 @@
 #include "Ship.h"
 
+//Declares the possible types of units a user can make
 const std::string Ship::u_type_strings[8] = {"Ballast", "Cargo Tank", "Cargo Hold", "HFO", "DO", "LO", "FW", "Various"};
 
-
+// Function to check, if the input from user is valid and returns false, if not
 bool Ship::assign_val(std::string& in_t, float& var)
 {
     if (::atof(in_t.c_str()))
@@ -12,27 +13,31 @@ bool Ship::assign_val(std::string& in_t, float& var)
     }else{ return false; }
 }
 
+// Still working on this one
 void Ship::calculate()
 {
 
 }
 
+// Calculates the ships particulars automagicly, if so wished. This function is available over the particulars input mask.
 void Ship::autoParticulars()
 {
-    float xmax = 0, ymax = 0, zmax = 0;
-    for (long unsigned int i=0; i<UnitVec.size(); i++)
-    {
+    float xmax = 0, ymax = 0, zmax = 0; // The maximum values of a unit
+    for (long unsigned int i=0; i<UnitVec.size(); i++) // Iterates through all declared units
+    { // and compares them. If a bigger number is found, the max value is replaced
         if(xmax < UnitVec[i].u_LCG + UnitVec[i].u_length) xmax = UnitVec[i].u_LCG + UnitVec[i].u_length;
         if(ymax < UnitVec[i].u_TCG + UnitVec[i].u_breadth) ymax = UnitVec[i].u_TCG + UnitVec[i].u_breadth;
         if(zmax < UnitVec[i].u_VCG + UnitVec[i].u_height) zmax = UnitVec[i].u_VCG + UnitVec[i].u_height;
     }
+    // And here is the automagic
     s_LOA = xmax+10;
     s_beam = ymax+0.1;
     s_height = zmax+0.5;
 
 
 }
-
+// This is the model, which will be used to make the data for the ship.
+// TODO: Make the model variable
 void Ship::modelLoad()
 {
     std::ifstream file;             // Declares where the model file is with its point coordinates.
@@ -63,38 +68,53 @@ void Ship::modelLoad()
         if (i+1 != points.size()){ // Checking if there is a next vector float
             ribs[j].x=points[i][0]; // Sets the x so it is known later for math
             ribs[j].zy.push_back(std::vector<float>()); // Adds a new object of vector to the zy vector in ribs class.
-            ribs[j].zy[l].push_back(2);
+            ribs[j].zy[l].push_back(2); // Adds two places in the vector for the z and y coordinates
+            // z and y coordinates are assigned for the starboard side of the ship and also the port side coordinates are created
             ribs[j].zy[l][0] = points[i][2];
             ribs[j].zy[l][1] = points[i][1];
+            l++;
+            ribs[j].zy.push_back(std::vector<float>());
             ribs[j].zy[l].push_back(2);
             ribs[j].zy[l][0] = points[i][2];
             ribs[j].zy[l][1] = - points[i][1];
             l++;
             if (points[i][0] != points[i+1][0]) // If the next x is different, then go to next iteration of the rib vector
             {
-                l=0;
-                j++;
-                rib dummy;
+                l=0; // For the ribs inner vector
+                j++; // For the ribs vector
+                rib dummy; // New element in the ribs vector
                 ribs.push_back(dummy);
             }
-        }else{
+        }else{ // All the same as above, only in case this is the last element
             ribs[j].x=points[i][0];
             ribs[j].zy.push_back(std::vector<float>());
             ribs[j].zy[l].push_back(2);
             ribs[j].zy[l][0] = points[i][2];
             ribs[j].zy[l][1] = points[i][1];
+            l++
+            ribs[j].zy.push_back(std::vector<float>());
+            ribs[j].zy[l].push_back(2);
+            ribs[j].zy[l][0] = points[i][2];
+            ribs[j].zy[l][1] = - points[i][1];
         }
     }
+    // This will go through all the ribs and sort the z values from keel to deck, thus making the math afterwards easier
     for (long unsigned int i=0; i<ribs.size(); i++)
     {
         std::stable_sort(ribs[i].zy.begin(), ribs[i].zy.end());
     }
 }
 
+// Saves all the data to file using the google protobuf protocol.
+// Quite easy to use and can be generates automatically.
 void Ship::save()
 {
-    ship::ShipBodyData SaveShip;
-    ship::ShipData* shipdata = SaveShip.add_shipdata();
+    /* Since the database provided by the protobuf is not meant to be worked with as a regular class,
+    and the values have to be brought over to the buffer class for its operation*/
+    // First it saves all ships body values
+    ship::ShipBodyData SaveShip; // Makes a protobuf class object
+    ship::ShipData* shipdata = SaveShip.add_shipdata(); // Adds a ship data class to the protobuf class object
+    // Setting all the parameters
     shipdata->set_shipname(s_name);
     shipdata->set_loa(s_LOA);
     shipdata->set_beam(s_beam);
@@ -109,7 +129,8 @@ void Ship::save()
     shipdata->set_deckstr(s_strengthCover);
     shipdata->set_tankstr(s_strengthTank);
     shipdata->set_watercondition(s_waterCondition);
-
+    // Here it iterates through all the unit, the user has provided and saves them to the class
+    // The same is applicable to the rest of this function
     for (long unsigned int i=0; i < UnitVec.size(); i++)
     {
         ship::Unit* unit = SaveShip.add_unit();
@@ -166,19 +187,20 @@ void Ship::save()
         curves->set_sixty(CrossVec[i].c_sixty);
         curves->set_eighty(CrossVec[i].c_eighty);
     }
-    std::string filename = s_name+".ship";
-    std::fstream output(filename,  std::ios::out | std::ios::trunc | std::ios::binary);
-    SaveShip.SerializeToOstream(&output);
-    output.close();
+    std::string filename = s_name+".ship"; // Program specific filename
+    std::fstream output(filename,  std::ios::out | std::ios::trunc | std::ios::binary); // Creating file
+    SaveShip.SerializeToOstream(&output); // Writing to file
+    output.close(); // File closed
 }
-bool Ship::load(std::string file)
+bool Ship::load(std::string file) // Load the protobuf file in the program.
 {
-    std::fstream input(file, std::ios::in | std::ios::binary);
-    ship::ShipBodyData BodyOfShip;
-    if (!BodyOfShip.ParseFromIstream(&input))
+    std::fstream input(file, std::ios::in | std::ios::binary); // The file name and path is provided by the UI
+    ship::ShipBodyData BodyOfShip; // Declaring the protobuf class to read all the data into
+    if (!BodyOfShip.ParseFromIstream(&input)) // Checking, if file is, what this program is made for
     {
-        return false;
+        return false; // If not the statement false is returned and the loading is stopped.
     }else{
+        // The same as saving, only reverse
         const ship::ShipData& body = BodyOfShip.shipdata(0);
         s_name = body.shipname();
         s_LOA = body.loa();
@@ -265,25 +287,27 @@ bool Ship::load(std::string file)
             HydroVec[i].h_mct = st.mct();
             HydroVec[i].h_tpc = st.tpc();
         }
-        return true;
+        return true; // At the end returns true
     }
 }
 
 
-Ship::Ship()
+Ship::Ship() // Declaration of the Ships null state.
 {
-    s_name = "Ship1";
-    s_LOA = 0.0f;
-    s_beam = 0.0f;
-    s_height = 0.0f;
+    s_name = "Ship1"; // Simple name with intention, it will be changed
+    s_LOA = 100.0f;     // Same as the model ship for LOA, beam and height, min draft and max draft
+    s_beam = 20.0f;
+    s_height = 8.0f;
     s_lightShip = 0;
     s_strengthTank = 20.0f;
     s_strengthCover = 5.0f;
-    s_minDraft = 0.0f;
-    s_maxDraft = 0.0f;
+    s_minDraft = 0.5f;
+    s_maxDraft = 5.0f;
     s_maxDWT = 0;
     s_waterCondition = 1.025;
 }
+// Setting ships particulars through function, since the values are not supposed to be accessed publicly.
+// Also checks, if the input values are valid.
 bool Ship::set_s_name(std::string in_t){
     if (in_t != "")
     {
@@ -291,6 +315,7 @@ bool Ship::set_s_name(std::string in_t){
         return true;
     }else{return false;}
 }
+// For all the floating points the function at the top of this class is used.
 bool Ship::set_s_LOA(std::string in_t){
     return Ship::assign_val(in_t, s_LOA);
 }
@@ -335,6 +360,8 @@ bool Ship::set_s_TCGLight(std::string in_t){
 bool Ship::set_s_VCGLight(std::string in_t){
     return Ship::assign_val(in_t, s_VCGLight);
 }
+
+// These functions return references to the actual values, so nothing is copied over
 std::string& Ship::read_s_name(){return s_name;}
 
 float& Ship::read_s_LOA(){return s_LOA;}
@@ -361,6 +388,7 @@ float& Ship::read_s_TCGLight(){return s_TCGLight;}
 
 float& Ship::read_s_VCGLight(){return s_VCGLight;}
 
+// Returns the values of units
 std::string& Ship::read_unit_name (int x){
     return UnitVec[x].u_name;}
 
@@ -381,21 +409,26 @@ float& Ship::read_u_volume(int x){
 float& Ship::read_u_dencity(int x){
     return UnitVec[x].u_density;}
 
+// The maximum volume is never saved, but always recalculated for more accuracy
 float Ship::read_u_maxvol(int i){
 return (UnitVec[i].u_length * UnitVec[i].u_breadth * UnitVec[i].u_height);}
 
+// Upon calling a new unit in the UI, a new unit is added to the Units Vector.
 void Ship::new_unit(u_types choice){
     Unit unit;
-    unit.u_type = choice;
+    unit.u_type = choice; // The choices from the top of this class
     UnitVec.push_back(unit);
 }
 
+// In case one unit is not wanted. This function takes an argument on, which unit is supposed to be deleted
 void Ship::delete_unit(int row){
     UnitVec.erase(UnitVec.begin()+row);
 }
+
+// Row is the unit number, col is the unit particular to be changed and val is the value, it is supposed to be set to
 bool Ship::set_unit(int row, int col, std::string val)
 {
-    switch (col)
+    switch (col) // A simple switch case is good enough
     {
     case (0):
         UnitVec[row].u_name = val;
@@ -426,15 +459,18 @@ bool Ship::set_unit(int row, int col, std::string val)
         return false;
     }
 }
-
+/* Returns the count of units existing. This must be done through a function
+since the Unit vector is not publicly available*/
 int Ship::unit_count()
 {
     int a = UnitVec.size();
     return a;
 }
 
+// Ship deconstructor
 Ship::~Ship(){}
 
+// Unit initial set
 Ship::Unit::Unit(){
     u_LCG = 0.0f;
     u_TCG = 0.0f;
@@ -448,7 +484,7 @@ Ship::Unit::Unit(){
     u_fsm = 0.0f;
     u_maxfsm = false;
 }
-Ship::Unit::~Unit(){}
+Ship::Unit::~Unit(){} // Unit deconstructor
 
 Ship::Hydrostatistics::Hydrostatistics(){
     h_draft = 0.0f;
