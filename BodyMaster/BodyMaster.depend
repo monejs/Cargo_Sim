@@ -1,10 +1,10 @@
 # depslib dependency file v1.0
-1557246178 source:/home/vilis/Cargo_Sim/BodyMaster/BodyMasterApp.cpp
+1557757143 source:/home/vilis/Cargo_Sim/BodyMaster/BodyMasterApp.cpp
 	"BodyMasterApp.h"
 	"BodyMasterMain.h"
 	<wx/image.h>
 
-1557246178 /home/vilis/Cargo_Sim/BodyMaster/BodyMasterApp.h
+1557757142 /home/vilis/Cargo_Sim/BodyMaster/BodyMasterApp.h
 	<wx/app.h>
 
 1555492884 /usr/include/wx-3.1/wx/app.h
@@ -563,8 +563,9 @@
 
 1555492886 /usr/include/wx-3.1/wx/gtk/app.h
 
-1557247238 /home/vilis/Cargo_Sim/BodyMaster/BodyMasterMain.h
+1557757142 /home/vilis/Cargo_Sim/BodyMaster/BodyMasterMain.h
 	"../Ship.h"
+	"../Particulars.h"
 	<wx/button.h>
 	<wx/frame.h>
 	<wx/grid.h>
@@ -989,11 +990,13 @@
 	"wx/defs.h"
 	"wx/window.h"
 
-1557220419 /home/vilis/Cargo_Sim/Ship.h
+1557740791 /home/vilis/Cargo_Sim/Ship.h
 	<string>
 	<vector>
 	<fstream>
 	<ios>
+	<iostream>
+	<sstream>
 	"Ship.pb.h"
 
 1557183387 /home/vilis/Cargo_Sim/Ship.pb.h
@@ -1016,7 +1019,7 @@
 	<google/protobuf/port_def.inc>
 	<google/protobuf/port_undef.inc>
 
-1557220448 source:/home/vilis/Cargo_Sim/Ship.cpp
+1557724611 source:/home/vilis/Cargo_Sim/Ship.cpp
 	"Ship.h"
 
 1557183398 source:/home/vilis/Cargo_Sim/Ship.pb.cc
@@ -1033,7 +1036,7 @@
 	<google/protobuf/port_def.inc>
 	<google/protobuf/port_undef.inc>
 
-1557247368 source:/home/vilis/Cargo_Sim/BodyMaster/BodyMasterMain.cpp
+1557757142 source:/home/vilis/Cargo_Sim/BodyMaster/BodyMasterMain.cpp
 	"BodyMasterMain.h"
 	<wx/msgdlg.h>
 	<wx/intl.h>
@@ -1084,4 +1087,606 @@
 1555492885 /usr/include/wx-3.1/wx/generic/msgdlgg.h
 
 1555492887 /usr/include/wx-3.1/wx/gtk/msgdlg.h
+
+1557756663 source:/home/vilis/Cargo_Sim/Particulars.cpp
+	"Particulars.h"
+	<iostream>
+	<wx/intl.h>
+	<wx/string.h>
+
+1557761297 /home/vilis/Cargo_Sim/Particulars.h
+	<wx/button.h>
+	<wx/dialog.h>
+	<wx/sizer.h>
+	<wx/stattext.h>
+	<wx/textctrl.h>
+
+1555492885 /usr/include/wx-3.1/wx/wx.h
+	"wx/defs.h"
+	"wx/object.h"
+	"wx/dynarray.h"
+	"wx/list.h"
+	"wx/hash.h"
+	"wx/string.h"
+	"wx/hashmap.h"
+	"wx/arrstr.h"
+	"wx/intl.h"
+	"wx/log.h"
+	"wx/event.h"
+	"wx/app.h"
+	"wx/utils.h"
+	"wx/stream.h"
+	"wx/memory.h"
+	"wx/math.h"
+	"wx/stopwatch.h"
+	"wx/timer.h"
+	"wx/module.h"
+	"wx/wxcrt.h"
+	"wx/wxcrtvararg.h"
+	"wx/window.h"
+	"wx/containr.h"
+	"wx/panel.h"
+	"wx/toplevel.h"
+	"wx/frame.h"
+	"wx/gdicmn.h"
+	"wx/gdiobj.h"
+	"wx/region.h"
+	"wx/bitmap.h"
+	"wx/image.h"
+	"wx/colour.h"
+	"wx/font.h"
+	"wx/dc.h"
+	"wx/dcclient.h"
+	"wx/dcmemory.h"
+	"wx/dcprint.h"
+	"wx/dcscreen.h"
+	"wx/button.h"
+	"wx/menuitem.h"
+	"wx/menu.h"
+	"wx/pen.h"
+	"wx/brush.h"
+	"wx/palette.h"
+	"wx/icon.h"
+	"wx/cursor.h"
+	"wx/dialog.h"
+	"wx/settings.h"
+	"wx/msgdlg.h"
+	"wx/dataobj.h"
+	"wx/control.h"
+	"wx/ctrlsub.h"
+	"wx/bmpbuttn.h"
+	"wx/checkbox.h"
+	"wx/checklst.h"
+	"wx/choice.h"
+	"wx/scrolbar.h"
+	"wx/stattext.h"
+	"wx/statbmp.h"
+	"wx/statbox.h"
+	"wx/listbox.h"
+	"wx/radiobox.h"
+	"wx/radiobut.h"
+	"wx/textctrl.h"
+	"wx/slider.h"
+	"wx/gauge.h"
+	"wx/scrolwin.h"
+	"wx/dirdlg.h"
+	"wx/toolbar.h"
+	"wx/combobox.h"
+	"wx/layout.h"
+	"wx/sizer.h"
+	"wx/statusbr.h"
+	"wx/choicdlg.h"
+	"wx/textdlg.h"
+	"wx/filedlg.h"
+	"wx/mdi.h"
+	"wx/validate.h"
+	"wx/valtext.h"
+
+1555492884 /usr/include/wx-3.1/wx/hash.h
+	"wx/defs.h"
+	"wx/string.h"
+	"wx/object.h"
+
+1555492884 /usr/include/wx-3.1/wx/stopwatch.h
+	"wx/defs.h"
+	"wx/longlong.h"
+	"wx/time.h"
+
+1555492885 /usr/include/wx-3.1/wx/time.h
+	"wx/longlong.h"
+
+1555492885 /usr/include/wx-3.1/wx/timer.h
+	"wx/defs.h"
+	"wx/object.h"
+	"wx/longlong.h"
+	"wx/event.h"
+	"wx/stopwatch.h"
+	"wx/utils.h"
+
+1555492884 /usr/include/wx-3.1/wx/module.h
+	"wx/object.h"
+	"wx/list.h"
+	"wx/arrstr.h"
+	"wx/dynarray.h"
+
+1555492885 /usr/include/wx-3.1/wx/dc.h
+	"wx/object.h"
+	"wx/intl.h"
+	"wx/colour.h"
+	"wx/font.h"
+	"wx/bitmap.h"
+	"wx/brush.h"
+	"wx/pen.h"
+	"wx/palette.h"
+	"wx/dynarray.h"
+	"wx/math.h"
+	"wx/image.h"
+	"wx/region.h"
+	"wx/affinematrix2d.h"
+
+1555492885 /usr/include/wx-3.1/wx/brush.h
+	"wx/defs.h"
+	"wx/object.h"
+	"wx/gdiobj.h"
+	"wx/gdicmn.h"
+	"wx/msw/brush.h"
+	"wx/x11/brush.h"
+	"wx/gtk/brush.h"
+	"wx/gtk1/brush.h"
+	"wx/dfb/brush.h"
+	"wx/osx/brush.h"
+	"wx/qt/brush.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/brush.h
+
+1555492885 /usr/include/wx-3.1/wx/affinematrix2d.h
+	"wx/defs.h"
+	"wx/affinematrix2dbase.h"
+
+1555492885 /usr/include/wx-3.1/wx/affinematrix2dbase.h
+	"wx/defs.h"
+	"wx/geometry.h"
+
+1555492886 /usr/include/wx-3.1/wx/geometry.h
+	"wx/defs.h"
+	"wx/utils.h"
+	"wx/gdicmn.h"
+	"wx/math.h"
+
+1555492885 /usr/include/wx-3.1/wx/dcclient.h
+	"wx/dc.h"
+
+1555492885 /usr/include/wx-3.1/wx/dcmemory.h
+	"wx/dc.h"
+	"wx/bitmap.h"
+
+1555492885 /usr/include/wx-3.1/wx/dcprint.h
+	"wx/defs.h"
+	"wx/dc.h"
+
+1555492885 /usr/include/wx-3.1/wx/dcscreen.h
+	"wx/defs.h"
+	"wx/dc.h"
+
+1555492885 /usr/include/wx-3.1/wx/settings.h
+	"wx/colour.h"
+	"wx/font.h"
+
+1555492886 /usr/include/wx-3.1/wx/dataobj.h
+	"wx/defs.h"
+	"wx/string.h"
+	"wx/bitmap.h"
+	"wx/list.h"
+	"wx/arrstr.h"
+	"wx/msw/ole/dataform.h"
+	"wx/motif/dataform.h"
+	"wx/gtk/dataform.h"
+	"wx/gtk1/dataform.h"
+	"wx/x11/dataform.h"
+	"wx/osx/dataform.h"
+	"wx/qt/dataform.h"
+	"wx/msw/ole/dataobj.h"
+	"wx/motif/dataobj.h"
+	"wx/x11/dataobj.h"
+	"wx/gtk/dataobj.h"
+	"wx/gtk1/dataobj.h"
+	"wx/osx/dataobj.h"
+	"wx/qt/dataobj.h"
+	"wx/msw/ole/dataobj2.h"
+	"wx/gtk/dataobj2.h"
+	"wx/gtk1/dataobj2.h"
+	"wx/x11/dataobj2.h"
+	"wx/motif/dataobj2.h"
+	"wx/osx/dataobj2.h"
+	"wx/qt/dataobj2.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/dataform.h
+
+1555492887 /usr/include/wx-3.1/wx/gtk/dataobj.h
+
+1555492887 /usr/include/wx-3.1/wx/gtk/dataobj2.h
+
+1555492885 /usr/include/wx-3.1/wx/ctrlsub.h
+	"wx/defs.h"
+	"wx/arrstr.h"
+	"wx/control.h"
+	<vector>
+	"wx/msw/ctrlsub.h"
+	"wx/motif/ctrlsub.h"
+	"wx/qt/ctrlsub.h"
+
+1555492885 /usr/include/wx-3.1/wx/bmpbuttn.h
+	"wx/defs.h"
+	"wx/button.h"
+	"wx/univ/bmpbuttn.h"
+	"wx/msw/bmpbuttn.h"
+	"wx/motif/bmpbuttn.h"
+	"wx/gtk/bmpbuttn.h"
+	"wx/gtk1/bmpbuttn.h"
+	"wx/osx/bmpbuttn.h"
+	"wx/qt/bmpbuttn.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/bmpbuttn.h
+
+1555492885 /usr/include/wx-3.1/wx/checkbox.h
+	"wx/defs.h"
+	"wx/control.h"
+	"wx/univ/checkbox.h"
+	"wx/msw/checkbox.h"
+	"wx/motif/checkbox.h"
+	"wx/gtk/checkbox.h"
+	"wx/gtk1/checkbox.h"
+	"wx/osx/checkbox.h"
+	"wx/qt/checkbox.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/checkbox.h
+
+1555492885 /usr/include/wx-3.1/wx/checklst.h
+	"wx/defs.h"
+	"wx/listbox.h"
+	"wx/univ/checklst.h"
+	"wx/msw/checklst.h"
+	"wx/motif/checklst.h"
+	"wx/gtk/checklst.h"
+	"wx/gtk1/checklst.h"
+	"wx/osx/checklst.h"
+	"wx/qt/checklst.h"
+
+1555492885 /usr/include/wx-3.1/wx/listbox.h
+	"wx/defs.h"
+	"wx/ctrlsub.h"
+	"wx/univ/listbox.h"
+	"wx/msw/listbox.h"
+	"wx/motif/listbox.h"
+	"wx/gtk/listbox.h"
+	"wx/gtk1/listbox.h"
+	"wx/osx/listbox.h"
+	"wx/qt/listbox.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/listbox.h
+
+1555492887 /usr/include/wx-3.1/wx/gtk/checklst.h
+
+1555492885 /usr/include/wx-3.1/wx/choice.h
+	"wx/defs.h"
+	"wx/ctrlsub.h"
+	"wx/univ/choice.h"
+	"wx/msw/choice.h"
+	"wx/motif/choice.h"
+	"wx/gtk/choice.h"
+	"wx/gtk1/choice.h"
+	"wx/osx/choice.h"
+	"wx/qt/choice.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/choice.h
+
+1555492885 /usr/include/wx-3.1/wx/scrolbar.h
+	"wx/defs.h"
+	"wx/control.h"
+	"wx/univ/scrolbar.h"
+	"wx/msw/scrolbar.h"
+	"wx/motif/scrolbar.h"
+	"wx/gtk/scrolbar.h"
+	"wx/gtk1/scrolbar.h"
+	"wx/osx/scrolbar.h"
+	"wx/qt/scrolbar.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/scrolbar.h
+
+1555492885 /usr/include/wx-3.1/wx/stattext.h
+	"wx/defs.h"
+	"wx/control.h"
+	"wx/univ/stattext.h"
+	"wx/msw/stattext.h"
+	"wx/motif/stattext.h"
+	"wx/gtk/stattext.h"
+	"wx/gtk1/stattext.h"
+	"wx/osx/stattext.h"
+	"wx/qt/stattext.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/stattext.h
+
+1555492885 /usr/include/wx-3.1/wx/statbmp.h
+	"wx/defs.h"
+	"wx/control.h"
+	"wx/bitmap.h"
+	"wx/icon.h"
+	"wx/univ/statbmp.h"
+	"wx/msw/statbmp.h"
+	"wx/motif/statbmp.h"
+	"wx/gtk/statbmp.h"
+	"wx/gtk1/statbmp.h"
+	"wx/osx/statbmp.h"
+	"wx/qt/statbmp.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/statbmp.h
+	"wx/icon.h"
+
+1555492885 /usr/include/wx-3.1/wx/statbox.h
+	"wx/defs.h"
+	"wx/control.h"
+	"wx/containr.h"
+	"wx/univ/statbox.h"
+	"wx/msw/statbox.h"
+	"wx/motif/statbox.h"
+	"wx/gtk/statbox.h"
+	"wx/gtk1/statbox.h"
+	"wx/osx/statbox.h"
+	"wx/qt/statbox.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/statbox.h
+
+1555492885 /usr/include/wx-3.1/wx/radiobox.h
+	"wx/defs.h"
+	"wx/ctrlsub.h"
+	"wx/dynarray.h"
+	"wx/univ/radiobox.h"
+	"wx/msw/radiobox.h"
+	"wx/motif/radiobox.h"
+	"wx/gtk/radiobox.h"
+	"wx/gtk1/radiobox.h"
+	"wx/osx/radiobox.h"
+	"wx/qt/radiobox.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/radiobox.h
+	"wx/bitmap.h"
+	"wx/list.h"
+
+1555492885 /usr/include/wx-3.1/wx/radiobut.h
+	"wx/defs.h"
+	"wx/control.h"
+	"wx/univ/radiobut.h"
+	"wx/msw/radiobut.h"
+	"wx/motif/radiobut.h"
+	"wx/gtk/radiobut.h"
+	"wx/gtk1/radiobut.h"
+	"wx/osx/radiobut.h"
+	"wx/qt/radiobut.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/radiobut.h
+
+1555492885 /usr/include/wx-3.1/wx/textctrl.h
+	"wx/defs.h"
+	"wx/control.h"
+	"wx/textentry.h"
+	"wx/dynarray.h"
+	"wx/gdicmn.h"
+	"wx/ioswrap.h"
+	"wx/x11/textctrl.h"
+	"wx/univ/textctrl.h"
+	"wx/msw/textctrl.h"
+	"wx/motif/textctrl.h"
+	"wx/gtk/textctrl.h"
+	"wx/gtk1/textctrl.h"
+	"wx/osx/textctrl.h"
+	"wx/qt/textctrl.h"
+
+1555492885 /usr/include/wx-3.1/wx/textentry.h
+	"wx/filefn.h"
+	"wx/gdicmn.h"
+	"wx/gtk/textentry.h"
+	"wx/osx/textentry.h"
+	"wx/msw/textentry.h"
+	"wx/motif/textentry.h"
+	"wx/qt/textentry.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/textentry.h
+
+1555492884 /usr/include/wx-3.1/wx/ioswrap.h
+	"wx/beforestd.h"
+	<iostream.h>
+	<iostream>
+	"wx/afterstd.h"
+	"wx/msw/winundef.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/textctrl.h
+
+1555492885 /usr/include/wx-3.1/wx/slider.h
+	"wx/defs.h"
+	"wx/control.h"
+	"wx/univ/slider.h"
+	"wx/msw/slider.h"
+	"wx/motif/slider.h"
+	"wx/gtk/slider.h"
+	"wx/gtk1/slider.h"
+	"wx/osx/slider.h"
+	"wx/qt/slider.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/slider.h
+
+1555492885 /usr/include/wx-3.1/wx/gauge.h
+	"wx/defs.h"
+	"wx/control.h"
+	"wx/univ/gauge.h"
+	"wx/msw/gauge.h"
+	"wx/motif/gauge.h"
+	"wx/gtk/gauge.h"
+	"wx/gtk1/gauge.h"
+	"wx/osx/gauge.h"
+	"wx/qt/gauge.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/gauge.h
+
+1555492885 /usr/include/wx-3.1/wx/dirdlg.h
+	"wx/defs.h"
+	"wx/dialog.h"
+	"wx/generic/dirdlgg.h"
+	"wx/generic/dirdlgg.h"
+	"wx/msw/dirdlg.h"
+	"wx/gtk/dirdlg.h"
+	"wx/generic/dirdlgg.h"
+	"wx/osx/dirdlg.h"
+	"wx/generic/dirdlgg.h"
+	"wx/qt/dirdlg.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/dirdlg.h
+
+1555492885 /usr/include/wx-3.1/wx/toolbar.h
+	"wx/defs.h"
+	"wx/tbarbase.h"
+	"wx/univ/toolbar.h"
+	"wx/msw/toolbar.h"
+	"wx/motif/toolbar.h"
+	"wx/gtk/toolbar.h"
+	"wx/gtk1/toolbar.h"
+	"wx/osx/toolbar.h"
+	"wx/qt/toolbar.h"
+
+1555492886 /usr/include/wx-3.1/wx/tbarbase.h
+	"wx/defs.h"
+	"wx/bitmap.h"
+	"wx/list.h"
+	"wx/control.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/toolbar.h
+
+1555492885 /usr/include/wx-3.1/wx/combobox.h
+	"wx/defs.h"
+	"wx/textctrl.h"
+	"wx/ctrlsub.h"
+	"wx/textentry.h"
+	"wx/univ/combobox.h"
+	"wx/msw/combobox.h"
+	"wx/motif/combobox.h"
+	"wx/gtk/combobox.h"
+	"wx/gtk1/combobox.h"
+	"wx/osx/combobox.h"
+	"wx/qt/combobox.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/combobox.h
+	"wx/choice.h"
+
+1555492885 /usr/include/wx-3.1/wx/layout.h
+	"wx/object.h"
+
+1555492885 /usr/include/wx-3.1/wx/choicdlg.h
+	"wx/defs.h"
+	"wx/generic/choicdgg.h"
+
+1555492885 /usr/include/wx-3.1/wx/generic/choicdgg.h
+	"wx/dynarray.h"
+	"wx/dialog.h"
+
+1555492885 /usr/include/wx-3.1/wx/textdlg.h
+	"wx/generic/textdlgg.h"
+
+1555492885 /usr/include/wx-3.1/wx/generic/textdlgg.h
+	"wx/defs.h"
+	"wx/dialog.h"
+	"wx/valtext.h"
+	"wx/textctrl.h"
+
+1555492885 /usr/include/wx-3.1/wx/valtext.h
+	"wx/defs.h"
+	"wx/validate.h"
+
+1555492885 /usr/include/wx-3.1/wx/filedlg.h
+	"wx/defs.h"
+	"wx/dialog.h"
+	"wx/arrstr.h"
+	"wx/generic/filedlgg.h"
+	"wx/msw/filedlg.h"
+	"wx/motif/filedlg.h"
+	"wx/gtk/filedlg.h"
+	"wx/gtk1/filedlg.h"
+	"wx/osx/filedlg.h"
+	"wx/qt/filedlg.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/filedlg.h
+	"wx/gtk/filectrl.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/filectrl.h
+	"wx/control.h"
+	"wx/filectrl.h"
+
+1555492886 /usr/include/wx-3.1/wx/filectrl.h
+	"wx/defs.h"
+	"wx/string.h"
+	"wx/event.h"
+	"wx/gtk/filectrl.h"
+	"wx/generic/filectrlg.h"
+
+1555492885 /usr/include/wx-3.1/wx/generic/filectrlg.h
+	"wx/containr.h"
+	"wx/listctrl.h"
+	"wx/filectrl.h"
+	"wx/filename.h"
+
+1555492886 /usr/include/wx-3.1/wx/listctrl.h
+	"wx/defs.h"
+	"wx/listbase.h"
+	"wx/msw/listctrl.h"
+	"wx/qt/listctrl.h"
+	"wx/generic/listctrl.h"
+
+1555492886 /usr/include/wx-3.1/wx/listbase.h
+	"wx/colour.h"
+	"wx/font.h"
+	"wx/gdicmn.h"
+	"wx/event.h"
+	"wx/control.h"
+	"wx/itemattr.h"
+	"wx/systhemectrl.h"
+
+1555492886 /usr/include/wx-3.1/wx/itemattr.h
+
+1555492886 /usr/include/wx-3.1/wx/systhemectrl.h
+	"wx/defs.h"
+
+1555492887 /usr/include/wx-3.1/wx/generic/listctrl.h
+	"wx/containr.h"
+	"wx/scrolwin.h"
+	"wx/textctrl.h"
+
+1555492884 /usr/include/wx-3.1/wx/filename.h
+	"wx/arrstr.h"
+	"wx/filefn.h"
+	"wx/datetime.h"
+	"wx/intl.h"
+	"wx/longlong.h"
+	"wx/file.h"
+
+1555492884 /usr/include/wx-3.1/wx/file.h
+	"wx/defs.h"
+	"wx/string.h"
+	"wx/filefn.h"
+	"wx/convauto.h"
+
+1555492884 /usr/include/wx-3.1/wx/convauto.h
+	"wx/strconv.h"
+	"wx/fontenc.h"
+
+1555492885 /usr/include/wx-3.1/wx/mdi.h
+	"wx/defs.h"
+	"wx/frame.h"
+	"wx/menu.h"
+	"wx/generic/mdig.h"
+	"wx/msw/mdi.h"
+	"wx/gtk/mdi.h"
+	"wx/gtk1/mdi.h"
+	"wx/osx/mdi.h"
+	"wx/qt/mdi.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/mdi.h
+	"wx/frame.h"
 

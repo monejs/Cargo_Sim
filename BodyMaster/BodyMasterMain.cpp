@@ -1,10 +1,10 @@
 /***************************************************************
  * Name:      BodyMasterMain.cpp
  * Purpose:   Code for Application Frame
- * Author:    Vilis Erglis (vilis@erglis.org)
+ * Author:    Vilis Erglis (vilis@taksis.org)
  * Created:   2019-05-07
  * Copyright: Vilis Erglis ()
- * License:
+ * License:   GNU General Public License v3.0
  **************************************************************/
 
 #include "BodyMasterMain.h"
@@ -17,6 +17,7 @@
 
 //helper functions
 Ship ShipBody;
+
 
 //(*IdInit(BodyMasterFrame)
 const long BodyMasterFrame::ID_GRID1 = wxNewId();
@@ -36,6 +37,7 @@ END_EVENT_TABLE()
 
 BodyMasterFrame::BodyMasterFrame(wxWindow* parent,wxWindowID id)
 {
+    ShipBody.modelLoad();
     //(*Initialize(BodyMasterFrame)
     wxBoxSizer* BoxSizer1;
     wxFlexGridSizer* FlexGridSizer1;
@@ -45,7 +47,7 @@ BodyMasterFrame::BodyMasterFrame(wxWindow* parent,wxWindowID id)
     wxMenuItem* MenuItem1;
     wxMenuItem* MenuItem2;
 
-    Create(parent, id, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("id"));
+    Create(parent, id, _("BodyMaster"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("id"));
     FlexGridSizer1 = new wxFlexGridSizer(2, 1, 0, 0);
     Grid = new wxGrid(this, ID_GRID1, wxDefaultPosition, wxDefaultSize, 0, _T("ID_GRID1"));
     Grid->CreateGrid(0,8);
@@ -87,6 +89,7 @@ BodyMasterFrame::BodyMasterFrame(wxWindow* parent,wxWindowID id)
     FlexGridSizer1->SetSizeHints(this);
 
     Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&BodyMasterFrame::OnAddButtonClick);
+    Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&BodyMasterFrame::OnParticularsButtonClick);
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&BodyMasterFrame::OnQuit);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&BodyMasterFrame::OnAbout);
     //*)
@@ -118,4 +121,12 @@ void BodyMasterFrame::OnAddButtonClick(wxCommandEvent& event)
     Grid->SetCellEditor(0,1, new wxGridCellChoiceEditor(choices, false));
     Grid->SetCellValue(0,1, choices[0]);
     ShipBody.new_unit(ShipBody.u_types::Ballast);
+}
+
+void BodyMasterFrame::OnParticularsButtonClick(wxCommandEvent& event)
+{
+    Particulars* particulars = new Particulars(NULL);
+
+    particulars->ShowModal();
+    delete particulars;
 }

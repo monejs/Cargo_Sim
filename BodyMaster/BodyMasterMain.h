@@ -1,15 +1,16 @@
 /***************************************************************
  * Name:      BodyMasterMain.h
  * Purpose:   Defines Application Frame
- * Author:    Vilis Erglis (vilis@erglis.org)
+ * Author:    Vilis Erglis (vilis@taksis.org)
  * Created:   2019-05-07
  * Copyright: Vilis Erglis ()
- * License:
+ * License:   GNU General Public License v3.0
  **************************************************************/
 
 #ifndef BODYMASTERMAIN_H
 #define BODYMASTERMAIN_H
 #include "../Ship.h"
+#include "../Particulars.h"
 
 //(*Headers(BodyMasterFrame)
 #include <wx/button.h>
@@ -33,6 +34,7 @@ class BodyMasterFrame: public wxFrame
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
         void OnAddButtonClick(wxCommandEvent& event);
+        void OnParticularsButtonClick(wxCommandEvent& event);
         //*)
 
         //(*Identifiers(BodyMasterFrame)
