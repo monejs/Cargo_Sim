@@ -1,7 +1,7 @@
 /***************************************************************
  * Name:      CargoMasterApp.h
  * Purpose:   Defines Application Class
- * Author:    Vilis Erglis (vilis@erglis.org)
+ * Author:    Vilis Erglis (vilis@taksis.org)
  * Created:   2019-05-07
  * Copyright: Vilis Erglis ()
  * License:   GNU General Public License v3.0
