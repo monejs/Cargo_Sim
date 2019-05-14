@@ -70,6 +70,7 @@ void Ship::modelLoad()
             ribs[j].zy.push_back(std::vector<float>()); // Adds a new object of vector to the zy vector in ribs class.
             ribs[j].zy[l].push_back(2); // Adds two places in the vector for the z and y coordinates
             // z and y coordinates are assigned for the starboard side of the ship and also the port side coordinates are created
+            // z axis is from keel up, y axis is from keel line to starboard
             ribs[j].zy[l][0] = points[i][2];
             ribs[j].zy[l][1] = points[i][1];
             l++;
@@ -91,7 +92,7 @@ void Ship::modelLoad()
             ribs[j].zy[l].push_back(2);
             ribs[j].zy[l][0] = points[i][2];
             ribs[j].zy[l][1] = points[i][1];
-            l++
+            l++;
             ribs[j].zy.push_back(std::vector<float>());
             ribs[j].zy[l].push_back(2);
             ribs[j].zy[l][0] = points[i][2];
