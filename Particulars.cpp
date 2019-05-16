@@ -4,6 +4,8 @@
 //InternalHeaders(Particulars)
 #include <wx/intl.h>
 #include <wx/string.h>
+#include <wx/validate.h>
+
 
 //IdInit(Particulars)
 const long Particulars::ID_NAMELABEL = wxNewId();
@@ -52,7 +54,7 @@ Particulars::Particulars(wxWindow* parent,wxWindowID id,const wxPoint& pos,const
 	FlexGridSizer1 = new wxFlexGridSizer(10, 4, 0, 0);
 	StaticText1 = new wxStaticText(this, ID_NAMELABEL, _("Ships Name"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_NAMELABEL"));
 	FlexGridSizer1->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	ShipNameText = new wxTextCtrl(this, ID_NAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_NAME"));
+	ShipNameText = new wxTextCtrl(this, ID_NAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0);
 	FlexGridSizer1->Add(ShipNameText, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText12 = new wxStaticText(this, ID_LSHIPLABEL, _("Light Ship"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_LSHIPLABEL"));
 	FlexGridSizer1->Add(StaticText12, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);

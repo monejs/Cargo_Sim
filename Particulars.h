@@ -46,7 +46,7 @@ class Particulars: public wxDialog
 		wxTextCtrl* VCGText;
 
 
-	protected:
+
 
 		//Identifiers(Particulars)
 		static const long ID_NAMELABEL;
