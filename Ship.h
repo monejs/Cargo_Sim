@@ -152,16 +152,22 @@ private:
         float s_VCG;
         float s_GZ;
     };
-    std::vector<std::vector<float>> points;
+    struct StandartShip
+    {
+        float sectionlength;
+        std::array<float, 10> section_beam;
+        std::array<float, 10> section_draft;
+    };
+//    std::vector<std::vector<float>> points;
     std::vector<Unit> UnitVec;
     std::vector<BulkCargo> BulkVec;
     std::vector<Hydrostatistics> HydroVec;
     std::vector<crossCurves> CrossVec;
-    struct rib
-    {
-        float x;
-        std::vector<std::vector<float>> zy;
-    };
-    std::vector<rib> ribs;
+//    struct rib
+//    {
+//        float x;
+//        std::vector<std::vector<float>> zy;
+//    };
+//    std::vector<rib> ribs;
 };
 #endif // SHIP_H

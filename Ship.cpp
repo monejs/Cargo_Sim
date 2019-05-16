@@ -16,7 +16,15 @@ bool Ship::assign_val(std::string& in_t, float& var)
 // Still working on this one
 void Ship::calculate()
 {
+    StandartShip standartship;
+    standartship.sectionlength = s_LOA/10;
+    standartship.section_beam = {0.23f*s_beam, 0.6f*s_beam, s_beam, s_beam, s_beam, s_beam, s_beam, 0.75f*s_beam, 0.5f*s_beam, 0.25f*s_beam};
+    standartship.section_draft = {0.9f*s_maxDraft, s_maxDraft, s_maxDraft, s_maxDraft, s_maxDraft, s_maxDraft, s_maxDraft, 0.8f*s_maxDraft, 0.5f*s_maxDraft, 0.3f*s_maxDraft};
 
+    for (float i=s_minDraft; i<s_maxDraft; i+=0.1f)
+    {
+
+    }
 }
 
 // Calculates the ships particulars automagicly, if so wished. This function is available over the particulars input mask.
@@ -31,14 +39,14 @@ void Ship::autoParticulars()
     }
     // And here is the automagic
     s_LOA = xmax+10;
-    s_beam = ymax+0.1;
-    s_height = zmax+0.5;
+    s_beam = ymax+0.1f;
+    s_height = zmax+0.5f;
 
 
 }
 // This is the model, which will be used to make the data for the ship.
 // TODO: Make the model variable
-void Ship::modelLoad()
+/* void Ship::modelLoad()
 {
     std::ifstream file;             // Declares where the model file is with its point coordinates.
     file.open("Model.txt", std::ios_base::in); // Opens file
@@ -61,8 +69,8 @@ void Ship::modelLoad()
     // This provides the ribs of the ship
     ribs.push_back(dumdum);                         // Adding the dummy
     int j=0, l=0;                                   // Iteration help for the vectors
-    /* Iterate through all points starting with x = 0 through the length of model ship
-    and getting all the point in a single rib */
+    / Iterate through all points starting with x = 0 through the length of model ship
+    and getting all the point in a single rib /
     for (long unsigned int i=0; i<points.size(); i++)
     {
         if (i+1 != points.size()){ // Checking if there is a next vector float
@@ -104,7 +112,7 @@ void Ship::modelLoad()
     {
         std::stable_sort(ribs[i].zy.begin(), ribs[i].zy.end());
     }
-}
+}*/
 
 // Saves all the data to file using the google protobuf protocol.
 // Quite easy to use and can be generates automatically.
@@ -297,15 +305,18 @@ Ship::Ship() // Declaration of the Ships null state.
 {
     s_name = "Ship1"; // Simple name with intention, it will be changed
     s_LOA = 100.0f;     // Same as the model ship for LOA, beam and height, min draft and max draft
-    s_beam = 20.0f;
-    s_height = 8.0f;
-    s_lightShip = 0;
+    s_beam = 16.4f;
+    s_height = 10.0f;
+    s_lightShip = 5600;
     s_strengthTank = 20.0f;
     s_strengthCover = 5.0f;
     s_minDraft = 0.5f;
-    s_maxDraft = 5.0f;
-    s_maxDWT = 0;
+    s_maxDraft = 7.5f;
+    s_maxDWT = 15000;
     s_waterCondition = 1.025;
+    s_LCGLight = 40.0f;
+    s_TCGLight = 0.0f;
+    s_VCGLight = 7.5f;
 }
 // Setting ships particulars through function, since the values are not supposed to be accessed publicly.
 // Also checks, if the input values are valid.
