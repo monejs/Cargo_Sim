@@ -8,7 +8,12 @@
  **************************************************************/
 
 #include "BodyMasterMain.h"
-#include <wx/msgdlg.h>
+
+#define output(x,y) if (!x(particulars->y->GetValue().ToStdString()))\
+    {\
+        wxMessageBox(wxT("Invalid input"), wxT("Error"));\
+        particulars->ShowModal();\
+    }
 
 //(*InternalHeaders(BodyMasterFrame)
 #include <wx/intl.h>
@@ -18,13 +23,14 @@
 //helper functions
 Ship ShipBody;
 
-
 //(*IdInit(BodyMasterFrame)
 const long BodyMasterFrame::ID_GRID1 = wxNewId();
 const long BodyMasterFrame::ID_BUTTON4 = wxNewId();
 const long BodyMasterFrame::ID_BUTTON3 = wxNewId();
 const long BodyMasterFrame::ID_BUTTON2 = wxNewId();
 const long BodyMasterFrame::ID_BUTTON1 = wxNewId();
+const long BodyMasterFrame::idMenuSave = wxNewId();
+const long BodyMasterFrame::idMenuLoad = wxNewId();
 const long BodyMasterFrame::idMenuQuit = wxNewId();
 const long BodyMasterFrame::idMenuAbout = wxNewId();
 const long BodyMasterFrame::ID_STATUSBAR1 = wxNewId();
@@ -37,7 +43,6 @@ END_EVENT_TABLE()
 
 BodyMasterFrame::BodyMasterFrame(wxWindow* parent,wxWindowID id)
 {
-    ShipBody.modelLoad();
     //(*Initialize(BodyMasterFrame)
     wxBoxSizer* BoxSizer1;
     wxFlexGridSizer* FlexGridSizer1;
@@ -71,6 +76,10 @@ BodyMasterFrame::BodyMasterFrame(wxWindow* parent,wxWindowID id)
     SetSizer(FlexGridSizer1);
     MenuBar1 = new wxMenuBar();
     Menu1 = new wxMenu();
+    SaveItem = new wxMenuItem(Menu1, idMenuSave, _("Save\tCtrl + s"), wxEmptyString, wxITEM_NORMAL);
+    Menu1->Append(SaveItem);
+    LoadItem = new wxMenuItem(Menu1, idMenuLoad, _("Load\tCtrl + o"), wxEmptyString, wxITEM_NORMAL);
+    Menu1->Append(LoadItem);
     MenuItem1 = new wxMenuItem(Menu1, idMenuQuit, _("Quit\tAlt-F4"), _("Quit the application"), wxITEM_NORMAL);
     Menu1->Append(MenuItem1);
     MenuBar1->Append(Menu1, _("&File"));
@@ -90,6 +99,8 @@ BodyMasterFrame::BodyMasterFrame(wxWindow* parent,wxWindowID id)
 
     Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&BodyMasterFrame::OnAddButtonClick);
     Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&BodyMasterFrame::OnParticularsButtonClick);
+    Connect(idMenuSave,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&BodyMasterFrame::OnSaveItemSelected);
+    Connect(idMenuLoad,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&BodyMasterFrame::OnLoadItemSelected);
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&BodyMasterFrame::OnQuit);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&BodyMasterFrame::OnAbout);
     //*)
@@ -100,16 +111,17 @@ BodyMasterFrame::~BodyMasterFrame()
     //(*Destroy(BodyMasterFrame)
     //*)
 }
-
+//Closes the program
 void BodyMasterFrame::OnQuit(wxCommandEvent& event)
 {
     Close();
 }
-
+//Opens the about window. Still working on this one
 void BodyMasterFrame::OnAbout(wxCommandEvent& event)
 {
 }
-
+//Adds a unit to the array in the grid and in the ShipBody instance
+//This approach is used to save memory and give more flexibility
 void BodyMasterFrame::OnAddButtonClick(wxCommandEvent& event)
 {
     wxArrayString choices;
@@ -127,6 +139,65 @@ void BodyMasterFrame::OnParticularsButtonClick(wxCommandEvent& event)
 {
     Particulars* particulars = new Particulars(NULL);
 
+    particulars->ShipNameText->SetValue(wxString::Format(wxT("%s"),ShipBody.read_s_name()));
+    particulars->LOAText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_LOA()));
+    particulars->HText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_height()));
+    particulars->BText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_beam()));
+    particulars->LCGText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_LCGLight()));
+    particulars->VCGText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_VCGLight()));
+    particulars->TCGText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_TCGLight()));
+    particulars->LightShipText->SetValue(wxString::Format(wxT("%i"),ShipBody.read_s_lightShip()));
+    particulars->MaxDrText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_maxDraft()));
+    particulars->MinDrText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_minDraft()));
+    particulars->MaxDWTText->SetValue(wxString::Format(wxT("%i"),ShipBody.read_s_maxDWT()));
+    particulars->DeckStrText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_strengthCover()));
+    particulars->TankStrText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_strengthTank()));
+
     particulars->ShowModal();
+
+    output(ShipBody.set_s_name, ShipNameText);
+    output(ShipBody.set_s_LOA, LOAText);
+    output(ShipBody.set_s_beam, BText);
+    output(ShipBody.set_s_height, HText);
+    output(ShipBody.set_s_lightShip, LightShipText);
+    output(ShipBody.set_s_LCGLight, LCGText);
+    output(ShipBody.set_s_TCGLight, TCGText);
+    output(ShipBody.set_s_VCGLight, VCGText);
+    output(ShipBody.set_s_maxDraft, MaxDrText);
+    output(ShipBody.set_s_minDraft, MinDrText);
+    output(ShipBody.set_s_maxDWT, MaxDWTText);
+    output(ShipBody.set_s_strengthCover, DeckStrText);
+    output(ShipBody.set_s_strengthTank, TankStrText);
+
     delete particulars;
+}
+
+void BodyMasterFrame::OnGridCellChanged(wxGridEvent& event)
+{
+    if (ShipBody.set_unit(Grid->GetGridCursorRow(),Grid->GetGridCursorCol(), Grid->GetCellValue(Grid->GetGridCursorRow(),Grid->GetGridCursorCol()).ToStdString())){  // Check if the input is a number
+        Grid->SetCellTextColour(Grid->GetGridCursorRow(),Grid->GetGridCursorCol(), *wxBLACK); // Make it black, in case it is a number
+    }else{
+        Grid->SetCellTextColour(Grid->GetGridCursorRow(),Grid->GetGridCursorCol(), *wxRED); // If the entry is not a float, it is tuned read
+    }
+}
+
+void BodyMasterFrame::OnDeleteButtonClick(wxCommandEvent& event)
+{
+    Grid->DeleteRows(Grid->GetGridCursorRow());
+    ShipBody.delete_unit(Grid->GetGridCursorRow());
+}
+
+void BodyMasterFrame::OnCalculateButtonClick(wxCommandEvent& event)
+{
+    ShipBody.calculate();
+}
+
+void BodyMasterFrame::OnLoadItemSelected(wxCommandEvent& event)
+{
+    ShipBody.load();
+}
+
+void BodyMasterFrame::OnSaveItemSelected(wxCommandEvent& event)
+{
+    ShipBody.save();
 }

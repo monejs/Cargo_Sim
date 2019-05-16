@@ -11,6 +11,8 @@
 #define BODYMASTERMAIN_H
 #include "../Ship.h"
 #include "../Particulars.h"
+#include <wx/msgdlg.h>
+
 
 //(*Headers(BodyMasterFrame)
 #include <wx/button.h>
@@ -35,6 +37,11 @@ class BodyMasterFrame: public wxFrame
         void OnAbout(wxCommandEvent& event);
         void OnAddButtonClick(wxCommandEvent& event);
         void OnParticularsButtonClick(wxCommandEvent& event);
+        void OnGridCellChanged(wxGridEvent& event);
+        void OnDeleteButtonClick(wxCommandEvent& event);
+        void OnCalculateButtonClick(wxCommandEvent& event);
+        void OnLoadItemSelected(wxCommandEvent& event);
+        void OnSaveItemSelected(wxCommandEvent& event);
         //*)
 
         //(*Identifiers(BodyMasterFrame)
@@ -43,6 +50,8 @@ class BodyMasterFrame: public wxFrame
         static const long ID_BUTTON3;
         static const long ID_BUTTON2;
         static const long ID_BUTTON1;
+        static const long idMenuSave;
+        static const long idMenuLoad;
         static const long idMenuQuit;
         static const long idMenuAbout;
         static const long ID_STATUSBAR1;
@@ -54,6 +63,8 @@ class BodyMasterFrame: public wxFrame
         wxButton* DeleteButton;
         wxButton* ParticularsButton;
         wxGrid* Grid;
+        wxMenuItem* LoadItem;
+        wxMenuItem* SaveItem;
         wxStatusBar* StatusBar1;
         //*)
 
