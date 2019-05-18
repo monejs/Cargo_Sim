@@ -16,14 +16,39 @@ bool Ship::assign_val(std::string& in_t, float& var)
 // Still working on this one
 void Ship::calculate()
 {
-    StandartShip standartship;
-    standartship.sectionlength = s_LOA/10;
-    standartship.section_beam = {0.23f*s_beam, 0.6f*s_beam, s_beam, s_beam, s_beam, s_beam, s_beam, 0.75f*s_beam, 0.5f*s_beam, 0.25f*s_beam};
-    standartship.section_draft = {0.9f*s_maxDraft, s_maxDraft, s_maxDraft, s_maxDraft, s_maxDraft, s_maxDraft, s_maxDraft, 0.8f*s_maxDraft, 0.5f*s_maxDraft, 0.3f*s_maxDraft};
+    float sectionlength;
+    std::array<float, 10> section_beam;
+    std::array<float, 10> section_height;
 
-    for (float i=s_minDraft; i<s_maxDraft; i+=0.1f)
+    sectionlength = s_LOA/10;
+    section_beam = {0.23f*s_beam, 0.6f*s_beam, s_beam, s_beam, s_beam, s_beam, s_beam, 0.75f*s_beam, 0.5f*s_beam, 0.25f*s_beam};
+    section_height = {0.9f*s_height, s_height, s_height, s_height, s_height, s_height, s_height, 0.8f*s_height, 0.5f*s_height, 0.3f*s_height};
+
+    for (float draft=s_minDraft; draft<s_maxDraft; draft+=0.1f)
     {
+        std::array<float, 10> section_area;
+        std::array<float, 10> section_vol;
+        std::array<float, 10> section_G;
+        std::array<float, 10> section_LCG;
+        std::array<float, 10> section_BM;
+        std::array<float, 10> section_KM;
+        std::array<float, 10> section_B;
+        for (int section=0; section!=10; section++)
+        {
+            if (section_height[section] > draft)
+            {
+                section_area[section]=section_beam[section]*(draft-s_height+section_height[section]); // A_sec = Beam_sec * draft
+                section_vol[section]=section_area[section]*sectionlength; // Area * section length
+                section_LCG[section]=section * sectionlength + sectionlength/2; //n*section + 1/2 section length
+                section_G[section]=s_height-section_height[section]/2; // Maximum draft - section draft /2
+                s_volume += section_vol[section]; // Total underwater volume
 
+                section_B[section]=(draft-s_height+section_height[section])/2 +s_height-section_height[section];
+                section_BM[section]=(sectionlength*pow(section_B[section],3))/(12*section_vol[section]);
+                section_KM[section]=section_B[section]+section_BM[section];
+
+            }
+        }
     }
 }
 
@@ -41,6 +66,8 @@ void Ship::autoParticulars()
     s_LOA = xmax+10;
     s_beam = ymax+0.1f;
     s_height = zmax+0.5f;
+
+    Ship::calculate();
 
 
 }
@@ -116,7 +143,7 @@ void Ship::autoParticulars()
 
 // Saves all the data to file using the google protobuf protocol.
 // Quite easy to use and can be generates automatically.
-void Ship::save()
+bool Ship::save()
 {
     /* Since the database provided by the protobuf is not meant to be worked with as a regular class,
     and the values have to be brought over to the buffer class for its operation*/
@@ -198,8 +225,14 @@ void Ship::save()
     }
     std::string filename = s_name+".ship"; // Program specific filename
     std::fstream output(filename,  std::ios::out | std::ios::trunc | std::ios::binary); // Creating file
-    SaveShip.SerializeToOstream(&output); // Writing to file
-    output.close(); // File closed
+    if (SaveShip.SerializeToOstream(&output)){
+        output.close(); // File closed
+        return true;
+
+    }else {
+        output.close(); // File closed
+        return false; // Writing to file
+    }
 }
 bool Ship::load(std::string file) // Load the protobuf file in the program.
 {

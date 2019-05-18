@@ -7,6 +7,8 @@
 #include <ios>
 #include <iostream>
 #include <sstream>
+#include <math.h>
+#include <cmath>
 
 #include "Ship.pb.h"
 
@@ -63,7 +65,7 @@ public:
     void new_unit(u_types);
     void delete_unit(int);
     void calculate();
-    void save();
+    bool save();
     bool load(std::string);
     void modelLoad();
 
@@ -85,6 +87,9 @@ private:
     float s_TCGLight;
     float s_VCGLight;
     float s_waterCondition;
+    float s_volume;
+    float hull_LCG;
+    float hull_VCG;
 
     class Unit
     {
@@ -152,17 +157,12 @@ private:
         float s_VCG;
         float s_GZ;
     };
-    struct StandartShip
-    {
-        float sectionlength;
-        std::array<float, 10> section_beam;
-        std::array<float, 10> section_draft;
-    };
 //    std::vector<std::vector<float>> points;
     std::vector<Unit> UnitVec;
     std::vector<BulkCargo> BulkVec;
     std::vector<Hydrostatistics> HydroVec;
     std::vector<crossCurves> CrossVec;
+
 //    struct rib
 //    {
 //        float x;
