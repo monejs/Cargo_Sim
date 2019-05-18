@@ -563,10 +563,11 @@
 
 1555492886 /usr/include/wx-3.1/wx/gtk/app.h
 
-1557998881 /home/vilis/Cargo_Sim/BodyMaster/BodyMasterMain.h
+1558008827 /home/vilis/Cargo_Sim/BodyMaster/BodyMasterMain.h
 	"../Ship.h"
 	"../Particulars.h"
 	<wx/msgdlg.h>
+	<wx/filedlg.h>
 	<wx/button.h>
 	<wx/frame.h>
 	<wx/grid.h>
@@ -991,13 +992,15 @@
 	"wx/defs.h"
 	"wx/window.h"
 
-1557933447 /home/vilis/Cargo_Sim/Ship.h
+1558101029 /home/vilis/Cargo_Sim/Ship.h
 	<string>
 	<vector>
 	<fstream>
 	<ios>
 	<iostream>
 	<sstream>
+	<math.h>
+	<cmath>
 	"Ship.pb.h"
 
 1557183387 /home/vilis/Cargo_Sim/Ship.pb.h
@@ -1020,7 +1023,7 @@
 	<google/protobuf/port_def.inc>
 	<google/protobuf/port_undef.inc>
 
-1557994159 source:/home/vilis/Cargo_Sim/Ship.cpp
+1558010692 source:/home/vilis/Cargo_Sim/Ship.cpp
 	"Ship.h"
 
 1557183398 source:/home/vilis/Cargo_Sim/Ship.pb.cc
@@ -1037,7 +1040,7 @@
 	<google/protobuf/port_def.inc>
 	<google/protobuf/port_undef.inc>
 
-1557998881 source:/home/vilis/Cargo_Sim/BodyMaster/BodyMasterMain.cpp
+1558010665 source:/home/vilis/Cargo_Sim/BodyMaster/BodyMasterMain.cpp
 	"BodyMasterMain.h"
 	<wx/intl.h>
 	<wx/string.h>

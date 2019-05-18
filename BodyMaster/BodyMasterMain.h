@@ -12,7 +12,7 @@
 #include "../Ship.h"
 #include "../Particulars.h"
 #include <wx/msgdlg.h>
-
+#include <wx/filedlg.h>
 
 //(*Headers(BodyMasterFrame)
 #include <wx/button.h>

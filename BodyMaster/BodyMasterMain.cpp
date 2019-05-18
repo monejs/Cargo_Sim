@@ -194,10 +194,20 @@ void BodyMasterFrame::OnCalculateButtonClick(wxCommandEvent& event)
 
 void BodyMasterFrame::OnLoadItemSelected(wxCommandEvent& event)
 {
-    ShipBody.load();
+    wxFileDialog dialog(NULL, wxT("Choose a ship file"));
+    if (dialog.ShowModal() == wxID_OPEN)
+    {
+        if (!ShipBody.load(dialog.GetPath().ToStdString()))
+        {
+            wxMessageBox(wxT("Error loading file"), wxT("Error"));
+        }
+    }
 }
 
 void BodyMasterFrame::OnSaveItemSelected(wxCommandEvent& event)
 {
-    ShipBody.save();
+    if(ShipBody.save())
+    {
+        wxMessageBox("File Saved", "Success");
+    }else {wxMessageBox("Error Saving File", "Error");}
 }
