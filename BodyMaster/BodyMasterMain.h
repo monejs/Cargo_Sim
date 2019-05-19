@@ -39,9 +39,10 @@ class BodyMasterFrame: public wxFrame
         void OnParticularsButtonClick(wxCommandEvent& event);
         void OnGridCellChanged(wxGridEvent& event);
         void OnDeleteButtonClick(wxCommandEvent& event);
-        void OnCalculateButtonClick(wxCommandEvent& event);
         void OnLoadItemSelected(wxCommandEvent& event);
         void OnSaveItemSelected(wxCommandEvent& event);
+        void OnCalculateButtonClick1(wxCommandEvent& event);
+        void OnPrintHydrostaticsSelected(wxCommandEvent& event);
         //*)
 
         //(*Identifiers(BodyMasterFrame)
@@ -53,6 +54,7 @@ class BodyMasterFrame: public wxFrame
         static const long idMenuSave;
         static const long idMenuLoad;
         static const long idMenuQuit;
+        static const long idPrintHydroStatics;
         static const long idMenuAbout;
         static const long ID_STATUSBAR1;
         //*)
@@ -63,7 +65,9 @@ class BodyMasterFrame: public wxFrame
         wxButton* DeleteButton;
         wxButton* ParticularsButton;
         wxGrid* Grid;
+        wxMenu* Menu3;
         wxMenuItem* LoadItem;
+        wxMenuItem* PrintHydrostatics;
         wxMenuItem* SaveItem;
         wxStatusBar* StatusBar1;
         //*)

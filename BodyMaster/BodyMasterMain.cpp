@@ -10,9 +10,8 @@
 #include "BodyMasterMain.h"
 
 #define output(x,y) if (!x(particulars->y->GetValue().ToStdString()))\
-    {\
+   // {\
         wxMessageBox(wxT("Invalid input"), wxT("Error"));\
-        particulars->ShowModal();\
     }
 
 //(*InternalHeaders(BodyMasterFrame)
@@ -32,6 +31,7 @@ const long BodyMasterFrame::ID_BUTTON1 = wxNewId();
 const long BodyMasterFrame::idMenuSave = wxNewId();
 const long BodyMasterFrame::idMenuLoad = wxNewId();
 const long BodyMasterFrame::idMenuQuit = wxNewId();
+const long BodyMasterFrame::idPrintHydroStatics = wxNewId();
 const long BodyMasterFrame::idMenuAbout = wxNewId();
 const long BodyMasterFrame::ID_STATUSBAR1 = wxNewId();
 //*)
@@ -91,6 +91,10 @@ BodyMasterFrame::BodyMasterFrame(wxWindow* parent,wxWindowID id)
     MenuItem1 = new wxMenuItem(Menu1, idMenuQuit, _("Quit\tAlt-F4"), _("Quit the application"), wxITEM_NORMAL);
     Menu1->Append(MenuItem1);
     MenuBar1->Append(Menu1, _("&File"));
+    Menu3 = new wxMenu();
+    PrintHydrostatics = new wxMenuItem(Menu3, idPrintHydroStatics, _("Print Hydrostatics"), wxEmptyString, wxITEM_NORMAL);
+    Menu3->Append(PrintHydrostatics);
+    MenuBar1->Append(Menu3, _("&Ship"));
     Menu2 = new wxMenu();
     MenuItem2 = new wxMenuItem(Menu2, idMenuAbout, _("About\tF1"), _("Show info about this application"), wxITEM_NORMAL);
     Menu2->Append(MenuItem2);
@@ -107,9 +111,11 @@ BodyMasterFrame::BodyMasterFrame(wxWindow* parent,wxWindowID id)
 
     Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&BodyMasterFrame::OnAddButtonClick);
     Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&BodyMasterFrame::OnParticularsButtonClick);
+    Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&BodyMasterFrame::OnCalculateButtonClick1);
     Connect(idMenuSave,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&BodyMasterFrame::OnSaveItemSelected);
     Connect(idMenuLoad,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&BodyMasterFrame::OnLoadItemSelected);
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&BodyMasterFrame::OnQuit);
+    Connect(idPrintHydroStatics,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&BodyMasterFrame::OnPrintHydrostaticsSelected);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&BodyMasterFrame::OnAbout);
     //*)
 }
@@ -195,11 +201,6 @@ void BodyMasterFrame::OnDeleteButtonClick(wxCommandEvent& event)
     ShipBody.delete_unit(Grid->GetGridCursorRow());
 }
 
-void BodyMasterFrame::OnCalculateButtonClick(wxCommandEvent& event)
-{
-    ShipBody.calculate();
-}
-
 void BodyMasterFrame::OnLoadItemSelected(wxCommandEvent& event)
 {
     wxFileDialog dialog(NULL, wxT("Choose a ship file"));
@@ -218,4 +219,14 @@ void BodyMasterFrame::OnSaveItemSelected(wxCommandEvent& event)
     {
         wxMessageBox("File Saved", "Success");
     }else {wxMessageBox("Error Saving File", "Error");}
+}
+
+void BodyMasterFrame::OnCalculateButtonClick1(wxCommandEvent& event)
+{
+    ShipBody.calculate();
+}
+
+void BodyMasterFrame::OnPrintHydrostaticsSelected(wxCommandEvent& event)
+{
+    ShipBody.text_print();
 }
