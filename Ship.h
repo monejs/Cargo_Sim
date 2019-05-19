@@ -50,7 +50,15 @@ public:
     float& read_s_TCGLight();
     float& read_s_VCGLight();
     float& read_s_waterCondition();
-    bool set_unit (int, int, std::string);
+    bool set_u_name(int, std::string);
+    bool set_u_type(int, std::string);
+    bool set_u_lcg(int, std::string);
+    bool set_u_vcg(int, std::string);
+    bool set_u_tcg(int, std::string);
+    bool set_u_height (int, std::string);
+    bool set_u_length (int, std::string);
+    bool set_u_breadth (int, std::string);
+
     std::string& read_unit_name (int);
     std::string read_unit_type (int);
     float& read_u_LCG(int x);
@@ -60,6 +68,7 @@ public:
     float& read_u_volume(int x);
     float& read_u_dencity(int x);
     float read_u_maxvol (int);
+    void variable_update();
     int unit_count();
     void autoParticulars();
     void text_print();
@@ -75,6 +84,7 @@ public:
     virtual ~Ship();
 
 private:
+
     bool assign_val(std::string&, float&);
     std::string s_name;
     float s_LOA;

@@ -137,10 +137,165 @@ void Ship::text_print(){
     out << dummy << std::endl;
 
     out << std::endl << std::endl << std::endl;
+    std::string dummy2 (89,'#');
+    out << dummy2 << std::endl;
+    out << std::setw(15) << "Compartments" << std::endl;
+    out << dummy2 << std::endl;
+    std::vector<int> carg;
+    std::vector<int> bal;
+    std::vector<int> hf;
+    std::vector<int> md;
+    std::vector<int> fw;
+    std::vector<int> va;
+    std::vector<int> lo;
 
-    out << std::setw(15) << "Compartments" << std::endl << std::endl;
-    out << (89,'#') << std::endl;
+    for (long unsigned int i=0; i<UnitVec.size(); i++)
+    {
+        if (UnitVec[i].u_type == u_types::Ballast) bal.push_back(i);
+        if (UnitVec[i].u_type == u_types::Cargo_Tank) carg.push_back(i);
+        if (UnitVec[i].u_type == u_types::Cargo_Hold) carg.insert(carg.begin(),i);
+        if (UnitVec[i].u_type == u_types::HFO) hf.push_back(i);
+        if (UnitVec[i].u_type == u_types::DO) md.push_back(i);
+        if (UnitVec[i].u_type == u_types::LO) lo.push_back(i);
+        if (UnitVec[i].u_type == u_types::FW) fw.push_back(i);
+        if (UnitVec[i].u_type == u_types::Various) va.push_back(i);
+    }
 
+        std::string dummy3 (72, '-');
+    if (bal.size()>0) out << std::setw(15) << "Cargo" << std::endl << std::endl << dummy3 <<std::endl
+        << " |" << std::setw(12) << "Name"
+        << " |" << std::setw(7) << "LCG"
+        << " |" << std::setw(7) << "TCG"
+        << " |" << std::setw(7) << "VCG"
+        << " |" << std::setw(7) << "Density"
+        << " |" << std::setw(10) << "Volume"
+        << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
+    for (int i=0; i<carg.size(); i++)
+    {
+        out << " |" << std::setw(12) << UnitVec[bal[i]].u_name
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_TCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_VCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_density
+            << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_volume
+            << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_fsm << " |" <<std::endl;
+            if ((i+1)%5==0)out<<dummy3<<std::endl;
+    }
+    if (bal.size()>0) out << std::setw(15) << "Ballast" << std::endl << std::endl << dummy3 <<std::endl
+        << " |" << std::setw(12) << "Name"
+        << " |" << std::setw(7) << "LCG"
+        << " |" << std::setw(7) << "TCG"
+        << " |" << std::setw(7) << "VCG"
+        << " |" << std::setw(7) << "Density"
+        << " |" << std::setw(10) << "Volume"
+        << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
+    for (int i=0; i<bal.size(); i++)
+    {
+        out << " |" << std::setw(12) << UnitVec[bal[i]].u_name
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_TCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_VCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_density
+            << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_volume
+            << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_fsm << " |" <<std::endl;
+            if ((i+1)%5==0)out<<dummy3<<std::endl;
+    }
+
+    if (bal.size()>0) out << std::setw(15) << "HFO" << std::endl << std::endl << dummy3 <<std::endl
+        << " |" << std::setw(12) << "Name"
+        << " |" << std::setw(7) << "LCG"
+        << " |" << std::setw(7) << "TCG"
+        << " |" << std::setw(7) << "VCG"
+        << " |" << std::setw(7) << "Density"
+        << " |" << std::setw(10) << "Volume"
+        << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
+    for (int i=0; i<carg.size(); i++)
+    {
+        out << " |" << std::setw(12) << UnitVec[hf[i]].u_name
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_TCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_VCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_density
+            << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_volume
+            << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_fsm << " |" <<std::endl;
+            if ((i+1)%5==0)out<<dummy3<<std::endl;
+    }
+    if (bal.size()>0) out << std::setw(15) << "DO" << std::endl << std::endl << dummy3 <<std::endl
+        << " |" << std::setw(12) << "Name"
+        << " |" << std::setw(7) << "LCG"
+        << " |" << std::setw(7) << "TCG"
+        << " |" << std::setw(7) << "VCG"
+        << " |" << std::setw(7) << "Density"
+        << " |" << std::setw(10) << "Volume"
+        << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
+    for (int i=0; i<carg.size(); i++)
+    {
+        out << " |" << std::setw(12) << UnitVec[md[i]].u_name
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_TCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_VCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_density
+            << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_volume
+            << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_fsm << " |" <<std::endl;
+            if ((i+1)%5==0)out<<dummy3<<std::endl;
+    }
+    if (bal.size()>0) out << std::setw(15) << "Fresh Water" << std::endl << std::endl << dummy3 <<std::endl
+        << " |" << std::setw(12) << "Name"
+        << " |" << std::setw(7) << "LCG"
+        << " |" << std::setw(7) << "TCG"
+        << " |" << std::setw(7) << "VCG"
+        << " |" << std::setw(7) << "Density"
+        << " |" << std::setw(10) << "Volume"
+        << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
+    for (int i=0; i<carg.size(); i++)
+    {
+        out << " |" << std::setw(12) << UnitVec[fw[i]].u_name
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_TCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_VCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_density
+            << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_volume
+            << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_fsm << " |" <<std::endl;
+            if ((i+1)%5==0)out<<dummy3<<std::endl;
+    }
+    if (bal.size()>0) out << std::setw(15) << "Lube Oil" << std::endl << std::endl << dummy3 <<std::endl
+        << " |" << std::setw(12) << "Name"
+        << " |" << std::setw(7) << "LCG"
+        << " |" << std::setw(7) << "TCG"
+        << " |" << std::setw(7) << "VCG"
+        << " |" << std::setw(7) << "Density"
+        << " |" << std::setw(10) << "Volume"
+        << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
+    for (int i=0; i<carg.size(); i++)
+    {
+        out << " |" << std::setw(12) << UnitVec[lo[i]].u_name
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_TCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_VCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_density
+            << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_volume
+            << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_fsm << " |" <<std::endl;
+            if ((i+1)%5==0)out<<dummy3<<std::endl;
+    }
+    if (bal.size()>0) out << std::setw(15) << "Various" << std::endl << std::endl << dummy3 <<std::endl
+        << " |" << std::setw(12) << "Name"
+        << " |" << std::setw(7) << "LCG"
+        << " |" << std::setw(7) << "TCG"
+        << " |" << std::setw(7) << "VCG"
+        << " |" << std::setw(7) << "Density"
+        << " |" << std::setw(10) << "Volume"
+        << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
+    for (int i=0; i<carg.size(); i++)
+    {
+        out << " |" << std::setw(12) << UnitVec[va[i]].u_name
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_TCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_VCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_density
+            << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_volume
+            << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_fsm << " |" <<std::endl;
+            if ((i+1)%5==0)out<<dummy3<<std::endl;
+    }
 
     out.close();
 }
@@ -348,7 +503,7 @@ bool Ship::load(std::string file) // Load the protobuf file in the program.
                     UnitVec[i].u_type = u_types::FW;
                     break;
                 case (ship::Unit::VA):
-                    UnitVec[i].u_type = u_types::FW;
+                    UnitVec[i].u_type = u_types::VA;
                     break;
             }
         }
@@ -443,6 +598,29 @@ bool Ship::set_s_VCGLight(std::string in_t){
     return Ship::assign_val(in_t, s_VCGLight);
 }
 
+void Ship::variable_update()
+{
+    for (long unsigned int i=0; i<UnitVec.size(); i++)
+    {
+        UnitVec[i].u_volume = UnitVec[i].u_length * UnitVec[i].u_breadth * UnitVec[i].u_height;
+        switch (UnitVec[i].u_type)
+        {
+        case Ballast:
+            UnitVec[i].u_density = 1.025f;
+        case HFO:
+            UnitVec[i].u_density = 0.98f;
+        case DO:
+            UnitVec[i].u_density = 0.89f;
+        case FW:
+            UnitVec[i].u_density = 1.0f;
+        case LO:
+            UnitVec[i].u_density = 0.9f;
+        default:
+            UnitVec[i].u_density = 1.0f;
+        }
+    }
+}
+
 // These functions return references to the actual values, so nothing is copied over
 std::string& Ship::read_s_name(){return s_name;}
 
@@ -470,6 +648,36 @@ float& Ship::read_s_TCGLight(){return s_TCGLight;}
 
 float& Ship::read_s_VCGLight(){return s_VCGLight;}
 
+bool Ship::set_u_name(int row, std::string val){
+    UnitVec[row].u_name = val;
+    return true;
+    }
+bool Ship::set_u_type(int row, std::string val)
+{
+    if (val == u_type_strings[0]) UnitVec[row].u_type = u_types::Ballast;
+    if (val == u_type_strings[1]) UnitVec[row].u_type = u_types::Cargo_Tank;
+    if (val == u_type_strings[2]) UnitVec[row].u_type = u_types::Cargo_Hold;
+    if (val == u_type_strings[3]) UnitVec[row].u_type = u_types::HFO;
+    if (val == u_type_strings[4]) UnitVec[row].u_type = u_types::DO;
+    if (val == u_type_strings[5]) UnitVec[row].u_type = u_types::LO;
+    if (val == u_type_strings[6]) UnitVec[row].u_type = u_types::FW;
+    if (val == u_type_strings[7]) UnitVec[row].u_type = u_types::Various;
+    return true;
+}
+bool Ship::set_u_lcg(int row, std::string val){
+    return Ship::assign_val(val, UnitVec[row].u_LCG);}
+
+bool Ship::set_u_vcg(int row, std::string val){
+    return Ship::assign_val(val, UnitVec[row].u_VCG);}
+bool Ship::set_u_tcg(int row, std::string val){
+    return Ship::assign_val(val, UnitVec[row].u_TCG);}
+bool Ship::set_u_height (int row, std::string val){
+    return Ship::assign_val(val, UnitVec[row].u_height);}
+bool Ship::set_u_length (int row, std::string val){
+    return Ship::assign_val(val, UnitVec[row].u_length);}
+bool Ship::set_u_breadth (int row, std::string val){
+    return Ship::assign_val(val, UnitVec[row].u_breadth);}
+
 // Returns the values of units
 std::string& Ship::read_unit_name (int x){
     return UnitVec[x].u_name;}
@@ -493,7 +701,7 @@ float& Ship::read_u_dencity(int x){
 
 // The maximum volume is never saved, but always recalculated for more accuracy
 float Ship::read_u_maxvol(int i){
-return (UnitVec[i].u_length * UnitVec[i].u_breadth * UnitVec[i].u_height);}
+return (UnitVec[i].u_volume);}
 
 // Upon calling a new unit in the UI, a new unit is added to the Units Vector.
 void Ship::new_unit(u_types choice){
@@ -507,40 +715,6 @@ void Ship::delete_unit(int row){
     UnitVec.erase(UnitVec.begin()+row);
 }
 
-// Row is the unit number, col is the unit particular to be changed and val is the value, it is supposed to be set to
-bool Ship::set_unit(int row, int col, std::string val)
-{
-    switch (col) // A simple switch case is good enough
-    {
-    case (0):
-        UnitVec[row].u_name = val;
-        return true;
-    case (1):
-        if (val == u_type_strings[0]) UnitVec[row].u_type = u_types::Ballast;
-        if (val == u_type_strings[1]) UnitVec[row].u_type = u_types::Cargo_Tank;
-        if (val == u_type_strings[2]) UnitVec[row].u_type = u_types::Cargo_Hold;
-        if (val == u_type_strings[3]) UnitVec[row].u_type = u_types::HFO;
-        if (val == u_type_strings[4]) UnitVec[row].u_type = u_types::DO;
-        if (val == u_type_strings[5]) UnitVec[row].u_type = u_types::LO;
-        if (val == u_type_strings[6]) UnitVec[row].u_type = u_types::FW;
-        if (val == u_type_strings[7]) UnitVec[row].u_type = u_types::Various;
-        return true;
-    case (2):
-        return (Ship::assign_val(val, UnitVec[row].u_LCG));
-    case (3):
-        return (Ship::assign_val(val, UnitVec[row].u_TCG));
-    case (4):
-        return (Ship::assign_val(val, UnitVec[row].u_VCG));
-    case (5):
-        return (Ship::assign_val(val, UnitVec[row].u_length));
-    case (6):
-        return (Ship::assign_val(val, UnitVec[row].u_breadth));
-    case (7):
-        return (Ship::assign_val(val, UnitVec[row].u_height));
-    default:
-        return false;
-    }
-}
 /* Returns the count of units existing. This must be done through a function
 since the Unit vector is not publicly available*/
 int Ship::unit_count()
