@@ -42,31 +42,7 @@ message Unit {
     }
     UnitType type = 12;
 }
-message Hydrostat {
-    float draft = 1;
-    float weight = 2;
-    float volume = 3;
-    float tpc = 4;
-    float mct = 5;
-    float kmt = 6;
-    float lcf = 7;
-    float lcb = 8;
-}
-message crossCurves {
-    int32 volume = 1;
-    float ten = 2;
-    float twenty = 3;
-    float thirty = 4;
-    float forty = 5;
-    float sixty = 6;
-    float eighty = 7;
-}
-message Stability {
-    float lcg = 1;
-    float tcg = 2;
-    float vcg = 3;
-    float GZ = 4;
-}
+
 message BulkCargo {
     string Name = 1;
     float lcg = 2;
@@ -80,8 +56,5 @@ message BulkCargo {
 message ShipBodyData {
     repeated ShipData shipdata = 1;
     repeated Unit unit = 2;
-    repeated Hydrostat hydrostat = 3;
-    repeated crossCurves crosscurves = 4;
-    repeated Stability stability = 5;
     repeated BulkCargo bulk = 6;
 }
