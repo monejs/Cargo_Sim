@@ -60,6 +60,14 @@ BodyMasterFrame::BodyMasterFrame(wxWindow* parent,wxWindowID id)
     Grid->EnableEditing(true);
     Grid->EnableGridLines(true);
     Grid->SetDefaultColSize(150, true);
+    Grid->SetColLabelValue(0, _("Name"));
+    Grid->SetColLabelValue(1, _("Type"));
+    Grid->SetColLabelValue(2, _("LCG"));
+    Grid->SetColLabelValue(3, _("TCG"));
+    Grid->SetColLabelValue(4, _("VCG"));
+    Grid->SetColLabelValue(5, _("Leangth"));
+    Grid->SetColLabelValue(6, _("Breath"));
+    Grid->SetColLabelValue(7, _("Height"));
     Grid->SetDefaultCellFont( Grid->GetFont() );
     Grid->SetDefaultCellTextColour( Grid->GetForegroundColour() );
     FlexGridSizer1->Add(Grid, 1, wxALL|wxEXPAND, 5);

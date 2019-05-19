@@ -9,6 +9,16 @@
 				<object class="wxGrid" name="ID_GRID1" variable="Grid" member="yes">
 					<cols>8</cols>
 					<defaultcolsize>150</defaultcolsize>
+					<collabels>
+						<item>Name</item>
+						<item>Type</item>
+						<item>LCG</item>
+						<item>TCG</item>
+						<item>VCG</item>
+						<item>Leangth</item>
+						<item>Breath</item>
+						<item>Height</item>
+					</collabels>
 					<minsize>1200,500</minsize>
 				</object>
 				<flag>wxALL|wxEXPAND</flag>
