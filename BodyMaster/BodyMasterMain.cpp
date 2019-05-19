@@ -188,11 +188,7 @@ void BodyMasterFrame::OnParticularsButtonClick(wxCommandEvent& event)
 
 void BodyMasterFrame::OnGridCellChanged(wxGridEvent& event)
 {
-    if (ShipBody.set_unit(Grid->GetGridCursorRow(),Grid->GetGridCursorCol(), Grid->GetCellValue(Grid->GetGridCursorRow(),Grid->GetGridCursorCol()).ToStdString())){  // Check if the input is a number
-        Grid->SetCellTextColour(Grid->GetGridCursorRow(),Grid->GetGridCursorCol(), *wxBLACK); // Make it black, in case it is a number
-    }else{
-        Grid->SetCellTextColour(Grid->GetGridCursorRow(),Grid->GetGridCursorCol(), *wxRED); // If the entry is not a float, it is tuned read
-    }
+
 }
 
 void BodyMasterFrame::OnDeleteButtonClick(wxCommandEvent& event)
@@ -215,6 +211,18 @@ void BodyMasterFrame::OnLoadItemSelected(wxCommandEvent& event)
 
 void BodyMasterFrame::OnSaveItemSelected(wxCommandEvent& event)
 {
+    for (int i=0; i<Grid->GetNumberRows(); i++)
+    {
+        ShipBody.set_u_name(i, Grid->GetCellValue(i,0).ToStdString());
+        ShipBody.set_u_type(i, Grid->GetCellValue(i,1).ToStdString());
+        ShipBody.set_u_lcg(i, Grid->GetCellValue(i,2).ToStdString());
+        ShipBody.set_u_tcg(i, Grid->GetCellValue(i,3).ToStdString());
+        ShipBody.set_u_vcg(i, Grid->GetCellValue(i,4).ToStdString());
+        ShipBody.set_u_length(i, Grid->GetCellValue(i,5).ToStdString());
+        ShipBody.set_u_breadth(i, Grid->GetCellValue(i,6).ToStdString());
+        ShipBody.set_u_height(i, Grid->GetCellValue(i,7).ToStdString());
+
+    }
     if(ShipBody.save())
     {
         wxMessageBox("File Saved", "Success");
@@ -228,5 +236,17 @@ void BodyMasterFrame::OnCalculateButtonClick1(wxCommandEvent& event)
 
 void BodyMasterFrame::OnPrintHydrostaticsSelected(wxCommandEvent& event)
 {
+        for (int i=0; i<Grid->GetNumberRows(); i++)
+    {
+        ShipBody.set_u_name(i, Grid->GetCellValue(i,0).ToStdString());
+        ShipBody.set_u_type(i, Grid->GetCellValue(i,1).ToStdString());
+        ShipBody.set_u_lcg(i, Grid->GetCellValue(i,2).ToStdString());
+        ShipBody.set_u_tcg(i, Grid->GetCellValue(i,3).ToStdString());
+        ShipBody.set_u_vcg(i, Grid->GetCellValue(i,4).ToStdString());
+        ShipBody.set_u_length(i, Grid->GetCellValue(i,5).ToStdString());
+        ShipBody.set_u_breadth(i, Grid->GetCellValue(i,6).ToStdString());
+        ShipBody.set_u_height(i, Grid->GetCellValue(i,7).ToStdString());
+
+    }
     ShipBody.text_print();
 }
