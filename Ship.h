@@ -9,6 +9,7 @@
 #include <sstream>
 #include <math.h>
 #include <cmath>
+#include <iomanip>
 
 #include "Ship.pb.h"
 
@@ -61,13 +62,15 @@ public:
     float read_u_maxvol (int);
     int unit_count();
     void autoParticulars();
+    void text_print();
+
 
     void new_unit(u_types);
     void delete_unit(int);
     void calculate();
     bool save();
     bool load(std::string);
-    void modelLoad();
+//    void modelLoad();
 
     virtual ~Ship();
 
@@ -90,7 +93,6 @@ private:
     float s_volume;
     float hull_LCG;
     float hull_VCG;
-
     class Unit
     {
     public:

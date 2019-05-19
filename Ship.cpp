@@ -1,5 +1,10 @@
 #include "Ship.h"
 
+#define cal(x) section_G[x]*section_vol[x]  //Definition for calculating the LCG of hull for particular draft
+
+#define calL(x) section_LCG[x]*section_vol[x]
+
+
 //Declares the possible types of units a user can make
 const std::string Ship::u_type_strings[8] = {"Ballast", "Cargo Tank", "Cargo Hold", "HFO", "DO", "LO", "FW", "Various"};
 
@@ -16,6 +21,7 @@ bool Ship::assign_val(std::string& in_t, float& var)
 // Still working on this one
 void Ship::calculate()
 {
+    HydroVec.clear();
     float sectionlength;
     std::array<float, 10> section_beam;
     std::array<float, 10> section_height;
@@ -26,6 +32,8 @@ void Ship::calculate()
 
     for (float draft=s_minDraft; draft<s_maxDraft; draft+=0.1f)
     {
+        Hydrostatistics stats;
+        stats.h_draft = draft;
         std::array<float, 10> section_area;
         std::array<float, 10> section_vol;
         std::array<float, 10> section_G;
@@ -33,22 +41,39 @@ void Ship::calculate()
         std::array<float, 10> section_BM;
         std::array<float, 10> section_KM;
         std::array<float, 10> section_B;
+        float hull_B;
+        float hull_F;
+        float floating_area;
         for (int section=0; section!=10; section++)
         {
-            if (section_height[section] > draft)
+            if (s_height - section_height[section] < draft)
             {
                 section_area[section]=section_beam[section]*(draft-s_height+section_height[section]); // A_sec = Beam_sec * draft
+                floating_area+=sectionlength *section_beam[section];
                 section_vol[section]=section_area[section]*sectionlength; // Area * section length
                 section_LCG[section]=section * sectionlength + sectionlength/2; //n*section + 1/2 section length
                 section_G[section]=s_height-section_height[section]/2; // Maximum draft - section draft /2
-                s_volume += section_vol[section]; // Total underwater volume
+                stats.h_volume += section_vol[section]; // Total underwater volume
+
 
                 section_B[section]=(draft-s_height+section_height[section])/2 +s_height-section_height[section];
+                hull_B+=section_B[section]*section_vol[section];
+                hull_F+=section_LCG[section]*sectionlength*section_beam[section];
                 section_BM[section]=(sectionlength*pow(section_B[section],3))/(12*section_vol[section]);
                 section_KM[section]=section_B[section]+section_BM[section];
 
             }
         }
+        hull_VCG=(cal(0)+cal(1)+cal(2)+cal(3)+cal(4)+cal(5)+cal(6)+cal(7)+cal(8)+cal(9))/s_volume;
+        hull_LCG=(calL(0)+calL(1)+calL(2)+calL(3)+calL(4)+calL(5)+calL(6)+calL(7)+calL(8)+calL(9))/s_volume;
+        stats.h_lcb=hull_B/s_volume;
+        stats.h_lcf=hull_F/floating_area;
+
+
+
+
+        stats.h_weight = stats.h_volume * 1.025;
+        HydroVec.push_back(stats);
     }
 }
 
@@ -68,9 +93,58 @@ void Ship::autoParticulars()
     s_height = zmax+0.5f;
 
     Ship::calculate();
-
-
 }
+
+
+void Ship::text_print(){
+    calculate();
+    std::string filename = s_name + "Hydrostatics.txt";
+    std::ofstream out(filename,  std::ofstream::out | std::ofstream::trunc);
+
+    out << std::setw(20) << "Ship Name"<<std::setw(5) << ":"<<std::setw(15)<< s_name << std::endl;
+    out << std::setw(20) << "LOA"<<std::setw(5) << ":"<<std::setw(15)<< s_LOA << std::endl;
+    out << std::setw(20) << "Beam"<<std::setw(5) << ":"<<std::setw(15)<< s_beam << std::endl;
+    out << std::setw(20) << "Height"<<std::setw(5) << ":"<<std::setw(15) <<s_height << std::endl;
+    out << std::setw(20) << "Dead Weight"<<std::setw(5) << ":"<<std::setw(15)<< s_maxDWT << std::endl;
+    out << std::setw(20) << "Minimal draft"<<std::setw(5) << ":"<<std::setw(15)<< s_minDraft << std::endl;
+    out << std::setw(20) << "Maximal draft"<<std::setw(5) << ":"<<std::setw(15) << s_maxDraft << std::endl;
+    out << std::endl << std::endl;
+    std::string dummy (89,'-');
+    out << dummy<<std::endl;
+    out <<" |" << std::setw(5) << "Draft"
+    <<" |" << std::setw(10) << "Volume"
+    <<" |" << std::setw(10) << "Displ"
+    <<" |" << std::setw(7) << "TPC"
+    <<" |" << std::setw(10) << "MCT"
+    <<" |" << std::setw(7) << "KMT"
+    <<" |" << std::setw(7) << "LCF"
+    <<" |" << std::setw(7) << "LCB"
+    <<" |" << std::setw(7) << "Draft |"<<std::endl << dummy << std::endl;
+
+    for (long unsigned int i=0; i<HydroVec.size(); i++)
+    {
+    out <<" |" << std::setw(5) << std::setprecision(2) << std::fixed << HydroVec[i].h_draft
+        <<" |" << std::setw(10) << std::setprecision(0) << std::fixed << HydroVec[i].h_volume
+        <<" |" << std::setw(10) << std::setprecision(0) << std::fixed << HydroVec[i].h_weight
+        <<" |" << std::setw(7) << std::setprecision(2) << std::fixed << HydroVec[i].h_tpc
+        <<" |" << std::setw(10) << std::setprecision(2) << std::fixed << HydroVec[i].h_mct
+        <<" |" << std::setw(7) << std::setprecision(2) << std::fixed << HydroVec[i].h_kmt
+        <<" |" << std::setw(7) << std::setprecision(2) << std::fixed << HydroVec[i].h_lcf
+        <<" |" << std::setw(7) << std::setprecision(2) << std::fixed << HydroVec[i].h_lcb
+        <<" |" << std::setw(5) << std::setprecision(2) << std::fixed << HydroVec[i].h_draft << " |" <<std::endl;
+        if ((i+1)%5==0)out<<dummy<<std::endl;
+    }
+    out << dummy << std::endl;
+
+    out << std::endl << std::endl << std::endl;
+
+    out << std::setw(15) << "Compartments" << std::endl << std::endl;
+    out << (89,'#') << std::endl;
+
+
+    out.close();
+}
+
 // This is the model, which will be used to make the data for the ship.
 // TODO: Make the model variable
 /* void Ship::modelLoad()
@@ -200,29 +274,6 @@ bool Ship::save()
         cargo->set_height(BulkVec[i].u_height);
         cargo->set_weight(BulkVec[i].u_weight);
     }
-    for (long unsigned int i=0; i<HydroVec.size(); i++)
-    {
-        ship::Hydrostat* hydrostat = SaveShip.add_hydrostat();
-        hydrostat->set_draft(HydroVec[i].h_draft);
-        hydrostat->set_volume(HydroVec[i].h_volume);
-        hydrostat->set_weight(HydroVec[i].h_weight);
-        hydrostat->set_tpc(HydroVec[i].h_tpc);
-        hydrostat->set_kmt(HydroVec[i].h_kmt);
-        hydrostat->set_lcb(HydroVec[i].h_lcb);
-        hydrostat->set_lcf(HydroVec[i].h_lcf);
-        hydrostat->set_mct(HydroVec[i].h_mct);
-    }
-    for (long unsigned int i=0; i<CrossVec.size(); i++)
-    {
-        ship::crossCurves* curves = SaveShip.add_crosscurves();
-        curves->set_volume(CrossVec[i].c_volume);
-        curves->set_ten(CrossVec[i].c_ten);
-        curves->set_twenty(CrossVec[i].c_twenty);
-        curves->set_thirty(CrossVec[i].c_thirty);
-        curves->set_forty(CrossVec[i].c_forty);
-        curves->set_sixty(CrossVec[i].c_sixty);
-        curves->set_eighty(CrossVec[i].c_eighty);
-    }
     std::string filename = s_name+".ship"; // Program specific filename
     std::fstream output(filename,  std::ios::out | std::ios::trunc | std::ios::binary); // Creating file
     if (SaveShip.SerializeToOstream(&output)){
@@ -315,20 +366,6 @@ bool Ship::load(std::string file) // Load the protobuf file in the program.
             BulkVec[i].u_height = cargo.height();
             BulkVec[i].u_weight = cargo.weight();
         }
-        for (int i=0; i<BodyOfShip.hydrostat_size(); i++)
-        {
-            Hydrostatistics hydro;
-            HydroVec.push_back(hydro);
-            const ship::Hydrostat& st = BodyOfShip.hydrostat(i);
-            HydroVec[i].h_draft = st.draft();
-            HydroVec[i].h_volume = st.volume();
-            HydroVec[i].h_weight = st.weight();
-            HydroVec[i].h_kmt = st.kmt();
-            HydroVec[i].h_lcb = st.lcb();
-            HydroVec[i].h_lcf = st.lcf();
-            HydroVec[i].h_mct = st.mct();
-            HydroVec[i].h_tpc = st.tpc();
-        }
         return true; // At the end returns true
     }
 }
@@ -336,7 +373,7 @@ bool Ship::load(std::string file) // Load the protobuf file in the program.
 
 Ship::Ship() // Declaration of the Ships null state.
 {
-    s_name = "Ship1"; // Simple name with intention, it will be changed
+    s_name = "Ship"; // Simple name with intention, it will be changed
     s_LOA = 100.0f;     // Same as the model ship for LOA, beam and height, min draft and max draft
     s_beam = 16.4f;
     s_height = 10.0f;
