@@ -42,7 +42,7 @@ struct TableStruct_Ship_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::google::protobuf::internal::ParseTable schema[4]
+  static const ::google::protobuf::internal::ParseTable schema[5]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
@@ -53,6 +53,9 @@ namespace ship {
 class BulkCargo;
 class BulkCargoDefaultTypeInternal;
 extern BulkCargoDefaultTypeInternal _BulkCargo_default_instance_;
+class Constants;
+class ConstantsDefaultTypeInternal;
+extern ConstantsDefaultTypeInternal _Constants_default_instance_;
 class ShipBodyData;
 class ShipBodyDataDefaultTypeInternal;
 extern ShipBodyDataDefaultTypeInternal _ShipBodyData_default_instance_;
@@ -66,6 +69,7 @@ extern UnitDefaultTypeInternal _Unit_default_instance_;
 namespace google {
 namespace protobuf {
 template<> ::ship::BulkCargo* Arena::CreateMaybeMessage<::ship::BulkCargo>(Arena*);
+template<> ::ship::Constants* Arena::CreateMaybeMessage<::ship::Constants>(Arena*);
 template<> ::ship::ShipBodyData* Arena::CreateMaybeMessage<::ship::ShipBodyData>(Arena*);
 template<> ::ship::ShipData* Arena::CreateMaybeMessage<::ship::ShipData>(Arena*);
 template<> ::ship::Unit* Arena::CreateMaybeMessage<::ship::Unit>(Arena*);
@@ -703,6 +707,154 @@ class BulkCargo :
 };
 // -------------------------------------------------------------------
 
+class Constants :
+    public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:ship.Constants) */ {
+ public:
+  Constants();
+  virtual ~Constants();
+
+  Constants(const Constants& from);
+
+  inline Constants& operator=(const Constants& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  Constants(Constants&& from) noexcept
+    : Constants() {
+    *this = ::std::move(from);
+  }
+
+  inline Constants& operator=(Constants&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const Constants& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const Constants* internal_default_instance() {
+    return reinterpret_cast<const Constants*>(
+               &_Constants_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  void Swap(Constants* other);
+  friend void swap(Constants& a, Constants& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Constants* New() const final {
+    return CreateMaybeMessage<Constants>(nullptr);
+  }
+
+  Constants* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<Constants>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const Constants& from);
+  void MergeFrom(const Constants& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Constants* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string Name = 1;
+  void clear_name();
+  static const int kNameFieldNumber = 1;
+  const ::std::string& name() const;
+  void set_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_name(::std::string&& value);
+  #endif
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  ::std::string* mutable_name();
+  ::std::string* release_name();
+  void set_allocated_name(::std::string* name);
+
+  // float lcg = 2;
+  void clear_lcg();
+  static const int kLcgFieldNumber = 2;
+  float lcg() const;
+  void set_lcg(float value);
+
+  // float tcg = 3;
+  void clear_tcg();
+  static const int kTcgFieldNumber = 3;
+  float tcg() const;
+  void set_tcg(float value);
+
+  // float vcg = 4;
+  void clear_vcg();
+  static const int kVcgFieldNumber = 4;
+  float vcg() const;
+  void set_vcg(float value);
+
+  // float weight = 5;
+  void clear_weight();
+  static const int kWeightFieldNumber = 5;
+  float weight() const;
+  void set_weight(float value);
+
+  // @@protoc_insertion_point(class_scope:ship.Constants)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr name_;
+  float lcg_;
+  float tcg_;
+  float vcg_;
+  float weight_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Ship_2eproto;
+};
+// -------------------------------------------------------------------
+
 class ShipBodyData :
     public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:ship.ShipBodyData) */ {
  public:
@@ -741,7 +893,7 @@ class ShipBodyData :
                &_ShipBodyData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    4;
 
   void Swap(ShipBodyData* other);
   friend void swap(ShipBodyData& a, ShipBodyData& b) {
@@ -822,6 +974,18 @@ class ShipBodyData :
   const ::google::protobuf::RepeatedPtrField< ::ship::Unit >&
       unit() const;
 
+  // repeated .ship.Constants constants = 3;
+  int constants_size() const;
+  void clear_constants();
+  static const int kConstantsFieldNumber = 3;
+  ::ship::Constants* mutable_constants(int index);
+  ::google::protobuf::RepeatedPtrField< ::ship::Constants >*
+      mutable_constants();
+  const ::ship::Constants& constants(int index) const;
+  ::ship::Constants* add_constants();
+  const ::google::protobuf::RepeatedPtrField< ::ship::Constants >&
+      constants() const;
+
   // repeated .ship.BulkCargo bulk = 6;
   int bulk_size() const;
   void clear_bulk();
@@ -841,6 +1005,7 @@ class ShipBodyData :
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::RepeatedPtrField< ::ship::ShipData > shipdata_;
   ::google::protobuf::RepeatedPtrField< ::ship::Unit > unit_;
+  ::google::protobuf::RepeatedPtrField< ::ship::Constants > constants_;
   ::google::protobuf::RepeatedPtrField< ::ship::BulkCargo > bulk_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Ship_2eproto;
@@ -1431,6 +1596,119 @@ inline void BulkCargo::set_weight(float value) {
 
 // -------------------------------------------------------------------
 
+// Constants
+
+// string Name = 1;
+inline void Constants::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Constants::name() const {
+  // @@protoc_insertion_point(field_get:ship.Constants.Name)
+  return name_.GetNoArena();
+}
+inline void Constants::set_name(const ::std::string& value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:ship.Constants.Name)
+}
+#if LANG_CXX11
+inline void Constants::set_name(::std::string&& value) {
+  
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:ship.Constants.Name)
+}
+#endif
+inline void Constants::set_name(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:ship.Constants.Name)
+}
+inline void Constants::set_name(const char* value, size_t size) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:ship.Constants.Name)
+}
+inline ::std::string* Constants::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:ship.Constants.Name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Constants::release_name() {
+  // @@protoc_insertion_point(field_release:ship.Constants.Name)
+  
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Constants::set_allocated_name(::std::string* name) {
+  if (name != nullptr) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:ship.Constants.Name)
+}
+
+// float lcg = 2;
+inline void Constants::clear_lcg() {
+  lcg_ = 0;
+}
+inline float Constants::lcg() const {
+  // @@protoc_insertion_point(field_get:ship.Constants.lcg)
+  return lcg_;
+}
+inline void Constants::set_lcg(float value) {
+  
+  lcg_ = value;
+  // @@protoc_insertion_point(field_set:ship.Constants.lcg)
+}
+
+// float tcg = 3;
+inline void Constants::clear_tcg() {
+  tcg_ = 0;
+}
+inline float Constants::tcg() const {
+  // @@protoc_insertion_point(field_get:ship.Constants.tcg)
+  return tcg_;
+}
+inline void Constants::set_tcg(float value) {
+  
+  tcg_ = value;
+  // @@protoc_insertion_point(field_set:ship.Constants.tcg)
+}
+
+// float vcg = 4;
+inline void Constants::clear_vcg() {
+  vcg_ = 0;
+}
+inline float Constants::vcg() const {
+  // @@protoc_insertion_point(field_get:ship.Constants.vcg)
+  return vcg_;
+}
+inline void Constants::set_vcg(float value) {
+  
+  vcg_ = value;
+  // @@protoc_insertion_point(field_set:ship.Constants.vcg)
+}
+
+// float weight = 5;
+inline void Constants::clear_weight() {
+  weight_ = 0;
+}
+inline float Constants::weight() const {
+  // @@protoc_insertion_point(field_get:ship.Constants.weight)
+  return weight_;
+}
+inline void Constants::set_weight(float value) {
+  
+  weight_ = value;
+  // @@protoc_insertion_point(field_set:ship.Constants.weight)
+}
+
+// -------------------------------------------------------------------
+
 // ShipBodyData
 
 // repeated .ship.ShipData shipdata = 1;
@@ -1493,6 +1771,36 @@ ShipBodyData::unit() const {
   return unit_;
 }
 
+// repeated .ship.Constants constants = 3;
+inline int ShipBodyData::constants_size() const {
+  return constants_.size();
+}
+inline void ShipBodyData::clear_constants() {
+  constants_.Clear();
+}
+inline ::ship::Constants* ShipBodyData::mutable_constants(int index) {
+  // @@protoc_insertion_point(field_mutable:ship.ShipBodyData.constants)
+  return constants_.Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField< ::ship::Constants >*
+ShipBodyData::mutable_constants() {
+  // @@protoc_insertion_point(field_mutable_list:ship.ShipBodyData.constants)
+  return &constants_;
+}
+inline const ::ship::Constants& ShipBodyData::constants(int index) const {
+  // @@protoc_insertion_point(field_get:ship.ShipBodyData.constants)
+  return constants_.Get(index);
+}
+inline ::ship::Constants* ShipBodyData::add_constants() {
+  // @@protoc_insertion_point(field_add:ship.ShipBodyData.constants)
+  return constants_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ship::Constants >&
+ShipBodyData::constants() const {
+  // @@protoc_insertion_point(field_list:ship.ShipBodyData.constants)
+  return constants_;
+}
+
 // repeated .ship.BulkCargo bulk = 6;
 inline int ShipBodyData::bulk_size() const {
   return bulk_.size();
@@ -1526,6 +1834,8 @@ ShipBodyData::bulk() const {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

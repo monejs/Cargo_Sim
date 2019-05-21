@@ -17,6 +17,7 @@
 #include <google/protobuf/port_def.inc>
 
 extern PROTOBUF_INTERNAL_EXPORT_Ship_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_BulkCargo_Ship_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_Ship_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_Constants_Ship_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_Ship_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_ShipData_Ship_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_Ship_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_Unit_Ship_2eproto;
 namespace ship {
@@ -32,6 +33,10 @@ class BulkCargoDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<BulkCargo> _instance;
 } _BulkCargo_default_instance_;
+class ConstantsDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<Constants> _instance;
+} _Constants_default_instance_;
 class ShipBodyDataDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<ShipBodyData> _instance;
@@ -79,6 +84,20 @@ static void InitDefaultsBulkCargo_Ship_2eproto() {
 ::google::protobuf::internal::SCCInfo<0> scc_info_BulkCargo_Ship_2eproto =
     {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsBulkCargo_Ship_2eproto}, {}};
 
+static void InitDefaultsConstants_Ship_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::ship::_Constants_default_instance_;
+    new (ptr) ::ship::Constants();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::ship::Constants::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<0> scc_info_Constants_Ship_2eproto =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsConstants_Ship_2eproto}, {}};
+
 static void InitDefaultsShipBodyData_Ship_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -90,20 +109,22 @@ static void InitDefaultsShipBodyData_Ship_2eproto() {
   ::ship::ShipBodyData::InitAsDefaultInstance();
 }
 
-::google::protobuf::internal::SCCInfo<3> scc_info_ShipBodyData_Ship_2eproto =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 3, InitDefaultsShipBodyData_Ship_2eproto}, {
+::google::protobuf::internal::SCCInfo<4> scc_info_ShipBodyData_Ship_2eproto =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 4, InitDefaultsShipBodyData_Ship_2eproto}, {
       &scc_info_ShipData_Ship_2eproto.base,
       &scc_info_Unit_Ship_2eproto.base,
+      &scc_info_Constants_Ship_2eproto.base,
       &scc_info_BulkCargo_Ship_2eproto.base,}};
 
 void InitDefaults_Ship_2eproto() {
   ::google::protobuf::internal::InitSCC(&scc_info_ShipData_Ship_2eproto.base);
   ::google::protobuf::internal::InitSCC(&scc_info_Unit_Ship_2eproto.base);
   ::google::protobuf::internal::InitSCC(&scc_info_BulkCargo_Ship_2eproto.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_Constants_Ship_2eproto.base);
   ::google::protobuf::internal::InitSCC(&scc_info_ShipBodyData_Ship_2eproto.base);
 }
 
-::google::protobuf::Metadata file_level_metadata_Ship_2eproto[4];
+::google::protobuf::Metadata file_level_metadata_Ship_2eproto[5];
 const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors_Ship_2eproto[1];
 constexpr ::google::protobuf::ServiceDescriptor const** file_level_service_descriptors_Ship_2eproto = nullptr;
 
@@ -156,32 +177,45 @@ const ::google::protobuf::uint32 TableStruct_Ship_2eproto::offsets[] PROTOBUF_SE
   PROTOBUF_FIELD_OFFSET(::ship::BulkCargo, height_),
   PROTOBUF_FIELD_OFFSET(::ship::BulkCargo, weight_),
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::ship::Constants, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::ship::Constants, name_),
+  PROTOBUF_FIELD_OFFSET(::ship::Constants, lcg_),
+  PROTOBUF_FIELD_OFFSET(::ship::Constants, tcg_),
+  PROTOBUF_FIELD_OFFSET(::ship::Constants, vcg_),
+  PROTOBUF_FIELD_OFFSET(::ship::Constants, weight_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::ship::ShipBodyData, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::ship::ShipBodyData, shipdata_),
   PROTOBUF_FIELD_OFFSET(::ship::ShipBodyData, unit_),
+  PROTOBUF_FIELD_OFFSET(::ship::ShipBodyData, constants_),
   PROTOBUF_FIELD_OFFSET(::ship::ShipBodyData, bulk_),
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::ship::ShipData)},
   { 19, -1, sizeof(::ship::Unit)},
   { 34, -1, sizeof(::ship::BulkCargo)},
-  { 47, -1, sizeof(::ship::ShipBodyData)},
+  { 47, -1, sizeof(::ship::Constants)},
+  { 57, -1, sizeof(::ship::ShipBodyData)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&::ship::_ShipData_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::ship::_Unit_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::ship::_BulkCargo_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::ship::_Constants_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::ship::_ShipBodyData_default_instance_),
 };
 
 ::google::protobuf::internal::AssignDescriptorsTable assign_descriptors_table_Ship_2eproto = {
   {}, AddDescriptors_Ship_2eproto, "Ship.proto", schemas,
   file_default_instances, TableStruct_Ship_2eproto::offsets,
-  file_level_metadata_Ship_2eproto, 4, file_level_enum_descriptors_Ship_2eproto, file_level_service_descriptors_Ship_2eproto,
+  file_level_metadata_Ship_2eproto, 5, file_level_enum_descriptors_Ship_2eproto, file_level_service_descriptors_Ship_2eproto,
 };
 
 const char descriptor_table_protodef_Ship_2eproto[] =
@@ -202,14 +236,17 @@ const char descriptor_table_protodef_Ship_2eproto[] =
   "rgo\022\014\n\004Name\030\001 \001(\t\022\013\n\003lcg\030\002 \001(\002\022\013\n\003tcg\030\003 "
   "\001(\002\022\013\n\003vcg\030\004 \001(\002\022\016\n\006length\030\005 \001(\002\022\017\n\007brea"
   "dth\030\006 \001(\002\022\016\n\006height\030\007 \001(\002\022\016\n\006weight\030\t \001("
-  "\002\"i\n\014ShipBodyData\022 \n\010shipdata\030\001 \003(\0132\016.sh"
-  "ip.ShipData\022\030\n\004unit\030\002 \003(\0132\n.ship.Unit\022\035\n"
-  "\004bulk\030\006 \003(\0132\017.ship.BulkCargob\006proto3"
+  "\002\"P\n\tConstants\022\014\n\004Name\030\001 \001(\t\022\013\n\003lcg\030\002 \001("
+  "\002\022\013\n\003tcg\030\003 \001(\002\022\013\n\003vcg\030\004 \001(\002\022\016\n\006weight\030\005 "
+  "\001(\002\"\215\001\n\014ShipBodyData\022 \n\010shipdata\030\001 \003(\0132\016"
+  ".ship.ShipData\022\030\n\004unit\030\002 \003(\0132\n.ship.Unit"
+  "\022\"\n\tconstants\030\003 \003(\0132\017.ship.Constants\022\035\n\004"
+  "bulk\030\006 \003(\0132\017.ship.BulkCargob\006proto3"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_Ship_2eproto = {
   false, InitDefaults_Ship_2eproto, 
   descriptor_table_protodef_Ship_2eproto,
-  "Ship.proto", &assign_descriptors_table_Ship_2eproto, 796,
+  "Ship.proto", &assign_descriptors_table_Ship_2eproto, 915,
 };
 
 void AddDescriptors_Ship_2eproto() {
@@ -2345,6 +2382,472 @@ void BulkCargo::InternalSwap(BulkCargo* other) {
 
 // ===================================================================
 
+void Constants::InitAsDefaultInstance() {
+}
+class Constants::HasBitSetters {
+ public:
+};
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int Constants::kNameFieldNumber;
+const int Constants::kLcgFieldNumber;
+const int Constants::kTcgFieldNumber;
+const int Constants::kVcgFieldNumber;
+const int Constants::kWeightFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+Constants::Constants()
+  : ::google::protobuf::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ship.Constants)
+}
+Constants::Constants(const Constants& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.name().size() > 0) {
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  ::memcpy(&lcg_, &from.lcg_,
+    static_cast<size_t>(reinterpret_cast<char*>(&weight_) -
+    reinterpret_cast<char*>(&lcg_)) + sizeof(weight_));
+  // @@protoc_insertion_point(copy_constructor:ship.Constants)
+}
+
+void Constants::SharedCtor() {
+  ::google::protobuf::internal::InitSCC(
+      &scc_info_Constants_Ship_2eproto.base);
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&lcg_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&weight_) -
+      reinterpret_cast<char*>(&lcg_)) + sizeof(weight_));
+}
+
+Constants::~Constants() {
+  // @@protoc_insertion_point(destructor:ship.Constants)
+  SharedDtor();
+}
+
+void Constants::SharedDtor() {
+  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void Constants::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const Constants& Constants::default_instance() {
+  ::google::protobuf::internal::InitSCC(&::scc_info_Constants_Ship_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void Constants::Clear() {
+// @@protoc_insertion_point(message_clear_start:ship.Constants)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&lcg_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&weight_) -
+      reinterpret_cast<char*>(&lcg_)) + sizeof(weight_));
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* Constants::_InternalParse(const char* begin, const char* end, void* object,
+                  ::google::protobuf::internal::ParseContext* ctx) {
+  auto msg = static_cast<Constants*>(object);
+  ::google::protobuf::int32 size; (void)size;
+  int depth; (void)depth;
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::ParseFunc parser_till_end; (void)parser_till_end;
+  auto ptr = begin;
+  while (ptr < end) {
+    ptr = ::google::protobuf::io::Parse32(ptr, &tag);
+    GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+    switch (tag >> 3) {
+      // string Name = 1;
+      case 1: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 10) goto handle_unusual;
+        ptr = ::google::protobuf::io::ReadSize(ptr, &size);
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+        ctx->extra_parse_data().SetFieldName("ship.Constants.Name");
+        object = msg->mutable_name();
+        if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
+          parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
+          goto string_till_end;
+        }
+        GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
+        ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
+        ptr += size;
+        break;
+      }
+      // float lcg = 2;
+      case 2: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 21) goto handle_unusual;
+        msg->set_lcg(::google::protobuf::io::UnalignedLoad<float>(ptr));
+        ptr += sizeof(float);
+        break;
+      }
+      // float tcg = 3;
+      case 3: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 29) goto handle_unusual;
+        msg->set_tcg(::google::protobuf::io::UnalignedLoad<float>(ptr));
+        ptr += sizeof(float);
+        break;
+      }
+      // float vcg = 4;
+      case 4: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 37) goto handle_unusual;
+        msg->set_vcg(::google::protobuf::io::UnalignedLoad<float>(ptr));
+        ptr += sizeof(float);
+        break;
+      }
+      // float weight = 5;
+      case 5: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 45) goto handle_unusual;
+        msg->set_weight(::google::protobuf::io::UnalignedLoad<float>(ptr));
+        ptr += sizeof(float);
+        break;
+      }
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->EndGroup(tag);
+          return ptr;
+        }
+        auto res = UnknownFieldParse(tag, {_InternalParse, msg},
+          ptr, end, msg->_internal_metadata_.mutable_unknown_fields(), ctx);
+        ptr = res.first;
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr != nullptr);
+        if (res.second) return ptr;
+      }
+    }  // switch
+  }  // while
+  return ptr;
+string_till_end:
+  static_cast<::std::string*>(object)->clear();
+  static_cast<::std::string*>(object)->reserve(size);
+  goto len_delim_till_end;
+len_delim_till_end:
+  return ctx->StoreAndTailCall(ptr, end, {_InternalParse, msg},
+                               {parser_till_end, object}, size);
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool Constants::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ship.Constants)
+  for (;;) {
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string Name = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (10 & 0xFF)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_name()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->name().data(), static_cast<int>(this->name().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "ship.Constants.Name"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float lcg = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (21 & 0xFF)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &lcg_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float tcg = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (29 & 0xFF)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &tcg_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float vcg = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (37 & 0xFF)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &vcg_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float weight = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (45 & 0xFF)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &weight_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ship.Constants)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ship.Constants)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void Constants::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ship.Constants)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string Name = 1;
+  if (this->name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->name().data(), static_cast<int>(this->name().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "ship.Constants.Name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->name(), output);
+  }
+
+  // float lcg = 2;
+  if (this->lcg() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->lcg(), output);
+  }
+
+  // float tcg = 3;
+  if (this->tcg() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->tcg(), output);
+  }
+
+  // float vcg = 4;
+  if (this->vcg() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(4, this->vcg(), output);
+  }
+
+  // float weight = 5;
+  if (this->weight() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(5, this->weight(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:ship.Constants)
+}
+
+::google::protobuf::uint8* Constants::InternalSerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ship.Constants)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string Name = 1;
+  if (this->name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->name().data(), static_cast<int>(this->name().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "ship.Constants.Name");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        1, this->name(), target);
+  }
+
+  // float lcg = 2;
+  if (this->lcg() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(2, this->lcg(), target);
+  }
+
+  // float tcg = 3;
+  if (this->tcg() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(3, this->tcg(), target);
+  }
+
+  // float vcg = 4;
+  if (this->vcg() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(4, this->vcg(), target);
+  }
+
+  // float weight = 5;
+  if (this->weight() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(5, this->weight(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ship.Constants)
+  return target;
+}
+
+size_t Constants::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ship.Constants)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string Name = 1;
+  if (this->name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->name());
+  }
+
+  // float lcg = 2;
+  if (this->lcg() != 0) {
+    total_size += 1 + 4;
+  }
+
+  // float tcg = 3;
+  if (this->tcg() != 0) {
+    total_size += 1 + 4;
+  }
+
+  // float vcg = 4;
+  if (this->vcg() != 0) {
+    total_size += 1 + 4;
+  }
+
+  // float weight = 5;
+  if (this->weight() != 0) {
+    total_size += 1 + 4;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void Constants::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:ship.Constants)
+  GOOGLE_DCHECK_NE(&from, this);
+  const Constants* source =
+      ::google::protobuf::DynamicCastToGenerated<Constants>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ship.Constants)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:ship.Constants)
+    MergeFrom(*source);
+  }
+}
+
+void Constants::MergeFrom(const Constants& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ship.Constants)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.name().size() > 0) {
+
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  if (from.lcg() != 0) {
+    set_lcg(from.lcg());
+  }
+  if (from.tcg() != 0) {
+    set_tcg(from.tcg());
+  }
+  if (from.vcg() != 0) {
+    set_vcg(from.vcg());
+  }
+  if (from.weight() != 0) {
+    set_weight(from.weight());
+  }
+}
+
+void Constants::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:ship.Constants)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Constants::CopyFrom(const Constants& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ship.Constants)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Constants::IsInitialized() const {
+  return true;
+}
+
+void Constants::Swap(Constants* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void Constants::InternalSwap(Constants* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  name_.Swap(&other->name_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(lcg_, other->lcg_);
+  swap(tcg_, other->tcg_);
+  swap(vcg_, other->vcg_);
+  swap(weight_, other->weight_);
+}
+
+::google::protobuf::Metadata Constants::GetMetadata() const {
+  ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_Ship_2eproto);
+  return ::file_level_metadata_Ship_2eproto[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
 void ShipBodyData::InitAsDefaultInstance() {
 }
 class ShipBodyData::HasBitSetters {
@@ -2354,6 +2857,7 @@ class ShipBodyData::HasBitSetters {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int ShipBodyData::kShipdataFieldNumber;
 const int ShipBodyData::kUnitFieldNumber;
+const int ShipBodyData::kConstantsFieldNumber;
 const int ShipBodyData::kBulkFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -2367,6 +2871,7 @@ ShipBodyData::ShipBodyData(const ShipBodyData& from)
       _internal_metadata_(nullptr),
       shipdata_(from.shipdata_),
       unit_(from.unit_),
+      constants_(from.constants_),
       bulk_(from.bulk_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:ship.ShipBodyData)
@@ -2402,6 +2907,7 @@ void ShipBodyData::Clear() {
 
   shipdata_.Clear();
   unit_.Clear();
+  constants_.Clear();
   bulk_.Clear();
   _internal_metadata_.Clear();
 }
@@ -2449,6 +2955,22 @@ const char* ShipBodyData::_InternalParse(const char* begin, const char* end, voi
               {parser_till_end, object}, ptr - size, ptr));
           if (ptr >= end) break;
         } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 18 && (ptr += 1));
+        break;
+      }
+      // repeated .ship.Constants constants = 3;
+      case 3: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 26) goto handle_unusual;
+        do {
+          ptr = ::google::protobuf::io::ReadSize(ptr, &size);
+          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+          parser_till_end = ::ship::Constants::_InternalParse;
+          object = msg->add_constants();
+          if (size > end - ptr) goto len_delim_till_end;
+          ptr += size;
+          GOOGLE_PROTOBUF_PARSER_ASSERT(ctx->ParseExactRange(
+              {parser_till_end, object}, ptr - size, ptr));
+          if (ptr >= end) break;
+        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 26 && (ptr += 1));
         break;
       }
       // repeated .ship.BulkCargo bulk = 6;
@@ -2519,6 +3041,17 @@ bool ShipBodyData::MergePartialFromCodedStream(
         break;
       }
 
+      // repeated .ship.Constants constants = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (26 & 0xFF)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+                input, add_constants()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       // repeated .ship.BulkCargo bulk = 6;
       case 6: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (50 & 0xFF)) {
@@ -2575,6 +3108,15 @@ void ShipBodyData::SerializeWithCachedSizes(
       output);
   }
 
+  // repeated .ship.Constants constants = 3;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->constants_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3,
+      this->constants(static_cast<int>(i)),
+      output);
+  }
+
   // repeated .ship.BulkCargo bulk = 6;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->bulk_size()); i < n; i++) {
@@ -2611,6 +3153,14 @@ void ShipBodyData::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessageToArray(
         2, this->unit(static_cast<int>(i)), target);
+  }
+
+  // repeated .ship.Constants constants = 3;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->constants_size()); i < n; i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        3, this->constants(static_cast<int>(i)), target);
   }
 
   // repeated .ship.BulkCargo bulk = 6;
@@ -2664,6 +3214,17 @@ size_t ShipBodyData::ByteSizeLong() const {
     }
   }
 
+  // repeated .ship.Constants constants = 3;
+  {
+    unsigned int count = static_cast<unsigned int>(this->constants_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->constants(static_cast<int>(i)));
+    }
+  }
+
   // repeated .ship.BulkCargo bulk = 6;
   {
     unsigned int count = static_cast<unsigned int>(this->bulk_size());
@@ -2704,6 +3265,7 @@ void ShipBodyData::MergeFrom(const ShipBodyData& from) {
 
   shipdata_.MergeFrom(from.shipdata_);
   unit_.MergeFrom(from.unit_);
+  constants_.MergeFrom(from.constants_);
   bulk_.MergeFrom(from.bulk_);
 }
 
@@ -2734,6 +3296,7 @@ void ShipBodyData::InternalSwap(ShipBodyData* other) {
   _internal_metadata_.Swap(&other->_internal_metadata_);
   CastToBase(&shipdata_)->InternalSwap(CastToBase(&other->shipdata_));
   CastToBase(&unit_)->InternalSwap(CastToBase(&other->unit_));
+  CastToBase(&constants_)->InternalSwap(CastToBase(&other->constants_));
   CastToBase(&bulk_)->InternalSwap(CastToBase(&other->bulk_));
 }
 
@@ -2755,6 +3318,9 @@ template<> PROTOBUF_NOINLINE ::ship::Unit* Arena::CreateMaybeMessage< ::ship::Un
 }
 template<> PROTOBUF_NOINLINE ::ship::BulkCargo* Arena::CreateMaybeMessage< ::ship::BulkCargo >(Arena* arena) {
   return Arena::CreateInternal< ::ship::BulkCargo >(arena);
+}
+template<> PROTOBUF_NOINLINE ::ship::Constants* Arena::CreateMaybeMessage< ::ship::Constants >(Arena* arena) {
+  return Arena::CreateInternal< ::ship::Constants >(arena);
 }
 template<> PROTOBUF_NOINLINE ::ship::ShipBodyData* Arena::CreateMaybeMessage< ::ship::ShipBodyData >(Arena* arena) {
   return Arena::CreateInternal< ::ship::ShipBodyData >(arena);

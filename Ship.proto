@@ -53,8 +53,16 @@ message BulkCargo {
     float height = 7;
     float weight = 9;
 }
+message Constants {
+    string Name = 1;
+    float lcg = 2;
+    float tcg = 3;
+    float vcg = 4;
+    float weight = 5;
+}
 message ShipBodyData {
     repeated ShipData shipdata = 1;
     repeated Unit unit = 2;
+    repeated Constants constants = 3;
     repeated BulkCargo bulk = 6;
 }
