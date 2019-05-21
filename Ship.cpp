@@ -121,7 +121,7 @@ void Ship::text_print(){
     <<" |" << std::setw(7) << "LCB"
     <<" |" << std::setw(7) << "Draft |"<<std::endl << dummy << std::endl;
 
-    for (long unsigned int i=0; i<HydroVec.size(); i++)
+    for (long unsigned int i=0; i<=HydroVec.size(); i++)
     {
     out <<" |" << std::setw(5) << std::setprecision(2) << std::fixed << HydroVec[i].h_draft
         <<" |" << std::setw(10) << std::setprecision(0) << std::fixed << HydroVec[i].h_volume
@@ -130,7 +130,7 @@ void Ship::text_print(){
         <<" |" << std::setw(10) << std::setprecision(2) << std::fixed << HydroVec[i].h_mct
         <<" |" << std::setw(7) << std::setprecision(2) << std::fixed << HydroVec[i].h_kmt
         <<" |" << std::setw(7) << std::setprecision(2) << std::fixed << HydroVec[i].h_lcf
-        <<" |" << std::setw(7) << std::setprecision(2) << std::fixed << HydroVec[i].h_lcb
+        <<" |" << std::setw(7) << std::setprecision(2)  << HydroVec[i].h_lcb
         <<" |" << std::setw(5) << std::setprecision(2) << std::fixed << HydroVec[i].h_draft << " |" <<std::endl;
         if ((i+1)%5==0)out<<dummy<<std::endl;
     }
@@ -429,6 +429,18 @@ bool Ship::save()
         cargo->set_height(BulkVec[i].u_height);
         cargo->set_weight(BulkVec[i].u_weight);
     }
+    for (long unsigned int i=0; i<BulkVec.size(); i++)
+    {
+        ship::BulkCargo* cargo = SaveShip.add_bulk();
+        cargo->set_name (BulkVec[i].u_name);
+        cargo->set_lcg (BulkVec[i].u_LCG);
+        cargo->set_tcg (BulkVec[i].u_TCG);
+        cargo->set_vcg (BulkVec[i].u_VCG);
+        cargo->set_length(BulkVec[i].u_length);
+        cargo->set_breadth(BulkVec[i].u_breadth);
+        cargo->set_height(BulkVec[i].u_height);
+        cargo->set_weight(BulkVec[i].u_weight);
+    }
     std::string filename = s_name+".ship"; // Program specific filename
     std::fstream output(filename,  std::ios::out | std::ios::trunc | std::ios::binary); // Creating file
     if (SaveShip.SerializeToOstream(&output)){
@@ -464,7 +476,7 @@ bool Ship::load(std::string file) // Load the protobuf file in the program.
         s_TCGLight = body.tcglight();
         s_waterCondition = body.watercondition();
         s_maxDWT = body.maxdwt();
-
+        std::cout << "Read Ships particulats" << std::endl;
         for (int i=0; i<BodyOfShip.unit_size(); i++)
         {
             Unit unit;
@@ -503,14 +515,13 @@ bool Ship::load(std::string file) // Load the protobuf file in the program.
                     UnitVec[i].u_type = u_types::FW;
                     break;
                 case (ship::Unit::VA):
-                    UnitVec[i].u_type = u_types::VA;
+                    UnitVec[i].u_type = u_types::Various;
                     break;
             }
+            std::cout << "Unit nr. " << i << std::endl;
         }
         for (int i=0; i<BodyOfShip.bulk_size(); i++)
         {
-            BulkCargo bulk;
-            BulkVec.push_back(bulk);
             const ship::BulkCargo& cargo = BodyOfShip.bulk(i);
             BulkVec[i].u_name = cargo.name();
             BulkVec[i].u_LCG = cargo.lcg();
@@ -525,6 +536,11 @@ bool Ship::load(std::string file) // Load the protobuf file in the program.
     }
 }
 
+void Ship::clear_data()
+{
+    Ship();
+    UnitVec.clear();
+}
 
 Ship::Ship() // Declaration of the Ships null state.
 {
@@ -685,23 +701,49 @@ std::string& Ship::read_unit_name (int x){
 std::string Ship::read_unit_type(int x){
     return u_type_strings[UnitVec[x].u_type];}
 
-float& Ship::read_u_LCG(int x){ //Returns the values of particular units
+float& Ship::read_u_LCG(int& x){ //Returns the values of particular units
     return UnitVec[x].u_LCG;}
-float& Ship::read_u_VCG(int x){
+float& Ship::read_u_VCG(int& x){
     return UnitVec[x].u_VCG;}
-float& Ship::read_u_TCG(int x){
+float& Ship::read_u_TCG(int& x){
     return UnitVec[x].u_TCG;}
-float& Ship::read_u_weight(int x){
+float& Ship::read_u_weight(int& x){
     return UnitVec[x].u_VCG;}
-float& Ship::read_u_volume(int x){
+float& Ship::read_u_volume(int& x){
     return UnitVec[x].u_volume;}
 
-float& Ship::read_u_dencity(int x){
+float& Ship::read_u_dencity(int& x){
     return UnitVec[x].u_density;}
 
+float& Ship::read_u_length(int& x){
+    return UnitVec[x].u_length;}
+float& Ship::read_u_breadth(int& x){
+    return UnitVec[x].u_breadth;}
+float& Ship::read_u_height(int& x){
+    return UnitVec[x].u_height;}
+
 // The maximum volume is never saved, but always recalculated for more accuracy
-float Ship::read_u_maxvol(int i){
+float& Ship::read_u_maxvol(int& i){
 return (UnitVec[i].u_volume);}
+
+
+// For the input of constants of the ship. These values are things like paint store, personal belongings, provisions etc.
+bool Ship::set_con_name(int row, std::string val)
+{
+    ConVec[row].con_name = val;
+    return true;}
+// All functions call the one function to test, if the input is in fact a number
+bool Ship::set_con_lcg(int row, std::string val){
+    return Ship::assign_val(val, ConVec[row].con_lcg);}
+
+bool Ship::set_con_tcg(int row, std::string val){
+    return Ship::assign_val(val, ConVec[row].con_tcg);}
+
+bool Ship::set_con_vcg(int row, std::string val){
+    return Ship::assign_val(val, ConVec[row].con_vcg);}
+
+bool Ship::set_con_weight(int row, std::string val){
+    return Ship::assign_val(val, ConVec[row].con_weight);}
 
 // Upon calling a new unit in the UI, a new unit is added to the Units Vector.
 void Ship::new_unit(u_types choice){
@@ -722,6 +764,32 @@ int Ship::unit_count()
     int a = UnitVec.size();
     return a;
 }
+
+bool Ship::set_car_name(int row, std::string val)
+{
+    BulkVec[row].u_name=val;
+    return true;
+}
+bool Ship::set_car_weight(int row, std::string val){
+    return Ship::assign_val(val, BulkVec[row].u_weight);}
+
+bool Ship::set_car_lcg(int row, std::string val){
+    return Ship::assign_val(val, BulkVec[row].u_LCG);}
+
+bool Ship::set_car_vcg(int row, std::string val){
+    return Ship::assign_val(val, BulkVec[row].u_VCG);}
+
+bool Ship::set_car_tcg(int row, std::string val){
+    return Ship::assign_val(val, BulkVec[row].u_TCG);}
+
+bool Ship::set_car_length(int row, std::string val){
+    return Ship::assign_val(val, BulkVec[row].u_length);}
+
+bool Ship::set_car_breadth(int row, std::string val){
+    return Ship::assign_val(val, BulkVec[row].u_breadth);}
+
+bool Ship::set_car_height(int row, std::string val){
+    return Ship::assign_val(val, BulkVec[row].u_height);}
 
 // Ship deconstructor
 Ship::~Ship(){}
@@ -773,3 +841,12 @@ Ship::Stability::Stability()
     s_GZ = 0.0f;
 }
 Ship::Stability::~Stability(){}
+
+Ship::Constants::Constants() {
+    con_name = "";
+    con_lcg = 0.0f;
+    con_vcg = 0.0f;
+    con_tcg = 0.0f;
+    con_weight = 0.0f;
+}
+Ship::Constants::~Constants(){}

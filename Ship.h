@@ -61,17 +61,38 @@ public:
 
     std::string& read_unit_name (int);
     std::string read_unit_type (int);
-    float& read_u_LCG(int x);
-    float& read_u_VCG(int x);
-    float& read_u_TCG(int x);
-    float& read_u_weight(int x);
-    float& read_u_volume(int x);
-    float& read_u_dencity(int x);
-    float read_u_maxvol (int);
+    float& read_u_LCG(int& x);
+    float& read_u_VCG(int& x);
+    float& read_u_TCG(int& x);
+    float& read_u_weight(int& x);
+    float& read_u_volume(int& x);
+    float& read_u_dencity(int& x);
+    float& read_u_length(int& x);
+    float& read_u_breadth(int&);
+    float& read_u_height(int&);
+    float& read_u_maxvol (int&);
+
+    bool set_con_name(int, std::string);
+    bool set_con_lcg(int, std::string);
+    bool set_con_tcg(int, std::string);
+    bool set_con_vcg(int, std::string);
+    bool set_con_weight(int, std::string);
+
+    bool set_car_name(int, std::string);
+    bool set_car_weight(int, std::string);
+    bool set_car_lcg(int, std::string);
+    bool set_car_vcg(int, std::string);
+    bool set_car_tcg(int, std::string);
+    bool set_car_length(int, std::string);
+    bool set_car_breadth(int, std::string);
+    bool set_car_height(int, std::string);
+
+
     void variable_update();
     int unit_count();
     void autoParticulars();
     void text_print();
+    void clear_data();
 
 
     void new_unit(u_types);
@@ -169,11 +190,24 @@ private:
         float s_VCG;
         float s_GZ;
     };
+
+    class Constants
+    {
+    public:
+        Constants();
+        virtual ~Constants();
+        std::string con_name;
+        float con_lcg;
+        float con_tcg;
+        float con_vcg;
+        float con_weight;
+    };
 //    std::vector<std::vector<float>> points;
     std::vector<Unit> UnitVec;
-    std::vector<BulkCargo> BulkVec;
+    std::array<BulkCargo, 50> BulkVec;
     std::vector<Hydrostatistics> HydroVec;
     std::vector<crossCurves> CrossVec;
+    std::array<Constants, 50> ConVec;
 
 //    struct rib
 //    {
@@ -181,5 +215,5 @@ private:
 //        std::vector<std::vector<float>> zy;
 //    };
 //    std::vector<rib> ribs;
-};
+}; // End Ship class
 #endif // SHIP_H
