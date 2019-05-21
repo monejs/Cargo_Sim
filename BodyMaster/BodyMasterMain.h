@@ -43,6 +43,7 @@ class BodyMasterFrame: public wxFrame
         void OnSaveItemSelected(wxCommandEvent& event);
         void OnCalculateButtonClick1(wxCommandEvent& event);
         void OnPrintHydrostaticsSelected(wxCommandEvent& event);
+        void OnResize(wxSizeEvent& event);
         //*)
 
         //(*Identifiers(BodyMasterFrame)
@@ -64,6 +65,7 @@ class BodyMasterFrame: public wxFrame
         wxButton* CalculateButton;
         wxButton* DeleteButton;
         wxButton* ParticularsButton;
+        wxFlexGridSizer* FlexGridSizer1;
         wxGrid* Grid;
         wxMenu* Menu3;
         wxMenuItem* LoadItem;

@@ -14,6 +14,8 @@
         wxMessageBox(wxT("Invalid input"), wxT("Error"));\
     }
 
+#define convert(x) wxString::Format(wxT("%.2f"), x)
+
 //(*InternalHeaders(BodyMasterFrame)
 #include <wx/intl.h>
 #include <wx/string.h>
@@ -45,18 +47,16 @@ BodyMasterFrame::BodyMasterFrame(wxWindow* parent,wxWindowID id)
 {
     //(*Initialize(BodyMasterFrame)
     wxBoxSizer* BoxSizer1;
-    wxFlexGridSizer* FlexGridSizer1;
     wxMenu* Menu1;
     wxMenu* Menu2;
     wxMenuBar* MenuBar1;
     wxMenuItem* MenuItem1;
     wxMenuItem* MenuItem2;
 
-    Create(parent, id, _("BodyMaster"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("id"));
+    Create(parent, wxID_ANY, _("BodyMaster"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
     FlexGridSizer1 = new wxFlexGridSizer(2, 1, 0, 0);
-    Grid = new wxGrid(this, ID_GRID1, wxDefaultPosition, wxDefaultSize, 0, _T("ID_GRID1"));
+    Grid = new wxGrid(this, ID_GRID1, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE, _T("ID_GRID1"));
     Grid->CreateGrid(0,8);
-    Grid->SetMinSize(wxSize(1200,500));
     Grid->EnableEditing(true);
     Grid->EnableGridLines(true);
     Grid->SetDefaultColSize(150, true);
@@ -80,7 +80,7 @@ BodyMasterFrame::BodyMasterFrame(wxWindow* parent,wxWindowID id)
     BoxSizer1->Add(ParticularsButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     CalculateButton = new wxButton(this, ID_BUTTON1, _("Calculate"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
     BoxSizer1->Add(CalculateButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    FlexGridSizer1->Add(BoxSizer1, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer1->Add(BoxSizer1, 1, wxALL|wxALIGN_RIGHT, 5);
     SetSizer(FlexGridSizer1);
     MenuBar1 = new wxMenuBar();
     Menu1 = new wxMenu();
@@ -117,6 +117,7 @@ BodyMasterFrame::BodyMasterFrame(wxWindow* parent,wxWindowID id)
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&BodyMasterFrame::OnQuit);
     Connect(idPrintHydroStatics,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&BodyMasterFrame::OnPrintHydrostaticsSelected);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&BodyMasterFrame::OnAbout);
+    Connect(wxEVT_SIZE,(wxObjectEventFunction)&BodyMasterFrame::OnResize);
     //*)
 }
 
@@ -143,10 +144,11 @@ void BodyMasterFrame::OnAddButtonClick(wxCommandEvent& event)
     {
         choices.Add(ShipBody.u_type_strings[i]);
     }
-    Grid->InsertRows();
-    Grid->SetCellEditor(0,1, new wxGridCellChoiceEditor(choices, false));
-    Grid->SetCellValue(0,1, choices[0]);
+    Grid->AppendRows();
+    Grid->SetCellEditor(Grid->GetNumberRows()-1,1, new wxGridCellChoiceEditor(choices, false));
+    Grid->SetCellValue(Grid->GetNumberRows()-1,1, choices[0]);
     ShipBody.new_unit(ShipBody.u_types::Ballast);
+    BodyMasterFrame::Layout();
 }
 
 void BodyMasterFrame::OnParticularsButtonClick(wxCommandEvent& event)
@@ -199,13 +201,28 @@ void BodyMasterFrame::OnDeleteButtonClick(wxCommandEvent& event)
 
 void BodyMasterFrame::OnLoadItemSelected(wxCommandEvent& event)
 {
+    ShipBody.clear_data();
+    Grid->DeleteRows(0,Grid->GetNumberRows());
     wxFileDialog dialog(NULL, wxT("Choose a ship file"));
-    if (dialog.ShowModal() == wxID_OPEN)
-    {
+  //  dialog.ShowModal();
+    if (dialog.ShowModal()==wxID_OK){
         if (!ShipBody.load(dialog.GetPath().ToStdString()))
         {
             wxMessageBox(wxT("Error loading file"), wxT("Error"));
-        }
+        }else{
+        wxMessageBox("File loaded!");}
+    }
+    for (int i=0; i<ShipBody.unit_count(); i++)
+    {
+        Grid->AppendRows();
+        Grid->SetCellValue(Grid->GetNumberRows()-1,0,ShipBody.read_unit_name(i));
+        Grid->SetCellValue(Grid->GetNumberRows()-1,1,ShipBody.read_unit_type(i));
+        Grid->SetCellValue(Grid->GetNumberRows()-1,2,convert(ShipBody.read_u_LCG(i)));
+        Grid->SetCellValue(Grid->GetNumberRows()-1,3,convert(ShipBody.read_u_TCG(i)));
+        Grid->SetCellValue(Grid->GetNumberRows()-1,4,convert(ShipBody.read_u_VCG(i)));
+        Grid->SetCellValue(Grid->GetNumberRows()-1,5,convert(ShipBody.read_u_length(i)));
+        Grid->SetCellValue(Grid->GetNumberRows()-1,6,convert(ShipBody.read_u_breadth(i)));
+        Grid->SetCellValue(Grid->GetNumberRows()-1,7,convert(ShipBody.read_u_height(i)));
     }
 }
 
@@ -248,5 +265,11 @@ void BodyMasterFrame::OnPrintHydrostaticsSelected(wxCommandEvent& event)
         ShipBody.set_u_height(i, Grid->GetCellValue(i,7).ToStdString());
 
     }
+    ShipBody.variable_update();
     ShipBody.text_print();
+}
+
+void BodyMasterFrame::OnResize(wxSizeEvent& event)
+{
+    BodyMasterFrame::Fit();
 }
