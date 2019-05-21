@@ -1,11 +1,11 @@
 # depslib dependency file v1.0
-1557220419 source:/home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.cpp
+1558461310 source:/home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.cpp
 	"CargoMasterMain.h"
 	<wx/msgdlg.h>
 	<wx/intl.h>
 	<wx/string.h>
 
-1557218411 /home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.h
+1558456653 /home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.h
 	"../Ship.h"
 	"wx/filedlg.h"
 	<wx/frame.h>
@@ -926,12 +926,12 @@
 
 1555492887 /usr/include/wx-3.1/wx/gtk/msgdlg.h
 
-1557184105 source:/home/vilis/Cargo_Sim/CargoMaster/CargoMasterApp.cpp
+1557757143 source:/home/vilis/Cargo_Sim/CargoMaster/CargoMasterApp.cpp
 	"CargoMasterApp.h"
 	"CargoMasterMain.h"
 	<wx/image.h>
 
-1557184105 /home/vilis/Cargo_Sim/CargoMaster/CargoMasterApp.h
+1557757143 /home/vilis/Cargo_Sim/CargoMaster/CargoMasterApp.h
 	<wx/app.h>
 
 1555492884 /usr/include/wx-3.1/wx/app.h
@@ -1105,17 +1105,22 @@
 	"wx/defs.h"
 	"wx/window.h"
 
-1557220448 source:/home/vilis/Cargo_Sim/Ship.cpp
+1558454537 source:/home/vilis/Cargo_Sim/Ship.cpp
 	"Ship.h"
 
-1557220419 /home/vilis/Cargo_Sim/Ship.h
+1558461310 /home/vilis/Cargo_Sim/Ship.h
 	<string>
 	<vector>
 	<fstream>
 	<ios>
+	<iostream>
+	<sstream>
+	<math.h>
+	<cmath>
+	<iomanip>
 	"Ship.pb.h"
 
-1557183387 /home/vilis/Cargo_Sim/Ship.pb.h
+1558452029 /home/vilis/Cargo_Sim/Ship.pb.h
 	<limits>
 	<string>
 	<google/protobuf/port_def.inc>
@@ -1247,7 +1252,7 @@
 	"wx/strconv.h"
 	"wx/fontenc.h"
 
-1557183398 source:/home/vilis/Cargo_Sim/Ship.pb.cc
+1558452029 source:/home/vilis/Cargo_Sim/Ship.pb.cc
 	"Ship.pb.h"
 	<algorithm>
 	<google/protobuf/stubs/common.h>

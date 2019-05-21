@@ -35,6 +35,9 @@ class CargoMasterFrame: public wxFrame
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
         void OnLoadButtonSelected(wxCommandEvent& event);
+        void OnNotebook1PageChanged(wxNotebookEvent& event);
+        void OnConstantsGridCellChanged(wxGridEvent& event);
+        void OnDeadLoadGridCellChanged(wxGridEvent& event);
         //*)
 
         //(*Identifiers(CargoMasterFrame)
@@ -62,10 +65,10 @@ class CargoMasterFrame: public wxFrame
 
         //(*Declarations(CargoMasterFrame)
         wxGrid* BallastGrid;
+        wxGrid* CargoTankGrid;
         wxGrid* ConstantsGrid;
         wxGrid* DeadLoadGrid;
         wxGrid* GeneralGrid;
-        wxGrid* Grid4;
         wxGrid* TankGrid;
         wxMenu* Menu3;
         wxMenuItem* LoadButton;

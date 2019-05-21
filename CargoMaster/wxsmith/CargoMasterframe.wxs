@@ -6,6 +6,7 @@
 		<object class="wxNotebook" name="ID_NOTEBOOK1" variable="Notebook1" member="yes">
 			<pos>152,176</pos>
 			<size>1088,728</size>
+			<handler function="OnNotebook1PageChanged" entry="EVT_NOTEBOOK_PAGE_CHANGED" />
 			<object class="notebookpage">
 				<object class="wxPanel" name="ID_PANEL1" variable="Panel1" member="yes">
 					<object class="wxBoxSizer" variable="BoxSizer1" member="no">
@@ -56,6 +57,7 @@
 									<item>VCG, m</item>
 									<item>TCG, m</item>
 								</collabels>
+								<handler function="OnConstantsGridCellChanged" entry="EVT_CMD_GRID_CELL_CHANGED" />
 							</object>
 							<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 							<border>5</border>
@@ -70,7 +72,7 @@
 					<object class="wxBoxSizer" variable="BoxSizer4" member="no">
 						<orient>wxVERTICAL</orient>
 						<object class="sizeritem">
-							<object class="wxGrid" name="ID_GRID4" variable="Grid4" member="yes">
+							<object class="wxGrid" name="ID_GRID4" variable="CargoTankGrid" member="yes">
 								<cols>10</cols>
 								<defaultcolsize>120</defaultcolsize>
 								<collabels>
@@ -92,7 +94,7 @@
 						</object>
 					</object>
 				</object>
-				<label>Cargo Tanks</label>
+				<label>Cargo Tanks/Holds</label>
 			</object>
 			<object class="notebookpage">
 				<object class="wxPanel" name="ID_PANEL3" variable="Panel3" member="yes">
@@ -179,6 +181,7 @@
 									<item>Breadth, m</item>
 									<item>Height, m</item>
 								</collabels>
+								<handler function="OnDeadLoadGridCellChanged" entry="EVT_CMD_GRID_CELL_CHANGED" />
 							</object>
 							<flag>wxALL|wxEXPAND</flag>
 							<border>5</border>

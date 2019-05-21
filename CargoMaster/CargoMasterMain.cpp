@@ -10,6 +10,8 @@
 #include "CargoMasterMain.h"
 #include <wx/msgdlg.h>
 
+#define CellVal(n) n->GetCellValue(n->GetGridCursorRow(), n->GetGridCursorCol())
+
 //(*InternalHeaders(CargoMasterFrame)
 #include <wx/intl.h>
 #include <wx/string.h>
@@ -113,24 +115,24 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     BoxSizer2->SetSizeHints(Panel2);
     Panel8 = new wxPanel(Notebook1, ID_PANEL8, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL8"));
     BoxSizer4 = new wxBoxSizer(wxVERTICAL);
-    Grid4 = new wxGrid(Panel8, ID_GRID4, wxDefaultPosition, wxDefaultSize, 0, _T("ID_GRID4"));
-    Grid4->CreateGrid(0,10);
-    Grid4->EnableEditing(true);
-    Grid4->EnableGridLines(true);
-    Grid4->SetDefaultColSize(120, true);
-    Grid4->SetColLabelValue(0, _("Name"));
-    Grid4->SetColLabelValue(1, _("Weight, t"));
-    Grid4->SetColLabelValue(2, _("LCG, m"));
-    Grid4->SetColLabelValue(3, _("VCG, m"));
-    Grid4->SetColLabelValue(4, _("TCG, m"));
-    Grid4->SetColLabelValue(5, _("Fs, m*t"));
-    Grid4->SetColLabelValue(6, _("Fs max"));
-    Grid4->SetColLabelValue(7, _("Vol %"));
-    Grid4->SetColLabelValue(8, _("Volume, m3"));
-    Grid4->SetColLabelValue(9, _("Max Vol, m3"));
-    Grid4->SetDefaultCellFont( Grid4->GetFont() );
-    Grid4->SetDefaultCellTextColour( Grid4->GetForegroundColour() );
-    BoxSizer4->Add(Grid4, 1, wxALL|wxEXPAND, 5);
+    CargoTankGrid = new wxGrid(Panel8, ID_GRID4, wxDefaultPosition, wxDefaultSize, 0, _T("ID_GRID4"));
+    CargoTankGrid->CreateGrid(0,10);
+    CargoTankGrid->EnableEditing(true);
+    CargoTankGrid->EnableGridLines(true);
+    CargoTankGrid->SetDefaultColSize(120, true);
+    CargoTankGrid->SetColLabelValue(0, _("Name"));
+    CargoTankGrid->SetColLabelValue(1, _("Weight, t"));
+    CargoTankGrid->SetColLabelValue(2, _("LCG, m"));
+    CargoTankGrid->SetColLabelValue(3, _("VCG, m"));
+    CargoTankGrid->SetColLabelValue(4, _("TCG, m"));
+    CargoTankGrid->SetColLabelValue(5, _("Fs, m*t"));
+    CargoTankGrid->SetColLabelValue(6, _("Fs max"));
+    CargoTankGrid->SetColLabelValue(7, _("Vol %"));
+    CargoTankGrid->SetColLabelValue(8, _("Volume, m3"));
+    CargoTankGrid->SetColLabelValue(9, _("Max Vol, m3"));
+    CargoTankGrid->SetDefaultCellFont( CargoTankGrid->GetFont() );
+    CargoTankGrid->SetDefaultCellTextColour( CargoTankGrid->GetForegroundColour() );
+    BoxSizer4->Add(CargoTankGrid, 1, wxALL|wxEXPAND, 5);
     Panel8->SetSizer(BoxSizer4);
     BoxSizer4->Fit(Panel8);
     BoxSizer4->SetSizeHints(Panel8);
@@ -205,7 +207,7 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     BoxSizer6->SetSizeHints(Panel7);
     Notebook1->AddPage(Panel1, _("General"), false);
     Notebook1->AddPage(Panel2, _("Constants"), false);
-    Notebook1->AddPage(Panel8, _("Cargo Tanks"), false);
+    Notebook1->AddPage(Panel8, _("Cargo Tanks/Holds"), false);
     Notebook1->AddPage(Panel3, _("Ballast Tanks"), false);
     Notebook1->AddPage(Panel4, _("Tanks"), false);
     Notebook1->AddPage(Panel5, _("Stability"), false);
@@ -234,6 +236,9 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     StatusBar1->SetStatusStyles(1,__wxStatusBarStyles_1);
     SetStatusBar(StatusBar1);
 
+    Connect(ID_GRID2,wxEVT_GRID_CELL_CHANGED,(wxObjectEventFunction)&CargoMasterFrame::OnConstantsGridCellChanged);
+    Connect(ID_GRID6,wxEVT_GRID_CELL_CHANGED,(wxObjectEventFunction)&CargoMasterFrame::OnDeadLoadGridCellChanged);
+    Connect(ID_NOTEBOOK1,wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,(wxObjectEventFunction)&CargoMasterFrame::OnNotebook1PageChanged);
     Connect(ID_MENUITEM1,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnLoadButtonSelected);
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnQuit);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnAbout);
@@ -264,18 +269,240 @@ void CargoMasterFrame::OnLoadButtonSelected(wxCommandEvent& event)
     {
         ShipBody.load(dialog.GetPath().ToStdString());
     }
-
+    std::vector<int>hfo, mdo, lo, fw, va;
     for (int i=0; i<ShipBody.unit_count(); i++)
     {
+
         if (ShipBody.read_unit_type(i)==ShipBody.u_type_strings[0])
         {
-            BallastGrid->InsertRows();
-            BallastGrid->SetCellValue(0,0,ShipBody.read_unit_name(i));
-            BallastGrid->SetCellValue(0,1,wxString::Format(wxT("%.2f"),ShipBody.read_u_weight(i)));
-            BallastGrid->SetCellValue(0,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(i)));
-            BallastGrid->SetCellValue(0,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(i)));
-            BallastGrid->SetCellValue(0,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(i)));
-            BallastGrid->SetCellValue(0,10,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(i)));
+            BallastGrid->AppendRows();
+            BallastGrid->SetCellValue(BallastGrid->GetNumberRows()-1,0,ShipBody.read_unit_name(i));
+            BallastGrid->SetCellValue(BallastGrid->GetNumberRows()-1,1,wxString::Format(wxT("%.2f"),ShipBody.read_u_weight(i)));
+            BallastGrid->SetCellValue(BallastGrid->GetNumberRows()-1,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(i)));
+            BallastGrid->SetCellValue(BallastGrid->GetNumberRows()-1,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(i)));
+            BallastGrid->SetCellValue(BallastGrid->GetNumberRows()-1,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(i)));
+            BallastGrid->SetCellValue(BallastGrid->GetNumberRows()-1,10,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(i)));
+        }
+        if (ShipBody.read_unit_type(i)==ShipBody.u_type_strings[1])
+        {
+            CargoTankGrid->AppendRows();
+            CargoTankGrid->SetCellValue(CargoTankGrid->GetNumberRows()-1,0,ShipBody.read_unit_name(i));
+            CargoTankGrid->SetCellValue(CargoTankGrid->GetNumberRows()-1,1,wxString::Format(wxT("%.2f"),ShipBody.read_u_weight(i)));
+            CargoTankGrid->SetCellValue(CargoTankGrid->GetNumberRows()-1,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(i)));
+            CargoTankGrid->SetCellValue(CargoTankGrid->GetNumberRows()-1,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(i)));
+            CargoTankGrid->SetCellValue(CargoTankGrid->GetNumberRows()-1,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(i)));
+            CargoTankGrid->SetCellValue(CargoTankGrid->GetNumberRows()-1,10,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(i)));
+        }
+        if (ShipBody.read_unit_type(i)==ShipBody.u_type_strings[2])
+        {
+            CargoTankGrid->InsertRows();
+            CargoTankGrid->SetCellValue(0,0,ShipBody.read_unit_name(i));
+            CargoTankGrid->SetCellValue(0,1,wxString::Format(wxT("%.2f"),ShipBody.read_u_weight(i)));
+            CargoTankGrid->SetCellValue(0,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(i)));
+            CargoTankGrid->SetCellValue(0,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(i)));
+            CargoTankGrid->SetCellValue(0,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(i)));
+            CargoTankGrid->SetCellValue(0,10,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(i)));
+        }
+        if (ShipBody.read_unit_type(i)==ShipBody.u_type_strings[3]) hfo.push_back(i);
+        if (ShipBody.read_unit_type(i)==ShipBody.u_type_strings[4]) mdo.push_back(i);
+        if (ShipBody.read_unit_type(i)==ShipBody.u_type_strings[5]) lo.push_back(i);
+        if (ShipBody.read_unit_type(i)==ShipBody.u_type_strings[6]) fw.push_back(i);
+        if (ShipBody.read_unit_type(i)==ShipBody.u_type_strings[7]) va.push_back(i);
+    }
+    for (int i=0; i<hfo.size(); i++)
+    {
+        TankGrid->AppendRows();
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,0,ShipBody.read_unit_name(hfo[i]));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,1,wxString::Format(wxT("%.2f"),ShipBody.read_u_weight(hfo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(hfo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(hfo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(hfo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,10,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(hfo[i])));
+    }
+    for (int i=0; i<mdo.size(); i++)
+    {
+        TankGrid->AppendRows();
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,0,ShipBody.read_unit_name(mdo[i]));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,1,wxString::Format(wxT("%.2f"),ShipBody.read_u_weight(mdo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(mdo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(mdo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(mdo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,10,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(mdo[i])));
+    }
+    for (int i=0; i<lo.size(); i++)
+    {
+        TankGrid->AppendRows();
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,0,ShipBody.read_unit_name(lo[i]));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,1,wxString::Format(wxT("%.2f"),ShipBody.read_u_weight(lo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(lo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(lo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(lo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,10,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(lo[i])));
+    }
+    for (int i=0; i<fw.size(); i++)
+    {
+        TankGrid->AppendRows();
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,0,ShipBody.read_unit_name(fw[i]));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,1,wxString::Format(wxT("%.2f"),ShipBody.read_u_weight(fw[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(fw[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(fw[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(fw[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,10,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(fw[i])));
+    }
+    for (int i=0; i<va.size(); i++)
+    {
+        TankGrid->AppendRows();
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,0,ShipBody.read_unit_name(va[i]));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,1,wxString::Format(wxT("%.2f"),ShipBody.read_u_weight(va[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(va[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(va[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(va[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,10,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(va[i])));
+    }
+}
+
+void CargoMasterFrame::OnNotebook1PageChanged(wxNotebookEvent& event)
+{
+}
+
+void CargoMasterFrame::OnConstantsGridCellChanged(wxGridEvent& event)
+{
+    if (ConstantsGrid->GetGridCursorCol()==0)
+    {
+        if (ShipBody.set_con_name(ConstantsGrid->GetGridCursorRow(),CellVal(ConstantsGrid).ToStdString()))
+        {
+            ConstantsGrid->SetCellTextColour(ConstantsGrid->GetGridCursorRow(),0,*wxBLACK);
+        }else{
+            ConstantsGrid->SetCellTextColour(ConstantsGrid->GetGridCursorRow(),0,*wxRED);
+            return;
+        }
+    }
+    if (ConstantsGrid->GetGridCursorCol()==1)
+    {
+        if(ShipBody.set_con_weight(ConstantsGrid->GetGridCursorRow(),CellVal(ConstantsGrid).ToStdString()))
+        {
+
+        ConstantsGrid->SetCellTextColour(ConstantsGrid->GetGridCursorRow(),1,*wxBLACK);
+    }else{
+        ConstantsGrid->SetCellTextColour(ConstantsGrid->GetGridCursorRow(),1,*wxRED);
+        return;
+        }
+    }
+    if (ConstantsGrid->GetGridCursorCol()==2)
+    {
+        if (ShipBody.set_con_lcg(ConstantsGrid->GetGridCursorRow(),CellVal(ConstantsGrid).ToStdString()))
+
+    {
+        ConstantsGrid->SetCellTextColour(ConstantsGrid->GetGridCursorRow(),2,*wxBLACK);
+    }else{
+        ConstantsGrid->SetCellTextColour(ConstantsGrid->GetGridCursorRow(),2,*wxRED);
+        return;
+    }
+    }
+    if (ConstantsGrid->GetGridCursorCol()==3)
+    {
+        if (ShipBody.set_con_vcg(ConstantsGrid->GetGridCursorRow(),CellVal(ConstantsGrid).ToStdString()))
+        {
+
+        ConstantsGrid->SetCellTextColour(ConstantsGrid->GetGridCursorRow(),3,*wxBLACK);
+    }else{
+        ConstantsGrid->SetCellTextColour(ConstantsGrid->GetGridCursorRow(),3,*wxRED);
+        return;
+        }
+    }
+    if (ConstantsGrid->GetGridCursorCol()==4)
+    {
+        if (ShipBody.set_con_tcg(ConstantsGrid->GetGridCursorRow(),CellVal(ConstantsGrid).ToStdString()))
+        {
+
+        ConstantsGrid->SetCellTextColour(ConstantsGrid->GetGridCursorRow(),4,*wxBLACK);
+    }else{
+        ConstantsGrid->SetCellTextColour(ConstantsGrid->GetGridCursorRow(),4,*wxRED);
+        return;
+        }
+    }
+}
+
+void CargoMasterFrame::OnDeadLoadGridCellChanged(wxGridEvent& event)
+{
+    if (DeadLoadGrid->GetGridCursorCol()==0)
+    {
+        if (ShipBody.set_car_name(DeadLoadGrid->GetGridCursorRow(), CellVal(DeadLoadGrid).ToStdString()))
+        {
+            DeadLoadGrid->SetCellTextColour(DeadLoadGrid->GetGridCursorRow(), DeadLoadGrid->GetGridCursorCol(), *wxBLACK);
+        }else{
+            DeadLoadGrid->SetCellTextColour(DeadLoadGrid->GetGridCursorRow(), DeadLoadGrid->GetGridCursorCol(), *wxRED);
+            return;
+        }
+    }
+    if (DeadLoadGrid->GetGridCursorCol()==1)
+    {
+        if (ShipBody.set_car_weight(DeadLoadGrid->GetGridCursorRow(), CellVal(DeadLoadGrid).ToStdString()))
+        {
+            DeadLoadGrid->SetCellTextColour(DeadLoadGrid->GetGridCursorRow(), DeadLoadGrid->GetGridCursorCol(), *wxBLACK);
+        }else{
+            DeadLoadGrid->SetCellTextColour(DeadLoadGrid->GetGridCursorRow(), DeadLoadGrid->GetGridCursorCol(), *wxRED);
+            return;
+        }
+    }
+    if (DeadLoadGrid->GetGridCursorCol()==2)
+    {
+        if (ShipBody.set_car_lcg(DeadLoadGrid->GetGridCursorRow(), CellVal(DeadLoadGrid).ToStdString()))
+        {
+            DeadLoadGrid->SetCellTextColour(DeadLoadGrid->GetGridCursorRow(), DeadLoadGrid->GetGridCursorCol(), *wxBLACK);
+        }else{
+            DeadLoadGrid->SetCellTextColour(DeadLoadGrid->GetGridCursorRow(), DeadLoadGrid->GetGridCursorCol(), *wxRED);
+            return;
+        }
+    }
+    if (DeadLoadGrid->GetGridCursorCol()==3)
+    {
+        if (ShipBody.set_car_vcg(DeadLoadGrid->GetGridCursorRow(), CellVal(DeadLoadGrid).ToStdString()))
+        {
+            DeadLoadGrid->SetCellTextColour(DeadLoadGrid->GetGridCursorRow(), DeadLoadGrid->GetGridCursorCol(), *wxBLACK);
+        }else{
+            DeadLoadGrid->SetCellTextColour(DeadLoadGrid->GetGridCursorRow(), DeadLoadGrid->GetGridCursorCol(), *wxRED);
+            return;
+        }
+    }
+    if (DeadLoadGrid->GetGridCursorCol()==4)
+    {
+        if (ShipBody.set_car_tcg(DeadLoadGrid->GetGridCursorRow(), CellVal(DeadLoadGrid).ToStdString()))
+        {
+            DeadLoadGrid->SetCellTextColour(DeadLoadGrid->GetGridCursorRow(), DeadLoadGrid->GetGridCursorCol(), *wxBLACK);
+        }else{
+            DeadLoadGrid->SetCellTextColour(DeadLoadGrid->GetGridCursorRow(), DeadLoadGrid->GetGridCursorCol(), *wxRED);
+            return;
+        }
+    }
+    if (DeadLoadGrid->GetGridCursorCol()==5)
+    {
+        if (ShipBody.set_car_length(DeadLoadGrid->GetGridCursorRow(), CellVal(DeadLoadGrid).ToStdString()))
+        {
+            DeadLoadGrid->SetCellTextColour(DeadLoadGrid->GetGridCursorRow(), DeadLoadGrid->GetGridCursorCol(), *wxBLACK);
+        }else{
+            DeadLoadGrid->SetCellTextColour(DeadLoadGrid->GetGridCursorRow(), DeadLoadGrid->GetGridCursorCol(), *wxRED);
+            return;
+        }
+    }
+    if (DeadLoadGrid->GetGridCursorCol()==6)
+    {
+        if (ShipBody.set_car_breadth(DeadLoadGrid->GetGridCursorRow(), CellVal(DeadLoadGrid).ToStdString()))
+        {
+            DeadLoadGrid->SetCellTextColour(DeadLoadGrid->GetGridCursorRow(), DeadLoadGrid->GetGridCursorCol(), *wxBLACK);
+        }else{
+            DeadLoadGrid->SetCellTextColour(DeadLoadGrid->GetGridCursorRow(), DeadLoadGrid->GetGridCursorCol(), *wxRED);
+            return;
+        }
+    }
+    if (DeadLoadGrid->GetGridCursorCol()==7)
+    {
+        if (ShipBody.set_car_height(DeadLoadGrid->GetGridCursorRow(), CellVal(DeadLoadGrid).ToStdString()))
+        {
+            DeadLoadGrid->SetCellTextColour(DeadLoadGrid->GetGridCursorRow(), DeadLoadGrid->GetGridCursorCol(), *wxBLACK);
+        }else{
+            DeadLoadGrid->SetCellTextColour(DeadLoadGrid->GetGridCursorRow(), DeadLoadGrid->GetGridCursorCol(), *wxRED);
+            return;
         }
     }
 }
