@@ -9,6 +9,7 @@
 
 #include "CargoMasterMain.h"
 #include <wx/msgdlg.h>
+#include <iostream>
 
 #define CellVal(n) n->GetCellValue(n->GetGridCursorRow(), n->GetGridCursorCol())
 
@@ -38,9 +39,9 @@ const long CargoMasterFrame::ID_PANEL6 = wxNewId();
 const long CargoMasterFrame::ID_GRID6 = wxNewId();
 const long CargoMasterFrame::ID_PANEL7 = wxNewId();
 const long CargoMasterFrame::ID_NOTEBOOK1 = wxNewId();
-const long CargoMasterFrame::ID_MENUITEM2 = wxNewId();
 const long CargoMasterFrame::ID_MENUITEM1 = wxNewId();
 const long CargoMasterFrame::idMenuQuit = wxNewId();
+const long CargoMasterFrame::ID_MENUITEM2 = wxNewId();
 const long CargoMasterFrame::idMenuAbout = wxNewId();
 const long CargoMasterFrame::ID_STATUSBAR1 = wxNewId();
 //*)
@@ -65,7 +66,7 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     wxMenuItem* MenuItem1;
     wxMenuItem* MenuItem2;
 
-    Create(parent, id, _("Cargo Master"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("id"));
+    Create(parent, wxID_ANY, _("Cargo Master"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
     SetClientSize(wxSize(920,713));
     Notebook1 = new wxNotebook(this, ID_NOTEBOOK1, wxPoint(152,176), wxSize(1088,728), 0, _T("ID_NOTEBOOK1"));
     Panel1 = new wxPanel(Notebook1, ID_PANEL1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL1"));
@@ -214,16 +215,16 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     Notebook1->AddPage(Panel6, _("Strength"), false);
     Notebook1->AddPage(Panel7, _("Dead Load"), false);
     MenuBar1 = new wxMenuBar();
-    Menu3 = new wxMenu();
-    ParticularsOpen = new wxMenuItem(Menu3, ID_MENUITEM2, _("Particulars"), wxEmptyString, wxITEM_NORMAL);
-    Menu3->Append(ParticularsOpen);
-    MenuBar1->Append(Menu3, _("&Ship"));
     Menu1 = new wxMenu();
     LoadButton = new wxMenuItem(Menu1, ID_MENUITEM1, _("Load"), wxEmptyString, wxITEM_NORMAL);
     Menu1->Append(LoadButton);
     MenuItem1 = new wxMenuItem(Menu1, idMenuQuit, _("Quit\tAlt-F4"), _("Quit the application"), wxITEM_NORMAL);
     Menu1->Append(MenuItem1);
     MenuBar1->Append(Menu1, _("&File"));
+    Menu3 = new wxMenu();
+    ParticularsOpen = new wxMenuItem(Menu3, ID_MENUITEM2, _("Particulars"), wxEmptyString, wxITEM_NORMAL);
+    Menu3->Append(ParticularsOpen);
+    MenuBar1->Append(Menu3, _("&Ship"));
     Menu2 = new wxMenu();
     MenuItem2 = new wxMenuItem(Menu2, idMenuAbout, _("About\tF1"), _("Show info about this application"), wxITEM_NORMAL);
     Menu2->Append(MenuItem2);
@@ -241,6 +242,7 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     Connect(ID_NOTEBOOK1,wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,(wxObjectEventFunction)&CargoMasterFrame::OnNotebook1PageChanged);
     Connect(ID_MENUITEM1,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnLoadButtonSelected);
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnQuit);
+    Connect(ID_MENUITEM2,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnParticularsOpenSelected);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnAbout);
     //*)
 }
@@ -265,14 +267,17 @@ void CargoMasterFrame::OnAbout(wxCommandEvent& event)
 void CargoMasterFrame::OnLoadButtonSelected(wxCommandEvent& event)
 {
     wxFileDialog dialog(NULL, wxT("Choose a File"));
-    if (dialog.ShowModal() == wxID_OK)
-    {
-        ShipBody.load(dialog.GetPath().ToStdString());
+    if (dialog.ShowModal()==wxID_OK){
+        if (!ShipBody.load(dialog.GetPath().ToStdString()))
+        {
+            wxMessageBox(wxT("Error loading file"), wxT("Error"));
+        }else{
+        wxMessageBox("File loaded!");}
     }
     std::vector<int>hfo, mdo, lo, fw, va;
-    for (int i=0; i<ShipBody.unit_count(); i++)
+    for (long unsigned int i=0; i<ShipBody.unit_count(); i++)
     {
-
+        std::cout << "Schleife" << std::endl;
         if (ShipBody.read_unit_type(i)==ShipBody.u_type_strings[0])
         {
             BallastGrid->AppendRows();
@@ -281,7 +286,7 @@ void CargoMasterFrame::OnLoadButtonSelected(wxCommandEvent& event)
             BallastGrid->SetCellValue(BallastGrid->GetNumberRows()-1,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(i)));
             BallastGrid->SetCellValue(BallastGrid->GetNumberRows()-1,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(i)));
             BallastGrid->SetCellValue(BallastGrid->GetNumberRows()-1,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(i)));
-            BallastGrid->SetCellValue(BallastGrid->GetNumberRows()-1,10,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(i)));
+            BallastGrid->SetCellValue(BallastGrid->GetNumberRows()-1,9,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(i)));
         }
         if (ShipBody.read_unit_type(i)==ShipBody.u_type_strings[1])
         {
@@ -291,8 +296,9 @@ void CargoMasterFrame::OnLoadButtonSelected(wxCommandEvent& event)
             CargoTankGrid->SetCellValue(CargoTankGrid->GetNumberRows()-1,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(i)));
             CargoTankGrid->SetCellValue(CargoTankGrid->GetNumberRows()-1,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(i)));
             CargoTankGrid->SetCellValue(CargoTankGrid->GetNumberRows()-1,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(i)));
-            CargoTankGrid->SetCellValue(CargoTankGrid->GetNumberRows()-1,10,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(i)));
+            CargoTankGrid->SetCellValue(CargoTankGrid->GetNumberRows()-1,9,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(i)));
         }
+        std::cout << "Vidus" << std::endl;
         if (ShipBody.read_unit_type(i)==ShipBody.u_type_strings[2])
         {
             CargoTankGrid->InsertRows();
@@ -301,7 +307,7 @@ void CargoMasterFrame::OnLoadButtonSelected(wxCommandEvent& event)
             CargoTankGrid->SetCellValue(0,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(i)));
             CargoTankGrid->SetCellValue(0,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(i)));
             CargoTankGrid->SetCellValue(0,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(i)));
-            CargoTankGrid->SetCellValue(0,10,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(i)));
+            CargoTankGrid->SetCellValue(0,9,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(i)));
         }
         if (ShipBody.read_unit_type(i)==ShipBody.u_type_strings[3]) hfo.push_back(i);
         if (ShipBody.read_unit_type(i)==ShipBody.u_type_strings[4]) mdo.push_back(i);
@@ -309,55 +315,72 @@ void CargoMasterFrame::OnLoadButtonSelected(wxCommandEvent& event)
         if (ShipBody.read_unit_type(i)==ShipBody.u_type_strings[6]) fw.push_back(i);
         if (ShipBody.read_unit_type(i)==ShipBody.u_type_strings[7]) va.push_back(i);
     }
-    for (int i=0; i<hfo.size(); i++)
+    std::cout << "Uniti" << std::endl;
+    for (long unsigned int i=0; i<hfo.size(); i++)
     {
         TankGrid->AppendRows();
+        for(int j=0; j<10; j++)
+        {
+            TankGrid->SetCellBackgroundColour(TankGrid->GetNumberRows()-1, j, *wxRED);
+        }
         TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,0,ShipBody.read_unit_name(hfo[i]));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,1,wxString::Format(wxT("%.2f"),ShipBody.read_u_weight(hfo[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(hfo[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(hfo[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(hfo[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,10,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(hfo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,1,wxString::Format(wxT("%.2f"),ShipBody.read_u_weight(hfo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(hfo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(hfo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(hfo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,9,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(hfo[i])));
     }
-    for (int i=0; i<mdo.size(); i++)
+    for (long unsigned int i=0; i<mdo.size(); i++)
     {
         TankGrid->AppendRows();
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,0,ShipBody.read_unit_name(mdo[i]));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,1,wxString::Format(wxT("%.2f"),ShipBody.read_u_weight(mdo[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(mdo[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(mdo[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(mdo[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,10,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(mdo[i])));
+        for(int j=0; j<10; j++)
+        {
+            TankGrid->SetCellBackgroundColour(TankGrid->GetNumberRows()-1, j, *wxGREEN);
+        }
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,0,ShipBody.read_unit_name(mdo[i]));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,1,wxString::Format(wxT("%.2f"),ShipBody.read_u_weight(mdo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(mdo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(mdo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(mdo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,9,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(mdo[i])));
     }
-    for (int i=0; i<lo.size(); i++)
+    for (long unsigned int i=0; i<lo.size(); i++)
     {
         TankGrid->AppendRows();
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,0,ShipBody.read_unit_name(lo[i]));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,1,wxString::Format(wxT("%.2f"),ShipBody.read_u_weight(lo[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(lo[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(lo[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(lo[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,10,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(lo[i])));
+        for(int j=0; j<10; j++)
+        {
+            TankGrid->SetCellBackgroundColour(TankGrid->GetNumberRows()-1, j, *wxYELLOW);
+        }
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,0,ShipBody.read_unit_name(lo[i]));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,1,wxString::Format(wxT("%.2f"),ShipBody.read_u_weight(lo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(lo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(lo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(lo[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,9,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(lo[i])));
     }
-    for (int i=0; i<fw.size(); i++)
+    for (long unsigned int i=0; i<fw.size(); i++)
     {
         TankGrid->AppendRows();
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,0,ShipBody.read_unit_name(fw[i]));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,1,wxString::Format(wxT("%.2f"),ShipBody.read_u_weight(fw[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(fw[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(fw[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(fw[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,10,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(fw[i])));
+        for(int j=0; j<10; j++)
+        {
+            TankGrid->SetCellBackgroundColour(TankGrid->GetNumberRows()-1, j, *wxCYAN);
+        }
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,0,ShipBody.read_unit_name(fw[i]));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,1,wxString::Format(wxT("%.2f"),ShipBody.read_u_weight(fw[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(fw[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(fw[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(fw[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,9,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(fw[i])));
     }
-    for (int i=0; i<va.size(); i++)
+    for (long unsigned int i=0; i<va.size(); i++)
     {
         TankGrid->AppendRows();
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,0,ShipBody.read_unit_name(va[i]));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,1,wxString::Format(wxT("%.2f"),ShipBody.read_u_weight(va[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(va[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(va[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(va[i])));
-        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1,10,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(va[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,0,ShipBody.read_unit_name(va[i]));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,1,wxString::Format(wxT("%.2f"),ShipBody.read_u_weight(va[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,2,wxString::Format(wxT("%.2f"),ShipBody.read_u_LCG(va[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,3,wxString::Format(wxT("%.2f"),ShipBody.read_u_VCG(va[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,4,wxString::Format(wxT("%.2f"),ShipBody.read_u_TCG(va[i])));
+        TankGrid->SetCellValue(TankGrid->GetNumberRows()-1 ,9,wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(va[i])));
     }
 }
 
@@ -505,4 +528,20 @@ void CargoMasterFrame::OnDeadLoadGridCellChanged(wxGridEvent& event)
             return;
         }
     }
+}
+
+void CargoMasterFrame::OnParticularsOpenSelected(wxCommandEvent& event)
+{
+   Particulars* particulars = new Particulars(NULL);
+   particulars->nameText->SetLabel(ShipBody.read_s_name());
+   particulars->LOAText->SetLabel(wxString::Format(wxT("%2.f m"), ShipBody.read_s_LOA()));
+   particulars->beamText->SetLabel(wxString::Format(wxT("%2.f m"), ShipBody.read_s_beam()));
+   particulars->heightText->SetLabel(wxString::Format(wxT("%2.f m"), ShipBody.read_s_height()));
+   particulars->lightShipText->SetLabel(wxString::Format(wxT("%i t"), ShipBody.read_s_lightShip()));
+   particulars->LCGText->SetLabel(wxString::Format(wxT("%2.f m"), ShipBody.read_s_LCGLight()));
+   particulars->TCGText->SetLabel(wxString::Format(wxT("%2.f m"), ShipBody.read_s_TCGLight()));
+   particulars->VCGText->SetLabel(wxString::Format(wxT("%2.f m"), ShipBody.read_s_VCGLight()));
+   particulars->ShowModal();
+
+   delete particulars;
 }

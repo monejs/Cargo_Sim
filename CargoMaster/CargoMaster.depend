@@ -1,13 +1,15 @@
 # depslib dependency file v1.0
-1558461310 source:/home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.cpp
+1558966954 source:/home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.cpp
 	"CargoMasterMain.h"
 	<wx/msgdlg.h>
+	<iostream>
 	<wx/intl.h>
 	<wx/string.h>
 
-1558456653 /home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.h
+1559036127 /home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.h
 	"../Ship.h"
 	"wx/filedlg.h"
+	"Particulars.h"
 	<wx/frame.h>
 	<wx/grid.h>
 	<wx/menu.h>
@@ -1105,10 +1107,10 @@
 	"wx/defs.h"
 	"wx/window.h"
 
-1558454537 source:/home/vilis/Cargo_Sim/Ship.cpp
+1558940261 source:/home/vilis/Cargo_Sim/Ship.cpp
 	"Ship.h"
 
-1558461310 /home/vilis/Cargo_Sim/Ship.h
+1558695971 /home/vilis/Cargo_Sim/Ship.h
 	<string>
 	<vector>
 	<fstream>
@@ -1265,4 +1267,42 @@
 	<google/protobuf/wire_format.h>
 	<google/protobuf/port_def.inc>
 	<google/protobuf/port_undef.inc>
+
+1559035811 source:/home/vilis/Cargo_Sim/CargoMaster/Particulars.cpp
+	"Particulars.h"
+	<wx/intl.h>
+	<wx/string.h>
+
+1559035811 /home/vilis/Cargo_Sim/CargoMaster/Particulars.h
+	<wx/dialog.h>
+	<wx/sizer.h>
+	<wx/statline.h>
+	<wx/stattext.h>
+
+1555492886 /usr/include/wx-3.1/wx/statline.h
+	"wx/defs.h"
+	"wx/control.h"
+	"wx/univ/statline.h"
+	"wx/msw/statline.h"
+	"wx/gtk/statline.h"
+	"wx/gtk1/statline.h"
+	"wx/osx/statline.h"
+	"wx/qt/statline.h"
+	"wx/generic/statline.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/statline.h
+	"wx/defs.h"
+
+1555492885 /usr/include/wx-3.1/wx/stattext.h
+	"wx/defs.h"
+	"wx/control.h"
+	"wx/univ/stattext.h"
+	"wx/msw/stattext.h"
+	"wx/motif/stattext.h"
+	"wx/gtk/stattext.h"
+	"wx/gtk1/stattext.h"
+	"wx/osx/stattext.h"
+	"wx/qt/stattext.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/stattext.h
 

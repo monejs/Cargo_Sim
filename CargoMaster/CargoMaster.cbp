@@ -51,7 +51,10 @@
 		<Unit filename="CargoMasterApp.h" />
 		<Unit filename="CargoMasterMain.cpp" />
 		<Unit filename="CargoMasterMain.h" />
+		<Unit filename="Particulars.cpp" />
+		<Unit filename="Particulars.h" />
 		<Unit filename="wxsmith/CargoMasterframe.wxs" />
+		<Unit filename="wxsmith/Particulars.wxs" />
 		<Extensions>
 			<code_completion />
 			<envvars />
@@ -60,6 +63,7 @@
 				<gui name="wxWidgets" src="CargoMasterApp.cpp" main="CargoMasterFrame" init_handlers="necessary" language="CPP" />
 				<resources>
 					<wxFrame wxs="wxsmith/CargoMasterframe.wxs" src="CargoMasterMain.cpp" hdr="CargoMasterMain.h" fwddecl="0" i18n="1" name="CargoMasterFrame" language="CPP" />
+					<wxDialog wxs="wxsmith/Particulars.wxs" src="Particulars.cpp" hdr="Particulars.h" fwddecl="0" i18n="1" name="Particulars" language="CPP" />
 				</resources>
 			</wxsmith>
 		</Extensions>

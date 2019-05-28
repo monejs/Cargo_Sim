@@ -11,6 +11,7 @@
 #define CARGOMASTERMAIN_H
 #include "../Ship.h"
 #include "wx/filedlg.h"
+#include "Particulars.h"
 
 //(*Headers(CargoMasterFrame)
 #include <wx/frame.h>
@@ -38,6 +39,7 @@ class CargoMasterFrame: public wxFrame
         void OnNotebook1PageChanged(wxNotebookEvent& event);
         void OnConstantsGridCellChanged(wxGridEvent& event);
         void OnDeadLoadGridCellChanged(wxGridEvent& event);
+        void OnParticularsOpenSelected(wxCommandEvent& event);
         //*)
 
         //(*Identifiers(CargoMasterFrame)
@@ -56,9 +58,9 @@ class CargoMasterFrame: public wxFrame
         static const long ID_GRID6;
         static const long ID_PANEL7;
         static const long ID_NOTEBOOK1;
-        static const long ID_MENUITEM2;
         static const long ID_MENUITEM1;
         static const long idMenuQuit;
+        static const long ID_MENUITEM2;
         static const long idMenuAbout;
         static const long ID_STATUSBAR1;
         //*)
