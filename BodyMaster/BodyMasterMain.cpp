@@ -57,6 +57,7 @@ BodyMasterFrame::BodyMasterFrame(wxWindow* parent,wxWindowID id)
     FlexGridSizer1 = new wxFlexGridSizer(2, 1, 0, 0);
     Grid = new wxGrid(this, ID_GRID1, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE, _T("ID_GRID1"));
     Grid->CreateGrid(0,8);
+    Grid->SetMinSize(wxSize(1300,800));
     Grid->EnableEditing(true);
     Grid->EnableGridLines(true);
     Grid->SetDefaultColSize(150, true);

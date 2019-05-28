@@ -992,7 +992,7 @@
 	"wx/defs.h"
 	"wx/window.h"
 
-1558442066 /home/vilis/Cargo_Sim/Ship.h
+1558695971 /home/vilis/Cargo_Sim/Ship.h
 	<string>
 	<vector>
 	<fstream>
@@ -1004,7 +1004,7 @@
 	<iomanip>
 	"Ship.pb.h"
 
-1558278437 /home/vilis/Cargo_Sim/Ship.pb.h
+1558452029 /home/vilis/Cargo_Sim/Ship.pb.h
 	<limits>
 	<string>
 	<google/protobuf/port_def.inc>
@@ -1024,10 +1024,10 @@
 	<google/protobuf/port_def.inc>
 	<google/protobuf/port_undef.inc>
 
-1558442066 source:/home/vilis/Cargo_Sim/Ship.cpp
+1558940261 source:/home/vilis/Cargo_Sim/Ship.cpp
 	"Ship.h"
 
-1558278437 source:/home/vilis/Cargo_Sim/Ship.pb.cc
+1558452029 source:/home/vilis/Cargo_Sim/Ship.pb.cc
 	"Ship.pb.h"
 	<algorithm>
 	<google/protobuf/stubs/common.h>
@@ -1041,7 +1041,7 @@
 	<google/protobuf/port_def.inc>
 	<google/protobuf/port_undef.inc>
 
-1558448270 source:/home/vilis/Cargo_Sim/BodyMaster/BodyMasterMain.cpp
+1558596956 source:/home/vilis/Cargo_Sim/BodyMaster/BodyMasterMain.cpp
 	"BodyMasterMain.h"
 	<wx/intl.h>
 	<wx/string.h>

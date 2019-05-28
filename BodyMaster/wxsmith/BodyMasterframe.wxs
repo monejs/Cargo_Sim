@@ -21,6 +21,7 @@
 						<item>Breath</item>
 						<item>Height</item>
 					</collabels>
+					<minsize>1300,800</minsize>
 					<style>wxFULL_REPAINT_ON_RESIZE</style>
 				</object>
 				<flag>wxALL|wxEXPAND</flag>
