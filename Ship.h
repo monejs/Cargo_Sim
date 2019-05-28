@@ -61,16 +61,16 @@ public:
 
     std::string& read_unit_name (int);
     std::string read_unit_type (int);
-    float& read_u_LCG(int& x);
-    float& read_u_VCG(int& x);
-    float& read_u_TCG(int& x);
-    float& read_u_weight(int& x);
-    float& read_u_volume(int& x);
-    float& read_u_dencity(int& x);
-    float& read_u_length(int& x);
-    float& read_u_breadth(int&);
-    float& read_u_height(int&);
-    float& read_u_maxvol (int&);
+    float& read_u_LCG(int x);
+    float& read_u_VCG(int x);
+    float& read_u_TCG(int x);
+    float& read_u_weight(int x);
+    float& read_u_volume(int x);
+    float& read_u_dencity(int x);
+    float& read_u_length(int x);
+    float& read_u_breadth(int);
+    float& read_u_height(int);
+    float& read_u_maxvol (int);
 
     bool set_con_name(int, std::string);
     bool set_con_lcg(int, std::string);
@@ -94,6 +94,7 @@ public:
     void text_print();
     void clear_data();
 
+    void stabi();
 
     void new_unit(u_types);
     void delete_unit(int);
@@ -124,6 +125,9 @@ private:
     float s_volume;
     float hull_LCG;
     float hull_VCG;
+    float LCG;
+    float VCG;
+    float TCG;
     class Unit
     {
     public:

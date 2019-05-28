@@ -66,7 +66,7 @@ void Ship::calculate()
         }
         hull_VCG=(cal(0)+cal(1)+cal(2)+cal(3)+cal(4)+cal(5)+cal(6)+cal(7)+cal(8)+cal(9))/s_volume;
         hull_LCG=(calL(0)+calL(1)+calL(2)+calL(3)+calL(4)+calL(5)+calL(6)+calL(7)+calL(8)+calL(9))/s_volume;
-        stats.h_lcb=hull_B/s_volume;
+        stats.h_lcb=hull_B/stats.h_volume;
         stats.h_lcf=hull_F/floating_area;
 
 
@@ -429,18 +429,6 @@ bool Ship::save()
         cargo->set_height(BulkVec[i].u_height);
         cargo->set_weight(BulkVec[i].u_weight);
     }
-    for (long unsigned int i=0; i<BulkVec.size(); i++)
-    {
-        ship::BulkCargo* cargo = SaveShip.add_bulk();
-        cargo->set_name (BulkVec[i].u_name);
-        cargo->set_lcg (BulkVec[i].u_LCG);
-        cargo->set_tcg (BulkVec[i].u_TCG);
-        cargo->set_vcg (BulkVec[i].u_VCG);
-        cargo->set_length(BulkVec[i].u_length);
-        cargo->set_breadth(BulkVec[i].u_breadth);
-        cargo->set_height(BulkVec[i].u_height);
-        cargo->set_weight(BulkVec[i].u_weight);
-    }
     std::string filename = s_name+".ship"; // Program specific filename
     std::fstream output(filename,  std::ios::out | std::ios::trunc | std::ios::binary); // Creating file
     if (SaveShip.SerializeToOstream(&output)){
@@ -519,7 +507,7 @@ bool Ship::load(std::string file) // Load the protobuf file in the program.
                     break;
             }
             std::cout << "Unit nr. " << i << std::endl;
-        }
+        } // Unit Loop
         for (int i=0; i<BodyOfShip.bulk_size(); i++)
         {
             const ship::BulkCargo& cargo = BodyOfShip.bulk(i);
@@ -536,6 +524,14 @@ bool Ship::load(std::string file) // Load the protobuf file in the program.
     }
 }
 
+// Function to calculate the current stability
+void Ship::stabi()
+{
+
+
+}
+
+// A function to clear data after a reset or file load of a ship
 void Ship::clear_data()
 {
     Ship();
@@ -701,29 +697,29 @@ std::string& Ship::read_unit_name (int x){
 std::string Ship::read_unit_type(int x){
     return u_type_strings[UnitVec[x].u_type];}
 
-float& Ship::read_u_LCG(int& x){ //Returns the values of particular units
+float& Ship::read_u_LCG(int x){ //Returns the values of particular units
     return UnitVec[x].u_LCG;}
-float& Ship::read_u_VCG(int& x){
+float& Ship::read_u_VCG(int x){
     return UnitVec[x].u_VCG;}
-float& Ship::read_u_TCG(int& x){
+float& Ship::read_u_TCG(int x){
     return UnitVec[x].u_TCG;}
-float& Ship::read_u_weight(int& x){
+float& Ship::read_u_weight(int x){
     return UnitVec[x].u_VCG;}
-float& Ship::read_u_volume(int& x){
+float& Ship::read_u_volume(int x){
     return UnitVec[x].u_volume;}
 
-float& Ship::read_u_dencity(int& x){
+float& Ship::read_u_dencity(int x){
     return UnitVec[x].u_density;}
 
-float& Ship::read_u_length(int& x){
+float& Ship::read_u_length(int x){
     return UnitVec[x].u_length;}
-float& Ship::read_u_breadth(int& x){
+float& Ship::read_u_breadth(int x){
     return UnitVec[x].u_breadth;}
-float& Ship::read_u_height(int& x){
+float& Ship::read_u_height(int x){
     return UnitVec[x].u_height;}
 
 // The maximum volume is never saved, but always recalculated for more accuracy
-float& Ship::read_u_maxvol(int& i){
+float& Ship::read_u_maxvol(int i){
 return (UnitVec[i].u_volume);}
 
 
