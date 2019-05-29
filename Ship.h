@@ -50,6 +50,7 @@ public:
     float& read_s_TCGLight();
     float& read_s_VCGLight();
     float& read_s_waterCondition();
+
     bool set_u_name(int, std::string);
     bool set_u_type(int, std::string);
     bool set_u_lcg(int, std::string);
@@ -58,6 +59,10 @@ public:
     bool set_u_height (int, std::string);
     bool set_u_length (int, std::string);
     bool set_u_breadth (int, std::string);
+    bool set_u_weight (int, std::string);
+    bool set_u_vol (int, std::string);
+    bool set_u_pvol (int, std::string);
+    bool set_u_density(int, std::string);
 
     std::string& read_unit_name (int);
     std::string read_unit_type (int);
@@ -65,18 +70,47 @@ public:
     float& read_u_VCG(int x);
     float& read_u_TCG(int x);
     float& read_u_weight(int x);
-    float& read_u_volume(int x);
-    float& read_u_dencity(int x);
+    float read_u_volume(int x);
+    float& read_u_density(int x);
     float& read_u_length(int x);
     float& read_u_breadth(int);
     float& read_u_height(int);
-    float& read_u_maxvol (int);
+    float read_u_maxvol (int);
+    float read_u_fsmax(int);
+    float read_u_pvol(int);
 
     bool set_con_name(int, std::string);
     bool set_con_lcg(int, std::string);
     bool set_con_tcg(int, std::string);
     bool set_con_vcg(int, std::string);
     bool set_con_weight(int, std::string);
+
+    float constants_weight();
+    float constants_LCG();
+    float constants_VCG();
+    float constants_TCG();
+
+    float unit_weight();
+    float unit_LCG();
+    float unit_VCG();
+    float unit_TCG();
+
+    float deadLoad_weight();
+    float deadLoad_lcg();
+    float deadLoad_vcg();
+    float deadLoad_tcg();
+
+    float deadweight();
+    float deadweight_lcg();
+    float deadweight_vcg();
+    float deadweight_tcg();
+
+    float disp();
+    float disp_lcg();
+    float disp_vcg();
+    float disp_tcg();
+
+    float rest_dwt();
 
     bool set_car_name(int, std::string);
     bool set_car_weight(int, std::string);

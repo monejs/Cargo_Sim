@@ -170,7 +170,7 @@ void Ship::text_print(){
         << " |" << std::setw(7) << "Density"
         << " |" << std::setw(10) << "Volume"
         << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
-    for (int i=0; i<carg.size(); i++)
+    for (long unsigned int i=0; i<carg.size(); i++)
     {
         out << " |" << std::setw(12) << UnitVec[bal[i]].u_name
             << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
@@ -189,7 +189,7 @@ void Ship::text_print(){
         << " |" << std::setw(7) << "Density"
         << " |" << std::setw(10) << "Volume"
         << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
-    for (int i=0; i<bal.size(); i++)
+    for (long unsigned int i=0; i<bal.size(); i++)
     {
         out << " |" << std::setw(12) << UnitVec[bal[i]].u_name
             << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
@@ -209,7 +209,7 @@ void Ship::text_print(){
         << " |" << std::setw(7) << "Density"
         << " |" << std::setw(10) << "Volume"
         << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
-    for (int i=0; i<carg.size(); i++)
+    for (long unsigned int i=0; i<carg.size(); i++)
     {
         out << " |" << std::setw(12) << UnitVec[hf[i]].u_name
             << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
@@ -228,7 +228,7 @@ void Ship::text_print(){
         << " |" << std::setw(7) << "Density"
         << " |" << std::setw(10) << "Volume"
         << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
-    for (int i=0; i<carg.size(); i++)
+    for (long unsigned int i=0; i<carg.size(); i++)
     {
         out << " |" << std::setw(12) << UnitVec[md[i]].u_name
             << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
@@ -247,7 +247,7 @@ void Ship::text_print(){
         << " |" << std::setw(7) << "Density"
         << " |" << std::setw(10) << "Volume"
         << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
-    for (int i=0; i<carg.size(); i++)
+    for (long unsigned int i=0; i<carg.size(); i++)
     {
         out << " |" << std::setw(12) << UnitVec[fw[i]].u_name
             << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
@@ -266,7 +266,7 @@ void Ship::text_print(){
         << " |" << std::setw(7) << "Density"
         << " |" << std::setw(10) << "Volume"
         << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
-    for (int i=0; i<carg.size(); i++)
+    for (long unsigned int i=0; i<carg.size(); i++)
     {
         out << " |" << std::setw(12) << UnitVec[lo[i]].u_name
             << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
@@ -285,7 +285,7 @@ void Ship::text_print(){
         << " |" << std::setw(7) << "Density"
         << " |" << std::setw(10) << "Volume"
         << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
-    for (int i=0; i<carg.size(); i++)
+    for (long unsigned int i=0; i<carg.size(); i++)
     {
         out << " |" << std::setw(12) << UnitVec[va[i]].u_name
             << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
@@ -614,22 +614,15 @@ void Ship::variable_update()
 {
     for (long unsigned int i=0; i<UnitVec.size(); i++)
     {
-        UnitVec[i].u_volume = UnitVec[i].u_length * UnitVec[i].u_breadth * UnitVec[i].u_height;
-        switch (UnitVec[i].u_type)
-        {
-        case Ballast:
-            UnitVec[i].u_density = 1.025f;
-        case HFO:
-            UnitVec[i].u_density = 0.98f;
-        case DO:
-            UnitVec[i].u_density = 0.89f;
-        case FW:
-            UnitVec[i].u_density = 1.0f;
-        case LO:
-            UnitVec[i].u_density = 0.9f;
-        default:
-            UnitVec[i].u_density = 1.0f;
-        }
+        if (UnitVec[i].u_type == u_types::Ballast) UnitVec[i].u_density=1.025f;
+        if (UnitVec[i].u_type == u_types::Cargo_Tank) UnitVec[i].u_density =1.0f;
+        if (UnitVec[i].u_type == u_types::Cargo_Hold) UnitVec[i].u_density=1.0f;
+        if (UnitVec[i].u_type == u_types::HFO) UnitVec[i].u_density=0.89f;
+        if (UnitVec[i].u_type == u_types::DO) UnitVec[i].u_density=0.98f;
+        if (UnitVec[i].u_type == u_types::LO) UnitVec[i].u_density=0.72;
+        if (UnitVec[i].u_type == u_types::FW) UnitVec[i].u_density=1.0f;
+        if (UnitVec[i].u_type == u_types::Various) UnitVec[i].u_density=1.0f;
+
     }
 }
 
@@ -690,6 +683,38 @@ bool Ship::set_u_length (int row, std::string val){
 bool Ship::set_u_breadth (int row, std::string val){
     return Ship::assign_val(val, UnitVec[row].u_breadth);}
 
+bool Ship::set_u_weight(int row, std::string val)
+{
+    if (::atof(val.c_str())/UnitVec[row].u_density <= Ship::read_u_maxvol(row))
+        {
+            return Ship::assign_val(val, UnitVec[row].u_weight);
+        }else {return false;}
+}
+
+bool Ship::set_u_pvol(int row, std::string val)
+{
+    if (::atof(val.c_str())<100)
+    {
+        UnitVec[row].u_weight=Ship::read_u_maxvol(row)*UnitVec[row].u_density*::atof(val.c_str())/100;
+        return true;
+    }else {return false;}
+}
+
+bool Ship::set_u_vol(int row, std::string val)
+{
+    if (::atof(val.c_str()) && ::atof(val.c_str())<=Ship::read_u_maxvol(row))
+    {
+        UnitVec[row].u_weight = ::atof(val.c_str())*UnitVec[row].u_density;
+        return true;
+    }else{return false;}
+}
+
+bool Ship::set_u_density(int row, std::string val)
+{
+    return Ship::assign_val(val, UnitVec[row].u_density);
+    UnitVec[row].u_weight=Ship::read_u_pvol(row)*UnitVec[row].u_density;
+}
+
 // Returns the values of units
 std::string& Ship::read_unit_name (int x){
     return UnitVec[x].u_name;}
@@ -704,11 +729,11 @@ float& Ship::read_u_VCG(int x){
 float& Ship::read_u_TCG(int x){
     return UnitVec[x].u_TCG;}
 float& Ship::read_u_weight(int x){
-    return UnitVec[x].u_VCG;}
-float& Ship::read_u_volume(int x){
-    return UnitVec[x].u_volume;}
+    return UnitVec[x].u_weight;}
+float Ship::read_u_volume(int x){
+    return UnitVec[x].u_weight/UnitVec[x].u_density;}
 
-float& Ship::read_u_dencity(int x){
+float& Ship::read_u_density(int x){
     return UnitVec[x].u_density;}
 
 float& Ship::read_u_length(int x){
@@ -719,9 +744,18 @@ float& Ship::read_u_height(int x){
     return UnitVec[x].u_height;}
 
 // The maximum volume is never saved, but always recalculated for more accuracy
-float& Ship::read_u_maxvol(int i){
-return (UnitVec[i].u_volume);}
+float Ship::read_u_maxvol(int i){
+return (UnitVec[i].u_length*UnitVec[i].u_breadth*UnitVec[i].u_height);}
 
+float Ship::read_u_pvol(int i)
+{
+    return Ship::read_u_volume(i)*100/Ship::read_u_maxvol(i);
+}
+
+float Ship::read_u_fsmax(int x)
+{
+    return 2.0f;
+}
 
 // For the input of constants of the ship. These values are things like paint store, personal belongings, provisions etc.
 bool Ship::set_con_name(int row, std::string val)
@@ -740,6 +774,182 @@ bool Ship::set_con_vcg(int row, std::string val){
 
 bool Ship::set_con_weight(int row, std::string val){
     return Ship::assign_val(val, ConVec[row].con_weight);}
+
+float Ship::constants_weight()
+{
+    float weight=0;
+    for (long unsigned int i=0; i<ConVec.size(); i++)
+    {
+        weight+=ConVec[i].con_weight;
+    }
+    return weight;
+}
+
+float Ship::constants_LCG()
+{
+    float weight=0, xweight=0;
+    for (long unsigned int i=0; i<ConVec.size(); i++)
+    {
+        weight+=ConVec[i].con_weight;
+        xweight+=ConVec[i].con_weight*ConVec[i].con_lcg;
+    }
+    return xweight/weight;
+}
+
+float Ship::constants_VCG()
+{
+    float weight=0, xweight=0;
+    for (long unsigned int i=0; i<ConVec.size(); i++)
+    {
+        weight+=ConVec[i].con_weight;
+        xweight+=ConVec[i].con_weight*ConVec[i].con_vcg;
+    }
+    return xweight/weight;
+}
+
+float Ship::constants_TCG()
+{
+    float weight=0, xweight=0;
+    for (long unsigned int i=0; i<ConVec.size(); i++)
+    {
+        weight+=ConVec[i].con_weight;
+        xweight+=ConVec[i].con_weight*ConVec[i].con_tcg;
+    }
+    return xweight/weight;
+}
+
+float Ship::unit_weight()
+{
+    float weight=0;
+    for (long unsigned int i=0; i<UnitVec.size(); i++)
+    {
+        weight+=UnitVec[i].u_weight;
+    }
+    return weight;
+}
+
+float Ship::unit_LCG()
+{
+    float weight=0, xweight=0;
+    for (long unsigned int i=0; i<UnitVec.size(); i++)
+    {
+        weight+=UnitVec[i].u_weight;
+        xweight+=UnitVec[i].u_weight*UnitVec[i].u_LCG;
+    }
+    return xweight/weight;
+}
+
+float Ship::unit_VCG()
+{
+    float weight=0, xweight=0;
+    for (long unsigned int i=0; i<UnitVec.size(); i++)
+    {
+        weight+=UnitVec[i].u_weight;
+        xweight+=UnitVec[i].u_weight*UnitVec[i].u_VCG;
+    }
+    return xweight/weight;
+}
+
+float Ship::unit_TCG()
+{
+    float weight=0, xweight=0;
+    for (long unsigned int i=0; i<UnitVec.size(); i++)
+    {
+        weight+=UnitVec[i].u_weight;
+        xweight+=UnitVec[i].u_weight*UnitVec[i].u_TCG;
+    }
+    return xweight/weight;
+}
+
+float Ship::deadLoad_weight()
+{
+    float weight=0;
+    for (long unsigned int i=0; i<BulkVec.size(); i++)
+    {
+        weight+=BulkVec[i].u_weight;
+    }
+    return weight;
+}
+
+float Ship::deadLoad_lcg()
+{
+    float weight=0, xweight=0;
+    for (long unsigned int i=0; i<BulkVec.size(); i++)
+    {
+        weight+=BulkVec[i].u_weight;
+        xweight+=BulkVec[i].u_weight*BulkVec[i].u_LCG;
+    }
+    return xweight/weight;
+}
+
+float Ship::deadLoad_vcg()
+{
+     float weight=0, xweight=0;
+    for (long unsigned int i=0; i<BulkVec.size(); i++)
+    {
+        weight+=BulkVec[i].u_weight;
+        xweight+=BulkVec[i].u_weight*BulkVec[i].u_VCG;
+    }
+    return xweight/weight;
+}
+
+float Ship::deadLoad_tcg()
+{
+     float weight=0, xweight=0;
+    for (long unsigned int i=0; i<BulkVec.size(); i++)
+    {
+        weight+=BulkVec[i].u_weight;
+        xweight+=BulkVec[i].u_weight*BulkVec[i].u_TCG;
+    }
+    return xweight/weight;
+}
+
+float Ship::deadweight()
+{
+    float weight=0;
+    weight=deadLoad_weight()+unit_weight()+constants_weight();
+    return weight;
+}
+
+float Ship::deadweight_lcg()
+{
+    return (deadLoad_lcg()*deadLoad_weight()+unit_LCG()*unit_weight()+constants_LCG()*constants_weight())/(deadLoad_weight()+unit_weight()+constants_weight());
+}
+
+float Ship::deadweight_vcg()
+{
+    return (deadLoad_vcg()*deadLoad_weight()+unit_VCG()*unit_weight()+constants_VCG()*constants_weight())/(deadLoad_weight()+unit_weight()+constants_weight());
+}
+
+float Ship::deadweight_tcg()
+{
+    return (deadLoad_tcg()*deadLoad_weight()+unit_TCG()*unit_weight()+constants_TCG()*constants_weight())/(deadLoad_weight()+unit_weight()+constants_weight());
+}
+
+float Ship::disp()
+{
+    return deadweight()+s_lightShip;
+}
+
+float Ship::disp_lcg()
+{
+    return (deadweight()*deadweight_lcg()+s_lightShip*s_LCGLight)/(deadweight()+s_lightShip);
+}
+
+float Ship::disp_vcg()
+{
+    return (deadweight()*deadweight_vcg()+s_lightShip*s_VCGLight)/(deadweight()+s_lightShip);
+}
+
+float Ship::disp_tcg()
+{
+    return (deadweight()*deadweight_tcg()+s_lightShip*s_TCGLight)/(deadweight()+s_lightShip);
+}
+
+float Ship::rest_dwt()
+{
+    return (s_maxDWT-deadweight());
+}
 
 // Upon calling a new unit in the UI, a new unit is added to the Units Vector.
 void Ship::new_unit(u_types choice){
