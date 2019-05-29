@@ -36,10 +36,12 @@ class CargoMasterFrame: public wxFrame
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
         void OnLoadButtonSelected(wxCommandEvent& event);
-        void OnNotebook1PageChanged(wxNotebookEvent& event);
         void OnConstantsGridCellChanged(wxGridEvent& event);
         void OnDeadLoadGridCellChanged(wxGridEvent& event);
         void OnParticularsOpenSelected(wxCommandEvent& event);
+        void OnCargoTankGridCellChanged(wxGridEvent& event);
+        void OnBallastGridCellChanged(wxGridEvent& event);
+        void OnTankGridCellChanged(wxGridEvent& event);
         //*)
 
         //(*Identifiers(CargoMasterFrame)
@@ -49,10 +51,6 @@ class CargoMasterFrame: public wxFrame
         static const long ID_PANEL2;
         static const long ID_GRID4;
         static const long ID_PANEL8;
-        static const long ID_GRID3;
-        static const long ID_PANEL3;
-        static const long ID_GRID5;
-        static const long ID_PANEL4;
         static const long ID_PANEL5;
         static const long ID_PANEL6;
         static const long ID_GRID6;
@@ -66,20 +64,16 @@ class CargoMasterFrame: public wxFrame
         //*)
 
         //(*Declarations(CargoMasterFrame)
-        wxGrid* BallastGrid;
         wxGrid* CargoTankGrid;
         wxGrid* ConstantsGrid;
         wxGrid* DeadLoadGrid;
         wxGrid* GeneralGrid;
-        wxGrid* TankGrid;
         wxMenu* Menu3;
         wxMenuItem* LoadButton;
         wxMenuItem* ParticularsOpen;
         wxNotebook* Notebook1;
         wxPanel* Panel1;
         wxPanel* Panel2;
-        wxPanel* Panel3;
-        wxPanel* Panel4;
         wxPanel* Panel5;
         wxPanel* Panel6;
         wxPanel* Panel7;
@@ -87,6 +81,7 @@ class CargoMasterFrame: public wxFrame
         wxStatusBar* StatusBar1;
         //*)
 
+        void update();
         DECLARE_EVENT_TABLE()
 };
 

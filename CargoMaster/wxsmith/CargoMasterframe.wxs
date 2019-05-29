@@ -3,17 +3,18 @@
 	<object class="wxFrame" name="CargoMasterFrame">
 		<title>Cargo Master</title>
 		<size>920,713</size>
+		<id_arg>0</id_arg>
 		<object class="wxNotebook" name="ID_NOTEBOOK1" variable="Notebook1" member="yes">
 			<pos>152,176</pos>
 			<size>1088,728</size>
-			<handler function="OnNotebook1PageChanged" entry="EVT_NOTEBOOK_PAGE_CHANGED" />
 			<object class="notebookpage">
 				<object class="wxPanel" name="ID_PANEL1" variable="Panel1" member="yes">
 					<object class="wxBoxSizer" variable="BoxSizer1" member="no">
 						<object class="sizeritem">
 							<object class="wxGrid" name="ID_GRID1" variable="GeneralGrid" member="yes">
 								<cols>5</cols>
-								<rows>8</rows>
+								<rows>7</rows>
+								<readonly>1</readonly>
 								<labelcolwidth>200</labelcolwidth>
 								<defaultcolsize>150</defaultcolsize>
 								<collabels>
@@ -25,10 +26,9 @@
 								</collabels>
 								<rowlabels>
 									<item>Constants</item>
-									<item>Tanks</item>
-									<item>Cargo Tanks</item>
-									<item>Deadweight</item>
+									<item>Tanks/Holds</item>
 									<item>Dead Load</item>
+									<item>Deadweight</item>
 									<item>Light Ship</item>
 									<item>Displacement</item>
 									<item>Deadw. Reserve</item>
@@ -87,6 +87,7 @@
 									<item>Volume, m3</item>
 									<item>Max Vol, m3</item>
 								</collabels>
+								<handler function="OnCargoTankGridCellChanged" entry="EVT_CMD_GRID_CELL_CHANGED" />
 							</object>
 							<flag>wxALL|wxEXPAND</flag>
 							<border>5</border>
@@ -94,65 +95,7 @@
 						</object>
 					</object>
 				</object>
-				<label>Cargo Tanks/Holds</label>
-			</object>
-			<object class="notebookpage">
-				<object class="wxPanel" name="ID_PANEL3" variable="Panel3" member="yes">
-					<object class="wxBoxSizer" variable="BoxSizer3" member="no">
-						<orient>wxVERTICAL</orient>
-						<object class="sizeritem">
-							<object class="wxGrid" name="ID_GRID3" variable="BallastGrid" member="yes">
-								<cols>10</cols>
-								<defaultcolsize>120</defaultcolsize>
-								<collabels>
-									<item>Name</item>
-									<item>Weight, t</item>
-									<item>LCG, m</item>
-									<item>VCG, m</item>
-									<item>TCG, m</item>
-									<item>Fs, m*t</item>
-									<item>Fs max</item>
-									<item>Vol %</item>
-									<item>Vo,l m3</item>
-									<item>Max Vol m3</item>
-								</collabels>
-							</object>
-							<flag>wxALL|wxEXPAND</flag>
-							<border>5</border>
-							<option>1</option>
-						</object>
-					</object>
-				</object>
-				<label>Ballast Tanks</label>
-			</object>
-			<object class="notebookpage">
-				<object class="wxPanel" name="ID_PANEL4" variable="Panel4" member="yes">
-					<object class="wxBoxSizer" variable="BoxSizer5" member="no">
-						<orient>wxVERTICAL</orient>
-						<object class="sizeritem">
-							<object class="wxGrid" name="ID_GRID5" variable="TankGrid" member="yes">
-								<cols>10</cols>
-								<defaultcolsize>120</defaultcolsize>
-								<collabels>
-									<item>Name</item>
-									<item>Weight, t</item>
-									<item>LCG, m</item>
-									<item>VCG, m</item>
-									<item>TCG, m</item>
-									<item>Fs, m*t</item>
-									<item>Fs max</item>
-									<item>Vol %</item>
-									<item>Volume, m3</item>
-									<item>Max Vol, m3</item>
-								</collabels>
-							</object>
-							<flag>wxALL|wxEXPAND</flag>
-							<border>5</border>
-							<option>1</option>
-						</object>
-					</object>
-				</object>
-				<label>Tanks</label>
+				<label>Tanks/Holds</label>
 			</object>
 			<object class="notebookpage">
 				<object class="wxPanel" name="ID_PANEL5" variable="Panel5" member="yes" />
