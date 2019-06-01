@@ -18,29 +18,19 @@ bool Ship::assign_val(std::string& in_t, float& var)
     }else{ return false; }
 }
 
-// Still working on this one
+// TODO: TCP, KMT, VHM
 void Ship::calculate()
 {
     HydroVec.clear();
-    float sectionlength;
-    std::array<float, 10> section_beam;
-    std::array<float, 10> section_height;
 
-    sectionlength = s_LOA/10;
-    section_beam = {0.23f*s_beam, 0.6f*s_beam, s_beam, s_beam, s_beam, s_beam, s_beam, 0.75f*s_beam, 0.5f*s_beam, 0.25f*s_beam};
-    section_height = {0.9f*s_height, s_height, s_height, s_height, s_height, s_height, s_height, 0.8f*s_height, 0.5f*s_height, 0.3f*s_height};
-
+    sectionlength = s_LOA/10; // Divides the length of the ship into 10 compartments
+    section_beam = {0.23f*s_beam, 0.6f*s_beam, s_beam, s_beam, s_beam, s_beam, s_beam, 0.75f*s_beam, 0.5f*s_beam, 0.25f*s_beam}; // The breadth of each compartment
+    section_height = {0.9f*s_height, s_height, s_height, s_height, s_height, s_height, s_height, 0.8f*s_height, 0.5f*s_height, 0.3f*s_height}; //The height of each compartment
     for (float draft=s_minDraft; draft<s_maxDraft; draft+=0.1f)
     {
-        Hydrostatistics stats;
-        stats.h_draft = draft;
-        std::array<float, 10> section_area;
-        std::array<float, 10> section_vol;
-        std::array<float, 10> section_G;
-        std::array<float, 10> section_LCG;
-        std::array<float, 10> section_BM;
-        std::array<float, 10> section_KM;
-        std::array<float, 10> section_B;
+        Hydrostatistics stats; // Makes a new class object for the stats to push back at end of the Hydrostatic vector
+        stats.h_draft = draft; // Assigns a draft
+
         float hull_B;
         float hull_F;
         float floating_area;
@@ -72,7 +62,7 @@ void Ship::calculate()
 
 
 
-        stats.h_weight = stats.h_volume * 1.025;
+        stats.h_weight = stats.h_volume * s_waterCondition;
         HydroVec.push_back(stats);
     }
 }
@@ -370,9 +360,125 @@ void Ship::text_print(){
     }
 }*/
 
+float Ship::find_draft()
+{
+    float dsp = disp();
+    for (long unsigned int i=0; i<HydroVec.size()-1; i++)
+    {
+        if (dsp > HydroVec[i].h_weight && dsp < HydroVec[i+1].h_weight)
+        {
+            return HydroVec[i].h_draft;
+        }
+    }
+}
+
+#define PI 3.14159265
+
+float Ship::stabi(int heel)
+{
+    calculate();
+    float draft = find_draft();
+    float gz=0;
+    float hull_B;
+        float hull_F;
+        float floating_area;
+        for (int section=0; section!=10; section++)
+        {
+            if (s_height - section_height[section] < draft)
+            {
+                section_area[section]=section_beam[section]*(draft-s_height+section_height[section]); // A_sec = Beam_sec * draft
+                floating_area+=sectionlength *section_beam[section];
+                section_vol[section]=section_area[section]*sectionlength; // Area * section length
+                section_LCG[section]=section * sectionlength + sectionlength/2; //n*section + 1/2 section length
+                section_G[section]=s_height-section_height[section]/2; // Maximum draft - section draft /2
+                s_volume += section_vol[section]; // Total underwater volume
+
+
+                section_B[section]=(draft-s_height+section_height[section])/2 +s_height-section_height[section];
+                hull_B+=section_B[section]*section_vol[section];
+                hull_F+=section_LCG[section]*sectionlength*section_beam[section];
+                section_BM[section]=(sectionlength*pow(section_B[section],3))/(12*section_vol[section]);
+                section_KM[section]=section_B[section]+section_BM[section];
+                hull_KM+=section_KM[section]*section_vol[section];
+            }
+        }
+        float km = hull_KM/s_volume;
+        gz=km*hull_VCG*sin(heel*PI/180);
+    return gz;
+}
+
+void Ship::gz_curve()
+{
+    double dataX0[90];
+    double dataY0[90];
+
+    for (int i=0; i!=90; i++)
+    {
+        dataX0[i]=i;
+        dataY0[i]=stabi(i);
+    }
+
+
+
+    // Create a XYChart object of size 450 x 450 pixels
+    XYChart *c = new XYChart(900, 500);
+
+    // Set the plotarea at (55, 65) and of size 350 x 300 pixels, with white background and a light
+    // grey border (0xc0c0c0). Turn on both horizontal and vertical grid lines with light grey color
+    // (0xc0c0c0)
+    c->setPlotArea(55, 65, 800, 400, 0xffffff, -1, 0xc0c0c0, 0xc0c0c0, -1);
+
+
+    // Add a title to the y axis using 12pt Arial Bold Italic font
+    c->yAxis()->setTitle("GZ, m", "arialbi.ttf", 12);
+
+    // Set the y axis line width to 3 pixels
+    c->yAxis()->setWidth(3);
+
+    // Add a title to the x axis using 12pt Arial Bold Italic font
+    c->xAxis()->setTitle("Heel, ° ", "arialbi.ttf", 12);
+
+    // Set the x axis line width to 3 pixels
+    c->xAxis()->setWidth(3);
+
+    // Add a red (0xff3333) line layer using dataX0 and dataY0
+    LineLayer *layer1 = c->addLineLayer(DoubleArray(dataY0, (int)(sizeof(dataY0) / sizeof(dataY0[0])
+        )), 0xff3333, "Compound AAA");
+    layer1->setXData(DoubleArray(dataX0, (int)(sizeof(dataX0) / sizeof(dataX0[0]))));
+
+    // Set the line width to 3 pixels
+    layer1->setLineWidth(3);
+
+    // Use 9 pixel square symbols for the data points
+    layer1->getDataSet(0)->setDataSymbol(Chart::SquareSymbol, 9);
+
+
+    // Output the chart
+    c->makeChart("gz.png");
+
+    //free up resources
+    delete c;
+}
+
+float Ship::init_heel()
+{
+
+}
+
+const std::string Ship::currentDateTime() {
+    time_t     now = time(0);
+    struct tm  tstruct;
+    char       buf[80];
+    tstruct = *localtime(&now);
+    // Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
+    // for more information about date/time format
+    strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
+
+    return buf;
+}
 // Saves all the data to file using the google protobuf protocol.
 // Quite easy to use and can be generates automatically.
-bool Ship::save()
+bool Ship::save(std::string filename)
 {
     /* Since the database provided by the protobuf is not meant to be worked with as a regular class,
     and the values have to be brought over to the buffer class for its operation*/
@@ -414,7 +520,7 @@ bool Ship::save()
         unit->set_length(UnitVec[i].u_length);
         unit->set_breadth(UnitVec[i].u_breadth);
         unit->set_height(UnitVec[i].u_height);
-        unit->set_volume(UnitVec[i].u_volume);
+        unit->set_volume(UnitVec[i].u_weight);
         unit->set_density(UnitVec[i].u_density);
     }
     for (long unsigned int i=0; i<BulkVec.size(); i++)
@@ -429,7 +535,7 @@ bool Ship::save()
         cargo->set_height(BulkVec[i].u_height);
         cargo->set_weight(BulkVec[i].u_weight);
     }
-    std::string filename = s_name+".ship"; // Program specific filename
+    filename += Ship::currentDateTime();// + ".ship"; // Program specific filename
     std::fstream output(filename,  std::ios::out | std::ios::trunc | std::ios::binary); // Creating file
     if (SaveShip.SerializeToOstream(&output)){
         output.close(); // File closed
@@ -440,6 +546,7 @@ bool Ship::save()
         return false; // Writing to file
     }
 }
+
 bool Ship::load(std::string file) // Load the protobuf file in the program.
 {
     std::fstream input(file, std::ios::in | std::ios::binary); // The file name and path is provided by the UI
@@ -477,7 +584,7 @@ bool Ship::load(std::string file) // Load the protobuf file in the program.
             UnitVec[i].u_length = unit1.length();
             UnitVec[i].u_breadth = unit1.breadth();
             UnitVec[i].u_height = unit1.height();
-            UnitVec[i].u_volume = unit1.volume();
+            UnitVec[i].u_weight = unit1.volume();
             UnitVec[i].u_density = unit1.density();
             switch (unit1.type())
             {
@@ -524,12 +631,6 @@ bool Ship::load(std::string file) // Load the protobuf file in the program.
     }
 }
 
-// Function to calculate the current stability
-void Ship::stabi()
-{
-
-
-}
 
 // A function to clear data after a reset or file load of a ship
 void Ship::clear_data()

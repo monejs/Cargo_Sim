@@ -10,6 +10,9 @@
 #include <math.h>
 #include <cmath>
 #include <iomanip>
+#include <stdio.h>
+#include <time.h>
+#include "ChartDirector/include/chartdir.h"
 
 #include "Ship.pb.h"
 
@@ -85,6 +88,8 @@ public:
     bool set_con_vcg(int, std::string);
     bool set_con_weight(int, std::string);
 
+    float gm();
+
     float constants_weight();
     float constants_LCG();
     float constants_VCG();
@@ -121,19 +126,22 @@ public:
     bool set_car_breadth(int, std::string);
     bool set_car_height(int, std::string);
 
+    float init_heel();
 
     void variable_update();
     int unit_count();
     void autoParticulars();
     void text_print();
     void clear_data();
-
-    void stabi();
+    const std::string currentDateTime();
+    float stabi(int);
+    float find_draft();
+    void gz_curve();
 
     void new_unit(u_types);
     void delete_unit(int);
     void calculate();
-    bool save();
+    bool save(std::string);
     bool load(std::string);
 //    void modelLoad();
 
@@ -159,9 +167,17 @@ private:
     float s_volume;
     float hull_LCG;
     float hull_VCG;
-    float LCG;
-    float VCG;
-    float TCG;
+    float hull_KM;
+    float sectionlength;
+    std::array<float, 10> section_area;
+    std::array<float, 10> section_vol;
+    std::array<float, 10> section_G;
+    std::array<float, 10> section_LCG;
+    std::array<float, 10> section_BM;
+    std::array<float, 10> section_KM;
+    std::array<float, 10> section_B;
+    std::array<float, 10> section_beam;
+    std::array<float, 10> section_height;
     class Unit
     {
     public:
