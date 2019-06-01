@@ -16,9 +16,13 @@
 					<Add option="-lprotobuf" />
 					<Add option="-g" />
 					<Add directory="./" />
+					<Add directory="../ChartDirector/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-lprotobuf" />
+					<Add option="-lchartdir" />
+					<Add library="../ChartDirector/lib/libchartdir.so" />
+					<Add directory="../ChartDirector/lib" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -31,10 +35,14 @@
 					<Add option="-O2" />
 					<Add option="-lprotobuf" />
 					<Add directory="./" />
+					<Add directory="../ChartDirector/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
 					<Add option="-lprotobuf" />
+					<Add option="-lchartdir" />
+					<Add library="../ChartDirector/lib/libchartdir.so" />
+					<Add directory="../ChartDirector/lib" />
 				</Linker>
 			</Target>
 		</Build>
@@ -45,6 +53,10 @@
 		<Linker>
 			<Add option="`wx-config --libs`" />
 		</Linker>
+		<Unit filename="../ChartDirector/include/FinanceChart.h" />
+		<Unit filename="../ChartDirector/include/bchartdir.h" />
+		<Unit filename="../ChartDirector/include/chartdir.h" />
+		<Unit filename="../ChartDirector/include/memblock.h" />
 		<Unit filename="../Particulars.cpp" />
 		<Unit filename="../Particulars.h" />
 		<Unit filename="../Ship.cpp" />

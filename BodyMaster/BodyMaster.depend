@@ -992,7 +992,7 @@
 	"wx/defs.h"
 	"wx/window.h"
 
-1558695971 /home/vilis/Cargo_Sim/Ship.h
+1559393598 /home/vilis/Cargo_Sim/Ship.h
 	<string>
 	<vector>
 	<fstream>
@@ -1002,6 +1002,9 @@
 	<math.h>
 	<cmath>
 	<iomanip>
+	<stdio.h>
+	<time.h>
+	"ChartDirector/include/chartdir.h"
 	"Ship.pb.h"
 
 1558452029 /home/vilis/Cargo_Sim/Ship.pb.h
@@ -1024,7 +1027,7 @@
 	<google/protobuf/port_def.inc>
 	<google/protobuf/port_undef.inc>
 
-1558940261 source:/home/vilis/Cargo_Sim/Ship.cpp
+1559396855 source:/home/vilis/Cargo_Sim/Ship.cpp
 	"Ship.h"
 
 1558452029 source:/home/vilis/Cargo_Sim/Ship.pb.cc
@@ -1041,7 +1044,7 @@
 	<google/protobuf/port_def.inc>
 	<google/protobuf/port_undef.inc>
 
-1558596956 source:/home/vilis/Cargo_Sim/BodyMaster/BodyMasterMain.cpp
+1559396908 source:/home/vilis/Cargo_Sim/BodyMaster/BodyMasterMain.cpp
 	"BodyMasterMain.h"
 	<wx/intl.h>
 	<wx/string.h>
@@ -1694,4 +1697,13 @@
 
 1555492887 /usr/include/wx-3.1/wx/gtk/mdi.h
 	"wx/frame.h"
+
+1541530674 /home/vilis/Cargo_Sim/ChartDirector/include/chartdir.h
+	<string.h>
+	"bchartdir.h"
+	"memblock.h"
+
+1541530674 /home/vilis/Cargo_Sim/ChartDirector/include/bchartdir.h
+
+1541530674 /home/vilis/Cargo_Sim/ChartDirector/include/memblock.h
 

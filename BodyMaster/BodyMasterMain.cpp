@@ -241,7 +241,7 @@ void BodyMasterFrame::OnSaveItemSelected(wxCommandEvent& event)
         ShipBody.set_u_height(i, Grid->GetCellValue(i,7).ToStdString());
 
     }
-    if(ShipBody.save())
+    if(ShipBody.save(ShipBody.read_s_name()))
     {
         wxMessageBox("File Saved", "Success");
     }else {wxMessageBox("Error Saving File", "Error");}
