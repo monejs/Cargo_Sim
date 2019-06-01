@@ -2,6 +2,7 @@
 <wxsmith>
 	<object class="wxFrame" name="CargoMasterFrame">
 		<title>Cargo Master</title>
+		<icon>/home/vilis/Cargo_Sim/CargoMaster/CargoMasterLogo.png</icon>
 		<size>920,713</size>
 		<id_arg>0</id_arg>
 		<object class="wxNotebook" name="ID_NOTEBOOK1" variable="Notebook1" member="yes">
@@ -82,7 +83,7 @@
 									<item>VCG, m</item>
 									<item>TCG, m</item>
 									<item>Fs, m*t</item>
-									<item>Fs max</item>
+									<item>Density, t/m3</item>
 									<item>Vol %</item>
 									<item>Volume, m3</item>
 									<item>Max Vol, m3</item>
@@ -99,7 +100,14 @@
 			</object>
 			<object class="notebookpage">
 				<object class="wxPanel" name="ID_PANEL5" variable="Panel5" member="yes">
-					<object class="wxBoxSizer" variable="StabilitySizer" member="yes" />
+					<object class="wxBoxSizer" variable="StabilitySizer" member="yes">
+						<object class="sizeritem">
+							<object class="wxStaticBitmap" name="ID_STATICBITMAP1" variable="StabilityBit" member="yes" />
+							<flag>wxALL|wxEXPAND</flag>
+							<border>5</border>
+							<option>1</option>
+						</object>
+					</object>
 				</object>
 				<label>Stability</label>
 			</object>

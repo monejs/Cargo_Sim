@@ -71,7 +71,7 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     SetClientSize(wxSize(920,713));
     {
     	wxIcon FrameIcon;
-    	FrameIcon.CopyFromBitmap(wxBitmap(wxImage(_T("/home/vilis/Cargo_Sim/Logo.png"))));
+    	FrameIcon.CopyFromBitmap(wxBitmap(wxImage(_T("/home/vilis/Cargo_Sim/CargoMaster/CargoMasterLogo.png"))));
     	SetIcon(FrameIcon);
     }
     Notebook1 = new wxNotebook(this, ID_NOTEBOOK1, wxPoint(152,176), wxSize(1088,728), 0, _T("ID_NOTEBOOK1"));
@@ -132,7 +132,7 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     CargoTankGrid->SetColLabelValue(3, _("VCG, m"));
     CargoTankGrid->SetColLabelValue(4, _("TCG, m"));
     CargoTankGrid->SetColLabelValue(5, _("Fs, m*t"));
-    CargoTankGrid->SetColLabelValue(6, _("Fs max"));
+    CargoTankGrid->SetColLabelValue(6, _("Density, t/m3"));
     CargoTankGrid->SetColLabelValue(7, _("Vol %"));
     CargoTankGrid->SetColLabelValue(8, _("Volume, m3"));
     CargoTankGrid->SetColLabelValue(9, _("Max Vol, m3"));

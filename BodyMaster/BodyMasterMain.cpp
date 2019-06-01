@@ -17,6 +17,9 @@
 #define convert(x) wxString::Format(wxT("%.2f"), x)
 
 //(*InternalHeaders(BodyMasterFrame)
+#include <wx/bitmap.h>
+#include <wx/icon.h>
+#include <wx/image.h>
 #include <wx/intl.h>
 #include <wx/string.h>
 //*)
@@ -54,6 +57,11 @@ BodyMasterFrame::BodyMasterFrame(wxWindow* parent,wxWindowID id)
     wxMenuItem* MenuItem2;
 
     Create(parent, wxID_ANY, _("BodyMaster"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
+    {
+    	wxIcon FrameIcon;
+    	FrameIcon.CopyFromBitmap(wxBitmap(wxImage(_T("/home/vilis/Cargo_Sim/BodyMaster/BodyMasterLogo.png"))));
+    	SetIcon(FrameIcon);
+    }
     FlexGridSizer1 = new wxFlexGridSizer(2, 1, 0, 0);
     Grid = new wxGrid(this, ID_GRID1, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE, _T("ID_GRID1"));
     Grid->CreateGrid(0,8);

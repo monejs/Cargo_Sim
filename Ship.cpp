@@ -417,45 +417,30 @@ void Ship::gz_curve()
         dataX0[i]=i;
         dataY0[i]=stabi(i);
     }
-
-
-
     // Create a XYChart object of size 450 x 450 pixels
     XYChart *c = new XYChart(900, 500);
-
     // Set the plotarea at (55, 65) and of size 350 x 300 pixels, with white background and a light
     // grey border (0xc0c0c0). Turn on both horizontal and vertical grid lines with light grey color
     // (0xc0c0c0)
     c->setPlotArea(55, 65, 800, 400, 0xffffff, -1, 0xc0c0c0, 0xc0c0c0, -1);
-
-
     // Add a title to the y axis using 12pt Arial Bold Italic font
     c->yAxis()->setTitle("GZ, m", "arialbi.ttf", 12);
-
     // Set the y axis line width to 3 pixels
     c->yAxis()->setWidth(3);
-
     // Add a title to the x axis using 12pt Arial Bold Italic font
     c->xAxis()->setTitle("Heel, ° ", "arialbi.ttf", 12);
-
     // Set the x axis line width to 3 pixels
     c->xAxis()->setWidth(3);
-
     // Add a red (0xff3333) line layer using dataX0 and dataY0
     LineLayer *layer1 = c->addLineLayer(DoubleArray(dataY0, (int)(sizeof(dataY0) / sizeof(dataY0[0])
         )), 0xff3333, "Compound AAA");
     layer1->setXData(DoubleArray(dataX0, (int)(sizeof(dataX0) / sizeof(dataX0[0]))));
-
     // Set the line width to 3 pixels
     layer1->setLineWidth(3);
-
     // Use 9 pixel square symbols for the data points
     layer1->getDataSet(0)->setDataSymbol(Chart::SquareSymbol, 9);
-
-
     // Output the chart
     c->makeChart("gz.png");
-
     //free up resources
     delete c;
 }
@@ -855,7 +840,7 @@ float Ship::read_u_pvol(int i)
 
 float Ship::read_u_fsmax(int x)
 {
-    return 2.0f;
+    return ((UnitVec[x].u_length*UnitVec[x].u_density*pow(UnitVec[x].u_breadth,3))/(12*disp()));
 }
 
 // For the input of constants of the ship. These values are things like paint store, personal belongings, provisions etc.
