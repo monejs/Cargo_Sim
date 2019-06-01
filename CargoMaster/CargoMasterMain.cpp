@@ -14,6 +14,9 @@
 #define CellVal(n) n->GetCellValue(n->GetGridCursorRow(), n->GetGridCursorCol())
 
 //(*InternalHeaders(CargoMasterFrame)
+#include <wx/bitmap.h>
+#include <wx/icon.h>
+#include <wx/image.h>
 #include <wx/intl.h>
 #include <wx/string.h>
 //*)
@@ -32,14 +35,16 @@ const long CargoMasterFrame::ID_GRID2 = wxNewId();
 const long CargoMasterFrame::ID_PANEL2 = wxNewId();
 const long CargoMasterFrame::ID_GRID4 = wxNewId();
 const long CargoMasterFrame::ID_PANEL8 = wxNewId();
+const long CargoMasterFrame::ID_STATICBITMAP1 = wxNewId();
 const long CargoMasterFrame::ID_PANEL5 = wxNewId();
 const long CargoMasterFrame::ID_PANEL6 = wxNewId();
 const long CargoMasterFrame::ID_GRID6 = wxNewId();
 const long CargoMasterFrame::ID_PANEL7 = wxNewId();
 const long CargoMasterFrame::ID_NOTEBOOK1 = wxNewId();
+const long CargoMasterFrame::ID_MENUITEM2 = wxNewId();
 const long CargoMasterFrame::ID_MENUITEM1 = wxNewId();
 const long CargoMasterFrame::idMenuQuit = wxNewId();
-const long CargoMasterFrame::ID_MENUITEM2 = wxNewId();
+const long CargoMasterFrame::ID_MENUITEM3 = wxNewId();
 const long CargoMasterFrame::idMenuAbout = wxNewId();
 const long CargoMasterFrame::ID_STATUSBAR1 = wxNewId();
 //*)
@@ -64,6 +69,11 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
 
     Create(parent, wxID_ANY, _("Cargo Master"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
     SetClientSize(wxSize(920,713));
+    {
+    	wxIcon FrameIcon;
+    	FrameIcon.CopyFromBitmap(wxBitmap(wxImage(_T("/home/vilis/Cargo_Sim/Logo.png"))));
+    	SetIcon(FrameIcon);
+    }
     Notebook1 = new wxNotebook(this, ID_NOTEBOOK1, wxPoint(152,176), wxSize(1088,728), 0, _T("ID_NOTEBOOK1"));
     Panel1 = new wxPanel(Notebook1, ID_PANEL1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL1"));
     BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
@@ -133,6 +143,12 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     BoxSizer4->Fit(Panel8);
     BoxSizer4->SetSizeHints(Panel8);
     Panel5 = new wxPanel(Notebook1, ID_PANEL5, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL5"));
+    StabilitySizer = new wxBoxSizer(wxHORIZONTAL);
+    StabilityBit = new wxStaticBitmap(Panel5, ID_STATICBITMAP1, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxSIMPLE_BORDER, _T("ID_STATICBITMAP1"));
+    StabilitySizer->Add(StabilityBit, 1, wxALL|wxEXPAND, 5);
+    Panel5->SetSizer(StabilitySizer);
+    StabilitySizer->Fit(Panel5);
+    StabilitySizer->SetSizeHints(Panel5);
     Panel6 = new wxPanel(Notebook1, ID_PANEL6, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL6"));
     Panel7 = new wxPanel(Notebook1, ID_PANEL7, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL7"));
     BoxSizer6 = new wxBoxSizer(wxVERTICAL);
@@ -163,13 +179,15 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     Notebook1->AddPage(Panel7, _("Dead Load"), false);
     MenuBar1 = new wxMenuBar();
     Menu1 = new wxMenu();
+    SaveItem = new wxMenuItem(Menu1, ID_MENUITEM2, _("Save\tCtrl+s"), wxEmptyString, wxITEM_NORMAL);
+    Menu1->Append(SaveItem);
     LoadButton = new wxMenuItem(Menu1, ID_MENUITEM1, _("Load"), wxEmptyString, wxITEM_NORMAL);
     Menu1->Append(LoadButton);
     MenuItem1 = new wxMenuItem(Menu1, idMenuQuit, _("Quit\tAlt-F4"), _("Quit the application"), wxITEM_NORMAL);
     Menu1->Append(MenuItem1);
     MenuBar1->Append(Menu1, _("&File"));
     Menu3 = new wxMenu();
-    ParticularsOpen = new wxMenuItem(Menu3, ID_MENUITEM2, _("Particulars"), wxEmptyString, wxITEM_NORMAL);
+    ParticularsOpen = new wxMenuItem(Menu3, ID_MENUITEM3, _("Particulars"), wxEmptyString, wxITEM_NORMAL);
     Menu3->Append(ParticularsOpen);
     MenuBar1->Append(Menu3, _("&Ship"));
     Menu2 = new wxMenu();
@@ -187,9 +205,10 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     Connect(ID_GRID2,wxEVT_GRID_CELL_CHANGED,(wxObjectEventFunction)&CargoMasterFrame::OnConstantsGridCellChanged);
     Connect(ID_GRID4,wxEVT_GRID_CELL_CHANGED,(wxObjectEventFunction)&CargoMasterFrame::OnCargoTankGridCellChanged);
     Connect(ID_GRID6,wxEVT_GRID_CELL_CHANGED,(wxObjectEventFunction)&CargoMasterFrame::OnDeadLoadGridCellChanged);
+    Connect(ID_MENUITEM2,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnSaveItemSelected);
     Connect(ID_MENUITEM1,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnLoadButtonSelected);
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnQuit);
-    Connect(ID_MENUITEM2,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnParticularsOpenSelected);
+    Connect(ID_MENUITEM3,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnParticularsOpenSelected);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnAbout);
     //*)
 }
@@ -218,7 +237,9 @@ void CargoMasterFrame::update()
     GeneralGrid->SetCellValue(5,2,wxString::Format(wxT("%.2f"), ShipBody.disp_vcg()));
     GeneralGrid->SetCellValue(5,3,wxString::Format(wxT("%.2f"), ShipBody.disp_tcg()));
     GeneralGrid->SetCellValue(6,0,wxString::Format(wxT("%.2f"), ShipBody.rest_dwt()));
-
+    ShipBody.gz_curve();
+    wxBitmap bitmap (wxT("gz.png"), wxBITMAP_TYPE_PNG);
+    StabilityBit->SetBitmap(bitmap);
 }
 
 CargoMasterFrame::~CargoMasterFrame()
@@ -479,4 +500,9 @@ void CargoMasterFrame::OnCargoTankGridCellChanged(wxGridEvent& event)
             update();
         }else{CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 8, *wxRED);}
     }
+}
+
+void CargoMasterFrame::OnSaveItemSelected(wxCommandEvent& event)
+{
+     ShipBody.save(ShipBody.read_s_name()+" Condition at ");
 }

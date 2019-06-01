@@ -1,12 +1,15 @@
 # depslib dependency file v1.0
-1559130930 source:/home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.cpp
+1559394564 source:/home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.cpp
 	"CargoMasterMain.h"
 	<wx/msgdlg.h>
 	<iostream>
+	<wx/bitmap.h>
+	<wx/icon.h>
+	<wx/image.h>
 	<wx/intl.h>
 	<wx/string.h>
 
-1559047395 /home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.h
+1559392609 /home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.h
 	"../Ship.h"
 	"wx/filedlg.h"
 	"Particulars.h"
@@ -16,6 +19,7 @@
 	<wx/notebook.h>
 	<wx/panel.h>
 	<wx/sizer.h>
+	<wx/statbmp.h>
 	<wx/statusbr.h>
 
 1555492885 /usr/include/wx-3.1/wx/frame.h
@@ -1107,10 +1111,10 @@
 	"wx/defs.h"
 	"wx/window.h"
 
-1559131228 source:/home/vilis/Cargo_Sim/Ship.cpp
+1559393533 source:/home/vilis/Cargo_Sim/Ship.cpp
 	"Ship.h"
 
-1559131228 /home/vilis/Cargo_Sim/Ship.h
+1559393598 /home/vilis/Cargo_Sim/Ship.h
 	<string>
 	<vector>
 	<fstream>
@@ -1120,6 +1124,9 @@
 	<math.h>
 	<cmath>
 	<iomanip>
+	<stdio.h>
+	<time.h>
+	"ChartDirector/include/chartdir.h"
 	"Ship.pb.h"
 
 1558452029 /home/vilis/Cargo_Sim/Ship.pb.h
@@ -1305,4 +1312,208 @@
 	"wx/qt/stattext.h"
 
 1555492887 /usr/include/wx-3.1/wx/gtk/stattext.h
+
+1258542466 /home/vilis/Cargo_Sim/mathplot.h
+	<vector>
+	<wx/defs.h>
+	<wx/menu.h>
+	<wx/scrolwin.h>
+	<wx/event.h>
+	<wx/dynarray.h>
+	<wx/pen.h>
+	<wx/dcmemory.h>
+	<wx/string.h>
+	<wx/print.h>
+	<wx/image.h>
+	<deque>
+	<crtdbg.h>
+
+1555492885 /usr/include/wx-3.1/wx/dcmemory.h
+	"wx/dc.h"
+	"wx/bitmap.h"
+
+1555492885 /usr/include/wx-3.1/wx/dc.h
+	"wx/object.h"
+	"wx/intl.h"
+	"wx/colour.h"
+	"wx/font.h"
+	"wx/bitmap.h"
+	"wx/brush.h"
+	"wx/pen.h"
+	"wx/palette.h"
+	"wx/dynarray.h"
+	"wx/math.h"
+	"wx/image.h"
+	"wx/region.h"
+	"wx/affinematrix2d.h"
+
+1555492885 /usr/include/wx-3.1/wx/brush.h
+	"wx/defs.h"
+	"wx/object.h"
+	"wx/gdiobj.h"
+	"wx/gdicmn.h"
+	"wx/msw/brush.h"
+	"wx/x11/brush.h"
+	"wx/gtk/brush.h"
+	"wx/gtk1/brush.h"
+	"wx/dfb/brush.h"
+	"wx/osx/brush.h"
+	"wx/qt/brush.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/brush.h
+
+1555492885 /usr/include/wx-3.1/wx/affinematrix2d.h
+	"wx/defs.h"
+	"wx/affinematrix2dbase.h"
+
+1555492885 /usr/include/wx-3.1/wx/affinematrix2dbase.h
+	"wx/defs.h"
+	"wx/geometry.h"
+
+1555492886 /usr/include/wx-3.1/wx/geometry.h
+	"wx/defs.h"
+	"wx/utils.h"
+	"wx/gdicmn.h"
+	"wx/math.h"
+
+1555492886 /usr/include/wx-3.1/wx/print.h
+	"wx/defs.h"
+	"wx/msw/printwin.h"
+	"wx/osx/printmac.h"
+	"wx/qt/printqt.h"
+	"wx/generic/printps.h"
+
+1555492885 /usr/include/wx-3.1/wx/generic/printps.h
+	"wx/prntbase.h"
+
+1555492886 /usr/include/wx-3.1/wx/prntbase.h
+	"wx/defs.h"
+	"wx/event.h"
+	"wx/cmndata.h"
+	"wx/panel.h"
+	"wx/scrolwin.h"
+	"wx/dialog.h"
+	"wx/frame.h"
+	"wx/dc.h"
+
+1555492885 /usr/include/wx-3.1/wx/cmndata.h
+	"wx/defs.h"
+	"wx/gdicmn.h"
+	"wx/stream.h"
+
+1559320916 source:/home/vilis/Cargo_Sim/mathplot.cpp
+	<wx/window.h>
+	"wx/object.h"
+	"wx/font.h"
+	"wx/colour.h"
+	"wx/settings.h"
+	"wx/sizer.h"
+	"wx/log.h"
+	"wx/intl.h"
+	"wx/dcclient.h"
+	"wx/cursor.h"
+	"mathplot.h"
+	<wx/bmpbuttn.h>
+	<wx/module.h>
+	<wx/msgdlg.h>
+	<wx/image.h>
+	<wx/tipwin.h>
+	<cmath>
+	<cstdio>
+	<ctime>
+
+1555492885 /usr/include/wx-3.1/wx/settings.h
+	"wx/colour.h"
+	"wx/font.h"
+
+1555492885 /usr/include/wx-3.1/wx/dcclient.h
+	"wx/dc.h"
+
+1555492885 /usr/include/wx-3.1/wx/bmpbuttn.h
+	"wx/defs.h"
+	"wx/button.h"
+	"wx/univ/bmpbuttn.h"
+	"wx/msw/bmpbuttn.h"
+	"wx/motif/bmpbuttn.h"
+	"wx/gtk/bmpbuttn.h"
+	"wx/gtk1/bmpbuttn.h"
+	"wx/osx/bmpbuttn.h"
+	"wx/qt/bmpbuttn.h"
+
+1555492885 /usr/include/wx-3.1/wx/button.h
+	"wx/defs.h"
+	"wx/anybutton.h"
+	"wx/univ/button.h"
+	"wx/msw/button.h"
+	"wx/motif/button.h"
+	"wx/gtk/button.h"
+	"wx/gtk1/button.h"
+	"wx/osx/button.h"
+	"wx/qt/button.h"
+
+1555492885 /usr/include/wx-3.1/wx/anybutton.h
+	"wx/defs.h"
+	"wx/bitmap.h"
+	"wx/control.h"
+	"wx/univ/anybutton.h"
+	"wx/msw/anybutton.h"
+	"wx/gtk/anybutton.h"
+	"wx/osx/anybutton.h"
+	"wx/qt/anybutton.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/anybutton.h
+
+1555492887 /usr/include/wx-3.1/wx/gtk/button.h
+
+1555492887 /usr/include/wx-3.1/wx/gtk/bmpbuttn.h
+
+1555492884 /usr/include/wx-3.1/wx/module.h
+	"wx/object.h"
+	"wx/list.h"
+	"wx/arrstr.h"
+	"wx/dynarray.h"
+
+1555492886 /usr/include/wx-3.1/wx/tipwin.h
+	"wx/popupwin.h"
+	"wx/frame.h"
+	"wx/arrstr.h"
+
+1555492886 /usr/include/wx-3.1/wx/popupwin.h
+	"wx/defs.h"
+	"wx/nonownedwnd.h"
+	"wx/msw/popupwin.h"
+	"wx/gtk/popupwin.h"
+	"wx/gtk1/popupwin.h"
+	"wx/x11/popupwin.h"
+	"wx/motif/popupwin.h"
+	"wx/dfb/popupwin.h"
+	"wx/osx/popupwin.h"
+	"wx/qt/popupwin.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/popupwin.h
+
+1541530674 /home/vilis/Cargo_Sim/ChartDirector/include/chartdir.h
+	<string.h>
+	"bchartdir.h"
+	"memblock.h"
+
+1541530674 /home/vilis/Cargo_Sim/ChartDirector/include/bchartdir.h
+
+1541530674 /home/vilis/Cargo_Sim/ChartDirector/include/memblock.h
+
+1555492885 /usr/include/wx-3.1/wx/statbmp.h
+	"wx/defs.h"
+	"wx/control.h"
+	"wx/bitmap.h"
+	"wx/icon.h"
+	"wx/univ/statbmp.h"
+	"wx/msw/statbmp.h"
+	"wx/motif/statbmp.h"
+	"wx/gtk/statbmp.h"
+	"wx/gtk1/statbmp.h"
+	"wx/osx/statbmp.h"
+	"wx/qt/statbmp.h"
+
+1555492887 /usr/include/wx-3.1/wx/gtk/statbmp.h
+	"wx/icon.h"
 

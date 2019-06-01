@@ -47,6 +47,8 @@
 		<Unit filename="../Ship.h" />
 		<Unit filename="../Ship.pb.cc" />
 		<Unit filename="../Ship.pb.h" />
+		<Unit filename="../mathplot.cpp" />
+		<Unit filename="../mathplot.h" />
 		<Unit filename="CargoMasterApp.cpp" />
 		<Unit filename="CargoMasterApp.h" />
 		<Unit filename="CargoMasterMain.cpp" />

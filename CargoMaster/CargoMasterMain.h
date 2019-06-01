@@ -20,6 +20,7 @@
 #include <wx/notebook.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
+#include <wx/statbmp.h>
 #include <wx/statusbr.h>
 //*)
 
@@ -42,6 +43,7 @@ class CargoMasterFrame: public wxFrame
         void OnCargoTankGridCellChanged(wxGridEvent& event);
         void OnBallastGridCellChanged(wxGridEvent& event);
         void OnTankGridCellChanged(wxGridEvent& event);
+        void OnSaveItemSelected(wxCommandEvent& event);
         //*)
 
         //(*Identifiers(CargoMasterFrame)
@@ -51,19 +53,22 @@ class CargoMasterFrame: public wxFrame
         static const long ID_PANEL2;
         static const long ID_GRID4;
         static const long ID_PANEL8;
+        static const long ID_STATICBITMAP1;
         static const long ID_PANEL5;
         static const long ID_PANEL6;
         static const long ID_GRID6;
         static const long ID_PANEL7;
         static const long ID_NOTEBOOK1;
+        static const long ID_MENUITEM2;
         static const long ID_MENUITEM1;
         static const long idMenuQuit;
-        static const long ID_MENUITEM2;
+        static const long ID_MENUITEM3;
         static const long idMenuAbout;
         static const long ID_STATUSBAR1;
         //*)
 
         //(*Declarations(CargoMasterFrame)
+        wxBoxSizer* StabilitySizer;
         wxGrid* CargoTankGrid;
         wxGrid* ConstantsGrid;
         wxGrid* DeadLoadGrid;
@@ -71,6 +76,7 @@ class CargoMasterFrame: public wxFrame
         wxMenu* Menu3;
         wxMenuItem* LoadButton;
         wxMenuItem* ParticularsOpen;
+        wxMenuItem* SaveItem;
         wxNotebook* Notebook1;
         wxPanel* Panel1;
         wxPanel* Panel2;
@@ -78,6 +84,7 @@ class CargoMasterFrame: public wxFrame
         wxPanel* Panel6;
         wxPanel* Panel7;
         wxPanel* Panel8;
+        wxStaticBitmap* StabilityBit;
         wxStatusBar* StatusBar1;
         //*)
 
