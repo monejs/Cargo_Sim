@@ -12,6 +12,7 @@
 #include "../Ship.h"
 #include "wx/filedlg.h"
 #include "Particulars.h"
+#include "mathplot.h"
 
 //(*Headers(CargoMasterFrame)
 #include <wx/frame.h>
@@ -20,7 +21,6 @@
 #include <wx/notebook.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
-#include <wx/statbmp.h>
 #include <wx/statusbr.h>
 //*)
 
@@ -53,7 +53,7 @@ class CargoMasterFrame: public wxFrame
         static const long ID_PANEL2;
         static const long ID_GRID4;
         static const long ID_PANEL8;
-        static const long ID_STATICBITMAP1;
+        static const long ID_PANEL3;
         static const long ID_PANEL5;
         static const long ID_PANEL6;
         static const long ID_GRID6;
@@ -84,7 +84,7 @@ class CargoMasterFrame: public wxFrame
         wxPanel* Panel6;
         wxPanel* Panel7;
         wxPanel* Panel8;
-        wxStaticBitmap* StabilityBit;
+        wxPanel* StabiPanel;
         wxStatusBar* StatusBar1;
         //*)
 

@@ -35,7 +35,7 @@ const long CargoMasterFrame::ID_GRID2 = wxNewId();
 const long CargoMasterFrame::ID_PANEL2 = wxNewId();
 const long CargoMasterFrame::ID_GRID4 = wxNewId();
 const long CargoMasterFrame::ID_PANEL8 = wxNewId();
-const long CargoMasterFrame::ID_STATICBITMAP1 = wxNewId();
+const long CargoMasterFrame::ID_PANEL3 = wxNewId();
 const long CargoMasterFrame::ID_PANEL5 = wxNewId();
 const long CargoMasterFrame::ID_PANEL6 = wxNewId();
 const long CargoMasterFrame::ID_GRID6 = wxNewId();
@@ -144,8 +144,8 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     BoxSizer4->SetSizeHints(Panel8);
     Panel5 = new wxPanel(Notebook1, ID_PANEL5, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL5"));
     StabilitySizer = new wxBoxSizer(wxHORIZONTAL);
-    StabilityBit = new wxStaticBitmap(Panel5, ID_STATICBITMAP1, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxSIMPLE_BORDER, _T("ID_STATICBITMAP1"));
-    StabilitySizer->Add(StabilityBit, 1, wxALL|wxEXPAND, 5);
+    StabiPanel = new wxPanel(Panel5, ID_PANEL3, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL3"));
+    StabilitySizer->Add(StabiPanel, 1, wxALL|wxEXPAND, 5);
     Panel5->SetSizer(StabilitySizer);
     StabilitySizer->Fit(Panel5);
     StabilitySizer->SetSizeHints(Panel5);
@@ -237,9 +237,16 @@ void CargoMasterFrame::update()
     GeneralGrid->SetCellValue(5,2,wxString::Format(wxT("%.2f"), ShipBody.disp_vcg()));
     GeneralGrid->SetCellValue(5,3,wxString::Format(wxT("%.2f"), ShipBody.disp_tcg()));
     GeneralGrid->SetCellValue(6,0,wxString::Format(wxT("%.2f"), ShipBody.rest_dwt()));
-    ShipBody.gz_curve();
-    wxBitmap bitmap (wxT("gz.png"), wxBITMAP_TYPE_PNG);
-    StabilityBit->SetBitmap(bitmap);
+    wxVector<wxString> labels = {wxT("0°"), wxT("10°"), wxT("20°"), wxT("30°"), wxT("40°"), wxT("50°"), wxT("60°"), wxT("70°"), wxT("80°"), wxT("90°")};
+
+    wxVector<wxDouble> points;
+    wxVector<wxInt16> xax;
+    for (int i=0; i!=90; i++)
+    {
+        xax.push_back(i);
+        points.push_back(ShipBody.stabi(i));
+    }
+
 }
 
 CargoMasterFrame::~CargoMasterFrame()
@@ -255,6 +262,7 @@ void CargoMasterFrame::OnQuit(wxCommandEvent& event)
 
 void CargoMasterFrame::OnAbout(wxCommandEvent& event)
 {
+    wxMessageBox("A continous update is uploaded to:\nhttps://github.com/monejs/Cargo_Sim", "Info");
 
 }
 
