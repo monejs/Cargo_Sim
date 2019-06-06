@@ -32,7 +32,7 @@ void Ship::calculate()
         stats.h_draft = draft; // Assigns a draft
 
         float hull_B;
-        float hull_F;
+        float hull_F, hull_BMl_vol, hull_BMl;
         float floating_area;
         for (int section=0; section!=10; section++)
         {
@@ -51,13 +51,16 @@ void Ship::calculate()
                 hull_F+=section_LCG[section]*sectionlength*section_beam[section];
                 section_BM[section]=(sectionlength*pow(section_B[section],3))/(12*section_vol[section]);
                 section_KM[section]=section_B[section]+section_BM[section];
-
+                section_BMl[section]=(section_beam[section]*pow(sectionlength,3))/(12*section_vol[section]);
+                hull_BMl+=section_BMl[section]*section_vol[section];
             }
         }
         hull_VCG=(cal(0)+cal(1)+cal(2)+cal(3)+cal(4)+cal(5)+cal(6)+cal(7)+cal(8)+cal(9))/s_volume;
         hull_LCG=(calL(0)+calL(1)+calL(2)+calL(3)+calL(4)+calL(5)+calL(6)+calL(7)+calL(8)+calL(9))/s_volume;
         stats.h_lcb=hull_B/stats.h_volume;
         stats.h_lcf=hull_F/floating_area;
+        hull_BMl=hull_BMl_vol/stats.h_volume;
+        stats.h_mct=hull_BMl*1.025/s_LOA;
 
 
 
@@ -68,7 +71,7 @@ void Ship::calculate()
 }
 
 // Calculates the ships particulars automagicly, if so wished. This function is available over the particulars input mask.
-void Ship::autoParticulars()
+/*void Ship::autoParticulars()
 {
     float xmax = 0, ymax = 0, zmax = 0; // The maximum values of a unit
     for (long unsigned int i=0; i<UnitVec.size(); i++) // Iterates through all declared units
@@ -83,7 +86,7 @@ void Ship::autoParticulars()
     s_height = zmax+0.5f;
 
     Ship::calculate();
-}
+}*/   //Maybe later on this one
 
 
 void Ship::text_print(){
@@ -409,40 +412,46 @@ float Ship::stabi(int heel)
 
 void Ship::gz_curve()
 {
-    double dataX0[90];
-    double dataY0[90];
 
-    for (int i=0; i!=90; i++)
+}
+
+float Ship::gm()
+{
+
+}
+
+float Ship::trim(float draft)
+{
+    float trim_moment;
+    float hull_B;
+    float hull_F;
+    float lcb, lcf;
+    float floating_area;
+    for (int section=0; section!=10; section++)
     {
-        dataX0[i]=i;
-        dataY0[i]=stabi(i);
+        if (s_height - section_height[section] < draft)
+        {
+            section_area[section]=section_beam[section]*(draft-s_height+section_height[section]); // A_sec = Beam_sec * draft
+            floating_area+=sectionlength *section_beam[section];
+            section_vol[section]=section_area[section]*sectionlength; // Area * section length
+            section_LCG[section]=section * sectionlength + sectionlength/2; //n*section + 1/2 section length
+            section_G[section]=s_height-section_height[section]/2; // Maximum draft - section draft /2
+            s_volume += section_vol[section]; // Total underwater volume
+
+
+            section_B[section]=(draft-s_height+section_height[section])/2 +s_height-section_height[section];
+            hull_B+=section_B[section]*section_vol[section];
+            hull_F+=section_LCG[section]*sectionlength*section_beam[section];
+            section_BM[section]=(sectionlength*pow(section_B[section],3))/(12*section_vol[section]);
+            section_KM[section]=section_B[section]+section_BM[section];
+
+        }
     }
-    // Create a XYChart object of size 450 x 450 pixels
-    XYChart *c = new XYChart(900, 500);
-    // Set the plotarea at (55, 65) and of size 350 x 300 pixels, with white background and a light
-    // grey border (0xc0c0c0). Turn on both horizontal and vertical grid lines with light grey color
-    // (0xc0c0c0)
-    c->setPlotArea(55, 65, 800, 400, 0xffffff, -1, 0xc0c0c0, 0xc0c0c0, -1);
-    // Add a title to the y axis using 12pt Arial Bold Italic font
-    c->yAxis()->setTitle("GZ, m", "arialbi.ttf", 12);
-    // Set the y axis line width to 3 pixels
-    c->yAxis()->setWidth(3);
-    // Add a title to the x axis using 12pt Arial Bold Italic font
-    c->xAxis()->setTitle("Heel, ° ", "arialbi.ttf", 12);
-    // Set the x axis line width to 3 pixels
-    c->xAxis()->setWidth(3);
-    // Add a red (0xff3333) line layer using dataX0 and dataY0
-    LineLayer *layer1 = c->addLineLayer(DoubleArray(dataY0, (int)(sizeof(dataY0) / sizeof(dataY0[0])
-        )), 0xff3333, "Compound AAA");
-    layer1->setXData(DoubleArray(dataX0, (int)(sizeof(dataX0) / sizeof(dataX0[0]))));
-    // Set the line width to 3 pixels
-    layer1->setLineWidth(3);
-    // Use 9 pixel square symbols for the data points
-    layer1->getDataSet(0)->setDataSymbol(Chart::SquareSymbol, 9);
-    // Output the chart
-    c->makeChart("gz.png");
-    //free up resources
-    delete c;
+    hull_VCG=(cal(0)+cal(1)+cal(2)+cal(3)+cal(4)+cal(5)+cal(6)+cal(7)+cal(8)+cal(9))/s_volume;
+    hull_LCG=(calL(0)+calL(1)+calL(2)+calL(3)+calL(4)+calL(5)+calL(6)+calL(7)+calL(8)+calL(9))/s_volume;
+    lcb=hull_B/s_volume;
+    lcf=hull_F/floating_area;
+    trim_moment = (hull_LCG-lcb)*disp();
 }
 
 float Ship::init_heel()
@@ -672,12 +681,13 @@ bool Ship::set_s_minDraft(std::string in_t){
 bool Ship::set_s_maxDraft(std::string in_t){
     return Ship::assign_val(in_t, s_maxDraft);
 }
-bool Ship::set_s_maxDWT(std::string in_t){
-    if (atoi(in_t.c_str()))
+bool Ship::set_s_maxDWT(){
+    s_maxDWT=0;
+    for (int i=0; i!=10; i++)
     {
-        s_maxDWT = atoi(in_t.c_str());
-        return true;
-    }else{return false;}
+        s_maxDWT+=sectionlength*section_beam[i]*(s_maxDraft-(s_height-section_height[i]));
+    }
+    return true;
 }
 bool Ship::set_s_lightShip(std::string in_t){
     if (atoi(in_t.c_str()))
@@ -729,7 +739,7 @@ float& Ship::read_s_minDraft(){return s_minDraft;}
 
 float& Ship::read_s_maxDraft(){return s_maxDraft;}
 
-int& Ship::read_s_maxDWT(){return s_maxDWT;}
+float Ship::read_s_maxDWT(){return s_maxDWT;}
 
 int& Ship::read_s_lightShip(){return s_lightShip;}
 
@@ -1036,6 +1046,8 @@ float Ship::rest_dwt()
 {
     return (s_maxDWT-deadweight());
 }
+
+
 
 // Upon calling a new unit in the UI, a new unit is added to the Units Vector.
 void Ship::new_unit(u_types choice){

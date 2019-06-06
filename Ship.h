@@ -12,7 +12,7 @@
 #include <iomanip>
 #include <stdio.h>
 #include <time.h>
-#include "ChartDirector/include/chartdir.h"
+
 
 #include "Ship.pb.h"
 
@@ -31,7 +31,7 @@ public:
     bool set_s_strengthCover(std::string);
     bool set_s_minDraft(std::string);
     bool set_s_maxDraft(std::string);
-    bool set_s_maxDWT(std::string);
+    bool set_s_maxDWT();
     bool set_s_lightShip(std::string);
     bool set_s_LCGLight(std::string);
     bool set_s_TCGLight(std::string);
@@ -44,7 +44,7 @@ public:
     float& read_s_strengthCover();
     float& read_s_minDraft();
     float& read_s_maxDraft();
-    int& read_s_maxDWT();
+    float read_s_maxDWT();
     int& read_s_lightShip();
     float& read_s_LCG();
     float& read_s_TCG();
@@ -127,6 +127,7 @@ public:
     bool set_car_height(int, std::string);
 
     float init_heel();
+    float trim(float);
 
     void variable_update();
     int unit_count();
@@ -174,6 +175,7 @@ private:
     std::array<float, 10> section_G;
     std::array<float, 10> section_LCG;
     std::array<float, 10> section_BM;
+    std::array<float, 10> section_BMl;
     std::array<float, 10> section_KM;
     std::array<float, 10> section_B;
     std::array<float, 10> section_beam;
