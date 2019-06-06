@@ -10,7 +10,7 @@
 #ifndef BODYMASTERMAIN_H
 #define BODYMASTERMAIN_H
 #include "../Ship.h"
-#include "../Particulars.h"
+#include "Particulars.h"
 #include <wx/msgdlg.h>
 #include <wx/filedlg.h>
 
@@ -44,6 +44,7 @@ class BodyMasterFrame: public wxFrame
         void OnCalculateButtonClick1(wxCommandEvent& event);
         void OnPrintHydrostaticsSelected(wxCommandEvent& event);
         void OnResize(wxSizeEvent& event);
+        void OnDeleteButtonClick1(wxCommandEvent& event);
         //*)
 
         //(*Identifiers(BodyMasterFrame)

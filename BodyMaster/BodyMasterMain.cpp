@@ -119,6 +119,7 @@ BodyMasterFrame::BodyMasterFrame(wxWindow* parent,wxWindowID id)
     FlexGridSizer1->SetSizeHints(this);
 
     Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&BodyMasterFrame::OnAddButtonClick);
+    Connect(ID_BUTTON3,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&BodyMasterFrame::OnDeleteButtonClick1);
     Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&BodyMasterFrame::OnParticularsButtonClick);
     Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&BodyMasterFrame::OnCalculateButtonClick1);
     Connect(idMenuSave,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&BodyMasterFrame::OnSaveItemSelected);
@@ -163,36 +164,8 @@ void BodyMasterFrame::OnAddButtonClick(wxCommandEvent& event)
 void BodyMasterFrame::OnParticularsButtonClick(wxCommandEvent& event)
 {
     Particulars* particulars = new Particulars(NULL);
-
-    particulars->ShipNameText->SetValue(wxString::Format(wxT("%s"),ShipBody.read_s_name()));
-    particulars->LOAText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_LOA()));
-    particulars->HText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_height()));
-    particulars->BText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_beam()));
-    particulars->LCGText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_LCGLight()));
-    particulars->VCGText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_VCGLight()));
-    particulars->TCGText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_TCGLight()));
-    particulars->LightShipText->SetValue(wxString::Format(wxT("%i"),ShipBody.read_s_lightShip()));
-    particulars->MaxDrText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_maxDraft()));
-    particulars->MinDrText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_minDraft()));
-    particulars->MaxDWTText->SetValue(wxString::Format(wxT("%i"),ShipBody.read_s_maxDWT()));
-    particulars->DeckStrText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_strengthCover()));
-    particulars->TankStrText->SetValue(wxString::Format(wxT("%.2f"),ShipBody.read_s_strengthTank()));
-
+    particulars->go(ShipBody);
     particulars->ShowModal();
-
-    output(ShipBody.set_s_name, ShipNameText);
-    output(ShipBody.set_s_LOA, LOAText);
-    output(ShipBody.set_s_beam, BText);
-    output(ShipBody.set_s_height, HText);
-    output(ShipBody.set_s_lightShip, LightShipText);
-    output(ShipBody.set_s_LCGLight, LCGText);
-    output(ShipBody.set_s_TCGLight, TCGText);
-    output(ShipBody.set_s_VCGLight, VCGText);
-    output(ShipBody.set_s_maxDraft, MaxDrText);
-    output(ShipBody.set_s_minDraft, MinDrText);
-    output(ShipBody.set_s_maxDWT, MaxDWTText);
-    output(ShipBody.set_s_strengthCover, DeckStrText);
-    output(ShipBody.set_s_strengthTank, TankStrText);
 
     delete particulars;
 }
@@ -282,3 +255,10 @@ void BodyMasterFrame::OnResize(wxSizeEvent& event)
 {
     BodyMasterFrame::Fit();
 }
+
+void BodyMasterFrame::OnDeleteButtonClick1(wxCommandEvent& event)
+{
+    Grid->DeleteRows(Grid->GetGridCursorRow());
+    ShipBody.delete_unit(Grid->GetGridCursorRow());
+}
+

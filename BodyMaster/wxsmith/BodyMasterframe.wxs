@@ -43,6 +43,7 @@
 					<object class="sizeritem">
 						<object class="wxButton" name="ID_BUTTON3" variable="DeleteButton" member="yes">
 							<label>Delete Unit</label>
+							<handler function="OnDeleteButtonClick1" entry="EVT_BUTTON" />
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
