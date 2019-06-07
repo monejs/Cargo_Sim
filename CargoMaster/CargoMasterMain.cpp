@@ -214,7 +214,7 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     Connect(ID_MENUITEM3,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnParticularsOpenSelected);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnAbout);
     //*)
-    mpFXYVector* vectorLayer = new mpFXYVector(wxT("GZ Curve"), mpALIGN_CENTER);
+    mpFXYVector* vectorLayer = new mpFXYVector(wxT(""), mpALIGN_CENTER);
     vectorLayer->SetData(vectorx, vectory);
     vectorLayer->SetContinuity(true);
     wxPen vectorpen(*wxBLUE, 2, wxSOLID);
@@ -270,7 +270,7 @@ void CargoMasterFrame::update()
         vectorx.push_back(i);
         vectory.push_back(ShipBody.stabi(i));
     }
-    m_plot->Update();
+    m_plot->
 }
 
 CargoMasterFrame::~CargoMasterFrame()
