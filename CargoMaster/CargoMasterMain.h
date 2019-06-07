@@ -12,9 +12,10 @@
 #include "../Ship.h"
 #include "wx/filedlg.h"
 #include "Particulars.h"
-#include "mathplot.h"
+#include <iostream>
 
 //(*Headers(CargoMasterFrame)
+#include "mathplot.h"
 #include <wx/frame.h>
 #include <wx/grid.h>
 #include <wx/menu.h>
@@ -53,7 +54,7 @@ class CargoMasterFrame: public wxFrame
         static const long ID_PANEL2;
         static const long ID_GRID4;
         static const long ID_PANEL8;
-        static const long ID_PANEL3;
+        static const long ID_GRID3;
         static const long ID_PANEL5;
         static const long ID_PANEL6;
         static const long ID_GRID6;
@@ -68,11 +69,12 @@ class CargoMasterFrame: public wxFrame
         //*)
 
         //(*Declarations(CargoMasterFrame)
-        wxBoxSizer* StabilitySizer;
+        mpWindow* m_plot;
         wxGrid* CargoTankGrid;
         wxGrid* ConstantsGrid;
         wxGrid* DeadLoadGrid;
         wxGrid* GeneralGrid;
+        wxGrid* Grid1;
         wxMenu* Menu3;
         wxMenuItem* LoadButton;
         wxMenuItem* ParticularsOpen;
@@ -84,10 +86,9 @@ class CargoMasterFrame: public wxFrame
         wxPanel* Panel6;
         wxPanel* Panel7;
         wxPanel* Panel8;
-        wxPanel* StabiPanel;
         wxStatusBar* StatusBar1;
         //*)
-
+        std::vector<double> vectorx, vectory;
         void update();
         DECLARE_EVENT_TABLE()
 };

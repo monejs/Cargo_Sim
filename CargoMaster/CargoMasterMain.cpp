@@ -35,7 +35,7 @@ const long CargoMasterFrame::ID_GRID2 = wxNewId();
 const long CargoMasterFrame::ID_PANEL2 = wxNewId();
 const long CargoMasterFrame::ID_GRID4 = wxNewId();
 const long CargoMasterFrame::ID_PANEL8 = wxNewId();
-const long CargoMasterFrame::ID_PANEL3 = wxNewId();
+const long CargoMasterFrame::ID_GRID3 = wxNewId();
 const long CargoMasterFrame::ID_PANEL5 = wxNewId();
 const long CargoMasterFrame::ID_PANEL6 = wxNewId();
 const long CargoMasterFrame::ID_GRID6 = wxNewId();
@@ -57,6 +57,7 @@ END_EVENT_TABLE()
 CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
 {
     //(*Initialize(CargoMasterFrame)
+    wxBoxSizer* BoxSiz;
     wxBoxSizer* BoxSizer1;
     wxBoxSizer* BoxSizer2;
     wxBoxSizer* BoxSizer4;
@@ -143,12 +144,14 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     BoxSizer4->Fit(Panel8);
     BoxSizer4->SetSizeHints(Panel8);
     Panel5 = new wxPanel(Notebook1, ID_PANEL5, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL5"));
-    StabilitySizer = new wxBoxSizer(wxHORIZONTAL);
-    StabiPanel = new wxPanel(Panel5, ID_PANEL3, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL3"));
-    StabilitySizer->Add(StabiPanel, 1, wxALL|wxEXPAND, 5);
-    Panel5->SetSizer(StabilitySizer);
-    StabilitySizer->Fit(Panel5);
-    StabilitySizer->SetSizeHints(Panel5);
+    BoxSiz = new wxBoxSizer(wxVERTICAL);
+    m_plot = new mpWindow(Panel5, wxID_ANY);
+    BoxSiz->Add(m_plot, 1, wxALL|wxEXPAND, 5);
+    Grid1 = new wxGrid(Panel5, ID_GRID3, wxDefaultPosition, wxDefaultSize, 0, _T("ID_GRID3"));
+    BoxSiz->Add(Grid1, 1, wxALL|wxEXPAND, 5);
+    Panel5->SetSizer(BoxSiz);
+    BoxSiz->Fit(Panel5);
+    BoxSiz->SetSizeHints(Panel5);
     Panel6 = new wxPanel(Notebook1, ID_PANEL6, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL6"));
     Panel7 = new wxPanel(Notebook1, ID_PANEL7, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL7"));
     BoxSizer6 = new wxBoxSizer(wxVERTICAL);
@@ -211,6 +214,28 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     Connect(ID_MENUITEM3,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnParticularsOpenSelected);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnAbout);
     //*)
+    mpFXYVector* vectorLayer = new mpFXYVector(wxT("GZ Curve"), mpALIGN_CENTER);
+    vectorLayer->SetData(vectorx, vectory);
+    vectorLayer->SetContinuity(true);
+    wxPen vectorpen(*wxBLUE, 2, wxSOLID);
+    vectorLayer->SetPen(vectorpen);
+    vectorLayer->SetDrawOutsideMargins(false);
+    wxBrush hatch(wxColour(200,200,200), wxSOLID);
+    wxPen mypen(*wxRED, 5, wxSOLID);
+    wxFont graphFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+    mpScaleX* xaxis = new mpScaleX(wxT("Heel, °"), mpALIGN_BOTTOM, true, mpX_NORMAL);
+    mpScaleY* yaxis = new mpScaleY(wxT("GZ, m"), mpALIGN_LEFT, true);
+    xaxis->SetFont(graphFont);
+    yaxis->SetFont(graphFont);
+    xaxis->SetDrawOutsideMargins(false);
+    yaxis->SetDrawOutsideMargins(false);
+    m_plot->SetMargins(30, 30, 50, 100);
+    m_plot->AddLayer(     xaxis );
+    m_plot->AddLayer(     yaxis );
+    m_plot->AddLayer(     vectorLayer );
+    m_plot->EnableDoubleBuffer(true);
+    m_plot->SetMPScrollbars(false);
+    m_plot->Fit();
 }
 //Automatically generated code end
 
@@ -237,16 +262,15 @@ void CargoMasterFrame::update()
     GeneralGrid->SetCellValue(5,2,wxString::Format(wxT("%.2f"), ShipBody.disp_vcg()));
     GeneralGrid->SetCellValue(5,3,wxString::Format(wxT("%.2f"), ShipBody.disp_tcg()));
     GeneralGrid->SetCellValue(6,0,wxString::Format(wxT("%.2f"), ShipBody.rest_dwt()));
-    wxVector<wxString> labels = {wxT("0°"), wxT("10°"), wxT("20°"), wxT("30°"), wxT("40°"), wxT("50°"), wxT("60°"), wxT("70°"), wxT("80°"), wxT("90°")};
 
-    wxVector<wxDouble> points;
-    wxVector<wxInt16> xax;
-    for (int i=0; i!=90; i++)
+    vectorx.clear();
+    vectory.clear();
+    for (int i=0; i<91; i++)
     {
-        xax.push_back(i);
-        points.push_back(ShipBody.stabi(i));
+        vectorx.push_back(i);
+        vectory.push_back(ShipBody.stabi(i));
     }
-
+    m_plot->Update();
 }
 
 CargoMasterFrame::~CargoMasterFrame()

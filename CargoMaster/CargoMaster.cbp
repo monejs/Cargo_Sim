@@ -179,6 +179,7 @@
 		<Unit filename="include/wx/charts/wxtimeserieschart.h" />
 		<Unit filename="include/wx/charts/wxtimeserieschartctrl.h" />
 		<Unit filename="include/wx/charts/wxtimeserieschartoptions.h" />
+		<Unit filename="mathplot.cpp" />
 		<Unit filename="mathplot.h" />
 		<Unit filename="wxsmith/CargoMasterframe.wxs" />
 		<Unit filename="wxsmith/Particulars.wxs" />

@@ -100,9 +100,21 @@
 			</object>
 			<object class="notebookpage">
 				<object class="wxPanel" name="ID_PANEL5" variable="Panel5" member="yes">
-					<object class="wxBoxSizer" variable="StabilitySizer" member="yes">
+					<object class="wxBoxSizer" variable="BoxSiz" member="no">
+						<orient>wxVERTICAL</orient>
 						<object class="sizeritem">
-							<object class="wxPanel" name="ID_PANEL3" variable="StabiPanel" member="yes" />
+							<object class="Custom" name="wxID_ANY" subclass="mpWindow" variable="m_plot" member="yes">
+								<creating_code>m__plot = new mpWindow(Panel5, wxID__ANY);</creating_code>
+								<include_file>mathplot.h</include_file>
+								<local_include>1</local_include>
+								<style></style>
+							</object>
+							<flag>wxALL|wxEXPAND</flag>
+							<border>5</border>
+							<option>1</option>
+						</object>
+						<object class="sizeritem">
+							<object class="wxGrid" name="ID_GRID3" variable="Grid1" member="yes" />
 							<flag>wxALL|wxEXPAND</flag>
 							<border>5</border>
 							<option>1</option>
