@@ -529,7 +529,7 @@ bool Ship::save(std::string filename)
         cargo->set_height(BulkVec[i].u_height);
         cargo->set_weight(BulkVec[i].u_weight);
     }
-    filename += Ship::currentDateTime();// + ".ship"; // Program specific filename
+    filename += Ship::currentDateTime() + ".ship"; // Program specific filename
     std::fstream output(filename,  std::ios::out | std::ios::trunc | std::ios::binary); // Creating file
     if (SaveShip.SerializeToOstream(&output)){
         output.close(); // File closed
