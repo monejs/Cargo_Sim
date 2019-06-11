@@ -37,6 +37,7 @@ const long CargoMasterFrame::ID_GRID4 = wxNewId();
 const long CargoMasterFrame::ID_PANEL8 = wxNewId();
 const long CargoMasterFrame::ID_GRID3 = wxNewId();
 const long CargoMasterFrame::ID_PANEL5 = wxNewId();
+const long CargoMasterFrame::ID_GRID5 = wxNewId();
 const long CargoMasterFrame::ID_PANEL6 = wxNewId();
 const long CargoMasterFrame::ID_GRID6 = wxNewId();
 const long CargoMasterFrame::ID_PANEL7 = wxNewId();
@@ -60,6 +61,7 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     wxBoxSizer* BoxSiz;
     wxBoxSizer* BoxSizer1;
     wxBoxSizer* BoxSizer2;
+    wxBoxSizer* BoxSizer3;
     wxBoxSizer* BoxSizer4;
     wxBoxSizer* BoxSizer6;
     wxMenu* Menu1;
@@ -159,9 +161,9 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     StabilityGrid->SetRowLabelValue(0, _("GM"));
     StabilityGrid->SetRowLabelValue(1, _("Max GZ"));
     StabilityGrid->SetRowLabelValue(2, _("Angle of max GZ"));
-    StabilityGrid->SetRowLabelValue(3, _("Area up to 30°"));
-    StabilityGrid->SetRowLabelValue(4, _("Area up to 40°"));
-    StabilityGrid->SetRowLabelValue(5, _("Area between 30° & 40°"));
+    StabilityGrid->SetRowLabelValue(3, _("Area up to 30"));
+    StabilityGrid->SetRowLabelValue(4, _("Area up to 40"));
+    StabilityGrid->SetRowLabelValue(5, _("Area between 30 & 40"));
     StabilityGrid->SetDefaultCellFont( StabilityGrid->GetFont() );
     StabilityGrid->SetDefaultCellTextColour( StabilityGrid->GetForegroundColour() );
     BoxSiz->Add(StabilityGrid, 1, wxALL|wxEXPAND, 5);
@@ -169,6 +171,26 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     BoxSiz->Fit(Panel5);
     BoxSiz->SetSizeHints(Panel5);
     Panel6 = new wxPanel(Notebook1, ID_PANEL6, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL6"));
+    BoxSizer3 = new wxBoxSizer(wxVERTICAL);
+    n_plot = new mpWindow(Panel6, wxID_ANY);
+    BoxSizer3->Add(n_plot, 1, wxALL|wxEXPAND, 5);
+    Grid1 = new wxGrid(Panel6, ID_GRID5, wxDefaultPosition, wxDefaultSize, 0, _T("ID_GRID5"));
+    Grid1->CreateGrid(3,2);
+    Grid1->EnableEditing(true);
+    Grid1->EnableGridLines(true);
+    Grid1->SetRowLabelSize(500);
+    Grid1->SetDefaultColSize(150, true);
+    Grid1->SetColLabelValue(0, _("Value"));
+    Grid1->SetColLabelValue(1, _("Unit"));
+    Grid1->SetRowLabelValue(0, _("Shereforce"));
+    Grid1->SetRowLabelValue(1, _("Bendingmoment"));
+    Grid1->SetRowLabelValue(2, _("Torsion"));
+    Grid1->SetDefaultCellFont( Grid1->GetFont() );
+    Grid1->SetDefaultCellTextColour( Grid1->GetForegroundColour() );
+    BoxSizer3->Add(Grid1, 1, wxALL|wxEXPAND, 5);
+    Panel6->SetSizer(BoxSizer3);
+    BoxSizer3->Fit(Panel6);
+    BoxSizer3->SetSizeHints(Panel6);
     Panel7 = new wxPanel(Notebook1, ID_PANEL7, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL7"));
     BoxSizer6 = new wxBoxSizer(wxVERTICAL);
     DeadLoadGrid = new wxGrid(Panel7, ID_GRID6, wxDefaultPosition, wxDefaultSize, 0, _T("ID_GRID6"));
@@ -231,6 +253,7 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnAbout);
     //*)
     vectorLayer = new mpFXYVector(wxT(""), mpALIGN_CENTER);
+    strvectorLayer = new mpFXYVector(wxT(""), mpALIGN_CENTER);
 //    vectorLayer->SetData(vectorx, vectory);
     vectorLayer->SetContinuity(false);
     wxPen vectorpen(*wxBLUE, 2, wxSOLID);
@@ -239,19 +262,32 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     wxBrush hatch(wxColour(200,200,200), wxSOLID);
     wxPen mypen(*wxRED, 5, wxSOLID);
     wxFont graphFont(11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
-    mpScaleX* xaxis = new mpScaleX(wxT("Heel, °"), mpALIGN_BOTTOM, true, mpX_NORMAL);
-    mpScaleY* yaxis = new mpScaleY(wxT("GZ, m"), mpALIGN_LEFT, true);
-    xaxis->SetFont(graphFont);
-    yaxis->SetFont(graphFont);
-    xaxis->SetDrawOutsideMargins(false);
-    yaxis->SetDrawOutsideMargins(false);
+    mpScaleX* sxaxis = new mpScaleX(wxT("Heel, °"), mpALIGN_BOTTOM, true, mpX_NORMAL);
+    mpScaleY* syaxis = new mpScaleY(wxT("GZ, m"), mpALIGN_LEFT, true);
+    mpScaleX* strxaxis = new mpScaleX(wxT("LOA, m"), mpALIGN_BOTTOM, true, mpX_NORMAL);
+    mpScaleY* stryaxis = new mpScaleY(wxT("F(sh), t*m"), mpALIGN_LEFT, true);
+    sxaxis->SetFont(graphFont);
+    syaxis->SetFont(graphFont);
+    sxaxis->SetDrawOutsideMargins(false);
+    syaxis->SetDrawOutsideMargins(false);
+    strxaxis->SetFont(graphFont);
+    stryaxis->SetFont(graphFont);
+    strxaxis->SetDrawOutsideMargins(false);
+    stryaxis->SetDrawOutsideMargins(false);
     m_plot->SetMargins(30, 30, 50, 100);
-    m_plot->AddLayer(     xaxis );
-    m_plot->AddLayer(     yaxis );
+    m_plot->AddLayer(     sxaxis );
+    m_plot->AddLayer(     syaxis );
     m_plot->AddLayer(     vectorLayer );
     m_plot->EnableDoubleBuffer(true);
     m_plot->SetMPScrollbars(false);
     m_plot->Fit();
+    m_plot->SetMargins(30, 30, 50, 100);
+    n_plot->AddLayer(     strxaxis );
+    n_plot->AddLayer(     stryaxis );
+    n_plot->AddLayer(     strvectorLayer );
+    n_plot->EnableDoubleBuffer(true);
+    n_plot->SetMPScrollbars(false);
+    n_plot->Fit();
 }
 //Automatically generated code end
 
@@ -281,13 +317,16 @@ void CargoMasterFrame::update()
 
     vectorLayer->Clear();
     vectory.clear();
+    vectorx.clear();
     for (int i=0; i<91; i++)
     {
         vectorx.push_back(i);
         vectory.push_back(ShipBody.stabi(i));
     }
     vectorLayer->SetData(vectorx, vectory);
+    vectorLayer->SetContinuity(true);
     m_plot->Update();
+    m_plot->Fit();
 }
 
 CargoMasterFrame::~CargoMasterFrame()
@@ -358,7 +397,7 @@ void CargoMasterFrame::OnLoadButtonSelected(wxCommandEvent& event)
         }
         StabilityGrid->SetCellValue(0,1, "m");
         StabilityGrid->SetCellValue(1,1, "m");
-        StabilityGrid->SetCellValue(2,1, "°");
+        StabilityGrid->SetCellValue(2,1, "degrees");
         StabilityGrid->SetCellValue(3,1, "m*rad");
         StabilityGrid->SetCellValue(4,1, "m*rad");
         StabilityGrid->SetCellValue(5,1, "m*rad");
@@ -525,54 +564,54 @@ void CargoMasterFrame::OnParticularsOpenSelected(wxCommandEvent& event)
 
 void CargoMasterFrame::OnCargoTankGridCellChanged(wxGridEvent& event)
 {
-    if (CargoTankGrid->GetGridCursorCol()==1)
+    if (CargoTankGrid->GetGridCursorCol()==2)
     {
         if (ShipBody.set_u_weight(CargoTankGrid->GetGridCursorRow(), CellVal(CargoTankGrid).ToStdString()))
         {
-            CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 1, *wxBLACK);
-            CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 7, *wxBLACK);
+            CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 2, *wxBLACK);
             CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 8, *wxBLACK);
-            CargoTankGrid->SetCellValue(CargoTankGrid->GetGridCursorRow(), 7, wxString::Format(wxT("%.1f"), ShipBody.read_u_pvol(CargoTankGrid->GetGridCursorRow())));
-            CargoTankGrid->SetCellValue(CargoTankGrid->GetGridCursorRow(), 8, wxString::Format(wxT("%.2f"), ShipBody.read_u_volume(CargoTankGrid->GetGridCursorRow())));
+            CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 9, *wxBLACK);
+            CargoTankGrid->SetCellValue(CargoTankGrid->GetGridCursorRow(), 8, wxString::Format(wxT("%.1f"), ShipBody.read_u_pvol(CargoTankGrid->GetGridCursorRow())));
+            CargoTankGrid->SetCellValue(CargoTankGrid->GetGridCursorRow(), 9, wxString::Format(wxT("%.2f"), ShipBody.read_u_volume(CargoTankGrid->GetGridCursorRow())));
             update();
-        }else{CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 1, *wxRED);}
-    }
-    if (CargoTankGrid->GetGridCursorCol()==7)
-    {
-        if (ShipBody.set_u_pvol(CargoTankGrid->GetGridCursorRow(), CellVal(CargoTankGrid).ToStdString()))
-        {
-            CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 7, *wxBLACK);
-            CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 8, *wxBLACK);
-            CargoTankGrid->SetCellValue(CargoTankGrid->GetGridCursorRow(), 1, wxString::Format(wxT("%.2f"), ShipBody.read_u_weight(CargoTankGrid->GetGridCursorRow())));
-            CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 1, *wxBLACK);
-            CargoTankGrid->SetCellValue(CargoTankGrid->GetGridCursorRow(), 8, wxString::Format(wxT("%.2f"), ShipBody.read_u_volume(CargoTankGrid->GetGridCursorRow())));
-            update();
-        }else{CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 7, *wxRED);}
+        }else{CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 2, *wxRED);}
     }
     if (CargoTankGrid->GetGridCursorCol()==8)
     {
-        if (ShipBody.set_u_vol(CargoTankGrid->GetGridCursorRow(), CellVal(CargoTankGrid).ToStdString()))
+        if (ShipBody.set_u_pvol(CargoTankGrid->GetGridCursorRow(), CellVal(CargoTankGrid).ToStdString()))
         {
             CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 8, *wxBLACK);
-            CargoTankGrid->SetCellValue(CargoTankGrid->GetGridCursorRow(), 1, wxString::Format(wxT("%.2f"), ShipBody.read_u_weight(CargoTankGrid->GetGridCursorRow())));
-            CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 1, *wxBLACK);
-            CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 7, *wxBLACK);
-            CargoTankGrid->SetCellValue(CargoTankGrid->GetGridCursorRow(), 7, wxString::Format(wxT("%.1f"), ShipBody.read_u_pvol(CargoTankGrid->GetGridCursorRow())));
+            CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 9, *wxBLACK);
+            CargoTankGrid->SetCellValue(CargoTankGrid->GetGridCursorRow(), 2, wxString::Format(wxT("%.2f"), ShipBody.read_u_weight(CargoTankGrid->GetGridCursorRow())));
+            CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 2, *wxBLACK);
+            CargoTankGrid->SetCellValue(CargoTankGrid->GetGridCursorRow(), 9, wxString::Format(wxT("%.2f"), ShipBody.read_u_volume(CargoTankGrid->GetGridCursorRow())));
             update();
         }else{CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 8, *wxRED);}
     }
-    if (CargoTankGrid->GetGridCursorCol()==6)
+    if (CargoTankGrid->GetGridCursorCol()==9)
+    {
+        if (ShipBody.set_u_vol(CargoTankGrid->GetGridCursorRow(), CellVal(CargoTankGrid).ToStdString()))
+        {
+            CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 9, *wxBLACK);
+            CargoTankGrid->SetCellValue(CargoTankGrid->GetGridCursorRow(), 2, wxString::Format(wxT("%.2f"), ShipBody.read_u_weight(CargoTankGrid->GetGridCursorRow())));
+            CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 2, *wxBLACK);
+            CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 8, *wxBLACK);
+            CargoTankGrid->SetCellValue(CargoTankGrid->GetGridCursorRow(), 9, wxString::Format(wxT("%.1f"), ShipBody.read_u_pvol(CargoTankGrid->GetGridCursorRow())));
+            update();
+        }else{CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 9, *wxRED);}
+    }
+    if (CargoTankGrid->GetGridCursorCol()==7)
     {
         if(ShipBody.set_u_density(CargoTankGrid->GetGridCursorRow(), CellVal(CargoTankGrid).ToStdString()))
         {
-            CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 1, *wxBLACK);
-            CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 7, *wxBLACK);
+            CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 2, *wxBLACK);
             CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 8, *wxBLACK);
-            CargoTankGrid->SetCellValue(CargoTankGrid->GetGridCursorRow(), 1, wxString::Format(wxT("%.2f"), ShipBody.read_u_weight(CargoTankGrid->GetGridCursorRow())));
-            CargoTankGrid->SetCellValue(CargoTankGrid->GetGridCursorRow(), 7, wxString::Format(wxT("%.1f"), ShipBody.read_u_pvol(CargoTankGrid->GetGridCursorRow())));
-            CargoTankGrid->SetCellValue(CargoTankGrid->GetGridCursorRow(), 8, wxString::Format(wxT("%.2f"), ShipBody.read_u_volume(CargoTankGrid->GetGridCursorRow())));
+            CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 9, *wxBLACK);
+            CargoTankGrid->SetCellValue(CargoTankGrid->GetGridCursorRow(), 2, wxString::Format(wxT("%.2f"), ShipBody.read_u_weight(CargoTankGrid->GetGridCursorRow())));
+            CargoTankGrid->SetCellValue(CargoTankGrid->GetGridCursorRow(), 8, wxString::Format(wxT("%.1f"), ShipBody.read_u_pvol(CargoTankGrid->GetGridCursorRow())));
+            CargoTankGrid->SetCellValue(CargoTankGrid->GetGridCursorRow(), 9, wxString::Format(wxT("%.2f"), ShipBody.read_u_volume(CargoTankGrid->GetGridCursorRow())));
             update();
-        }else{CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 8, *wxRED);}
+        }else{CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 9, *wxRED);}
     }
 }
 

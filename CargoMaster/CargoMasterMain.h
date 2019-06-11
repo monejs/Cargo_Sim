@@ -56,6 +56,7 @@ class CargoMasterFrame: public wxFrame
         static const long ID_PANEL8;
         static const long ID_GRID3;
         static const long ID_PANEL5;
+        static const long ID_GRID5;
         static const long ID_PANEL6;
         static const long ID_GRID6;
         static const long ID_PANEL7;
@@ -70,10 +71,12 @@ class CargoMasterFrame: public wxFrame
 
         //(*Declarations(CargoMasterFrame)
         mpWindow* m_plot;
+        mpWindow* n_plot;
         wxGrid* CargoTankGrid;
         wxGrid* ConstantsGrid;
         wxGrid* DeadLoadGrid;
         wxGrid* GeneralGrid;
+        wxGrid* Grid1;
         wxGrid* StabilityGrid;
         wxMenu* Menu3;
         wxMenuItem* LoadButton;
@@ -90,6 +93,8 @@ class CargoMasterFrame: public wxFrame
         //*)
         std::vector<double> vectorx, vectory;
         mpFXYVector* vectorLayer;
+        std::vector<double> strvectorx, strvectory;
+        mpFXYVector* strvectorLayer;
         void update();
         void rowColor(int, const wxColour&);
         DECLARE_EVENT_TABLE()
