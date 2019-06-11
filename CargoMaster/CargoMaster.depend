@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1559935008 source:/home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.cpp
+1560257313 source:/home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.cpp
 	"CargoMasterMain.h"
 	<wx/msgdlg.h>
 	<iostream>
@@ -9,7 +9,7 @@
 	<wx/intl.h>
 	<wx/string.h>
 
-1559935142 /home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.h
+1560257963 /home/vilis/Cargo_Sim/CargoMaster/CargoMasterMain.h
 	"../Ship.h"
 	"wx/filedlg.h"
 	"Particulars.h"
@@ -1112,10 +1112,10 @@
 	"wx/defs.h"
 	"wx/window.h"
 
-1559897730 source:/home/vilis/Cargo_Sim/Ship.cpp
+1560256160 source:/home/vilis/Cargo_Sim/Ship.cpp
 	"Ship.h"
 
-1559821693 /home/vilis/Cargo_Sim/Ship.h
+1560256160 /home/vilis/Cargo_Sim/Ship.h
 	<string>
 	<vector>
 	<fstream>

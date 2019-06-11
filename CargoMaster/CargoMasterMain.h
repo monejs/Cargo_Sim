@@ -74,7 +74,7 @@ class CargoMasterFrame: public wxFrame
         wxGrid* ConstantsGrid;
         wxGrid* DeadLoadGrid;
         wxGrid* GeneralGrid;
-        wxGrid* Grid1;
+        wxGrid* StabilityGrid;
         wxMenu* Menu3;
         wxMenuItem* LoadButton;
         wxMenuItem* ParticularsOpen;
@@ -89,7 +89,9 @@ class CargoMasterFrame: public wxFrame
         wxStatusBar* StatusBar1;
         //*)
         std::vector<double> vectorx, vectory;
+        mpFXYVector* vectorLayer;
         void update();
+        void rowColor(int, const wxColour&);
         DECLARE_EVENT_TABLE()
 };
 
