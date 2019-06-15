@@ -21,13 +21,19 @@ bool Ship::assign_val(std::string& in_t, float& var)
 // TODO: TCP, KMT, VHM
 void Ship::calculate()
 {
-    HydroVec.clear();
-
     sectionlength = s_LOA/10; // Divides the length of the ship into 10 compartments
     section_beam = {0.23f*s_beam, 0.6f*s_beam, s_beam, s_beam, s_beam, s_beam, s_beam, 0.75f*s_beam, 0.5f*s_beam, 0.25f*s_beam}; // The breadth of each compartment
-    section_height = {0.9f*s_height, s_height, s_height, s_height, s_height, s_height, s_height, 0.8f*s_height, 0.5f*s_height, 0.3f*s_height}; //The height of each compartment
-    for (float draft=s_minDraft; draft<s_maxDraft; draft+=0.1f)
+    section_height = {0.9f*s_height, s_height, s_height, s_height, s_height, s_height, s_height, 0.8f*s_height, 0.5f*s_height, 0.3f*s_height};
+    HydroVec.clear();
+    hull_KM=0;
+    hull_LCG=0;
+    hull_VCG=0;
+    int i=0;
+    std::cout << s_minDraft << s_maxDraft << std::endl;
+     //The height of each compartment
+    for (float draft=s_minDraft; draft<s_maxDraft+0.1; draft+=0.1f)
     {
+
         Hydrostatistics stats; // Makes a new class object for the stats to push back at end of the Hydrostatic vector
         stats.h_draft = draft; // Assigns a draft
 
@@ -55,19 +61,21 @@ void Ship::calculate()
                 hull_BMl+=section_BMl[section]*section_vol[section];
             }
         }
-        hull_VCG=(cal(0)+cal(1)+cal(2)+cal(3)+cal(4)+cal(5)+cal(6)+cal(7)+cal(8)+cal(9))/s_volume;
-        hull_LCG=(calL(0)+calL(1)+calL(2)+calL(3)+calL(4)+calL(5)+calL(6)+calL(7)+calL(8)+calL(9))/s_volume;
+
+        hull_VCG=(cal(0)+cal(1)+cal(2)+cal(3)+cal(4)+cal(5)+cal(6)+cal(7)+cal(8)+cal(9))/stats.h_volume;
+        hull_LCG=(calL(0)+calL(1)+calL(2)+calL(3)+calL(4)+calL(5)+calL(6)+calL(7)+calL(8)+calL(9))/stats.h_volume;
         stats.h_lcb=hull_B/stats.h_volume;
         stats.h_lcf=hull_F/floating_area;
         hull_BMl=hull_BMl_vol/stats.h_volume;
         stats.h_mct=hull_BMl*1.025/s_LOA;
-
-
+        std::cout <<draft<<"  "<< i << std::endl;
+        i++;
 
 
         stats.h_weight = stats.h_volume * s_waterCondition;
         HydroVec.push_back(stats);
     }
+    std::cout << "Calculations done" << std::endl;
 }
 
 // Calculates the ships particulars automagicly, if so wished. This function is available over the particulars input mask.
@@ -90,7 +98,6 @@ void Ship::calculate()
 
 
 void Ship::text_print(){
-    calculate();
     std::string filename = s_name + "Hydrostatics.txt";
     std::ofstream out(filename,  std::ofstream::out | std::ofstream::trunc);
 
@@ -114,7 +121,7 @@ void Ship::text_print(){
     <<" |" << std::setw(7) << "LCB"
     <<" |" << std::setw(7) << "Draft |"<<std::endl << dummy << std::endl;
 
-    for (long unsigned int i=0; i<=HydroVec.size(); i++)
+    for (int i=0; i<HydroVec.size(); i++)
     {
     out <<" |" << std::setw(5) << std::setprecision(2) << std::fixed << HydroVec[i].h_draft
         <<" |" << std::setw(10) << std::setprecision(0) << std::fixed << HydroVec[i].h_volume
@@ -123,7 +130,7 @@ void Ship::text_print(){
         <<" |" << std::setw(10) << std::setprecision(2) << std::fixed << HydroVec[i].h_mct
         <<" |" << std::setw(7) << std::setprecision(2) << std::fixed << HydroVec[i].h_kmt
         <<" |" << std::setw(7) << std::setprecision(2) << std::fixed << HydroVec[i].h_lcf
-        <<" |" << std::setw(7) << std::setprecision(2)  << HydroVec[i].h_lcb
+        <<" |" << std::setw(7) << std::setprecision(2)  << std::fixed <<  HydroVec[i].h_lcb
         <<" |" << std::setw(5) << std::setprecision(2) << std::fixed << HydroVec[i].h_draft << " |" <<std::endl;
         if ((i+1)%5==0)out<<dummy<<std::endl;
     }
@@ -155,7 +162,7 @@ void Ship::text_print(){
     }
 
         std::string dummy3 (72, '-');
-    if (bal.size()>0) out << std::setw(15) << "Cargo" << std::endl << std::endl << dummy3 <<std::endl
+    if (carg.size()>0){ out << std::setw(15) << "Cargo" << std::endl << std::endl << dummy3 <<std::endl
         << " |" << std::setw(12) << "Name"
         << " |" << std::setw(7) << "LCG"
         << " |" << std::setw(7) << "TCG"
@@ -165,16 +172,17 @@ void Ship::text_print(){
         << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
     for (long unsigned int i=0; i<carg.size(); i++)
     {
-        out << " |" << std::setw(12) << UnitVec[bal[i]].u_name
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_TCG
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_VCG
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_density
-            << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_volume
-            << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_fsm << " |" <<std::endl;
+        out << " |" << std::setw(12) << UnitVec[carg[i]].u_name
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[carg[i]].u_LCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[carg[i]].u_TCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[carg[i]].u_VCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[carg[i]].u_density
+            << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[carg[i]].u_volume
+            << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[carg[i]].u_fsm << " |" <<std::endl;
             if ((i+1)%5==0)out<<dummy3<<std::endl;
+    } out << std::endl << std::endl;
     }
-    if (bal.size()>0) out << std::setw(15) << "Ballast" << std::endl << std::endl << dummy3 <<std::endl
+    if (bal.size()>0){ out << std::setw(15) << "Ballast" << std::endl << std::endl << dummy3 <<std::endl
         << " |" << std::setw(12) << "Name"
         << " |" << std::setw(7) << "LCG"
         << " |" << std::setw(7) << "TCG"
@@ -192,9 +200,10 @@ void Ship::text_print(){
             << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_volume
             << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_fsm << " |" <<std::endl;
             if ((i+1)%5==0)out<<dummy3<<std::endl;
+    }out << std::endl << std::endl;
     }
 
-    if (bal.size()>0) out << std::setw(15) << "HFO" << std::endl << std::endl << dummy3 <<std::endl
+    if (hf.size()>0){ out << std::setw(15) << "HFO" << std::endl << std::endl << dummy3 <<std::endl
         << " |" << std::setw(12) << "Name"
         << " |" << std::setw(7) << "LCG"
         << " |" << std::setw(7) << "TCG"
@@ -202,18 +211,19 @@ void Ship::text_print(){
         << " |" << std::setw(7) << "Density"
         << " |" << std::setw(10) << "Volume"
         << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
-    for (long unsigned int i=0; i<carg.size(); i++)
+    for (long unsigned int i=0; i<hf.size(); i++)
     {
         out << " |" << std::setw(12) << UnitVec[hf[i]].u_name
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_TCG
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_VCG
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_density
-            << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_volume
-            << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_fsm << " |" <<std::endl;
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[hf[i]].u_LCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[hf[i]].u_TCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[hf[i]].u_VCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[hf[i]].u_density
+            << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[hf[i]].u_volume
+            << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[hf[i]].u_fsm << " |" <<std::endl;
             if ((i+1)%5==0)out<<dummy3<<std::endl;
+    }out << std::endl << std::endl;
     }
-    if (bal.size()>0) out << std::setw(15) << "DO" << std::endl << std::endl << dummy3 <<std::endl
+    if (md.size()>0){ out << std::setw(15) << "DO" << std::endl << std::endl << dummy3 <<std::endl
         << " |" << std::setw(12) << "Name"
         << " |" << std::setw(7) << "LCG"
         << " |" << std::setw(7) << "TCG"
@@ -221,18 +231,19 @@ void Ship::text_print(){
         << " |" << std::setw(7) << "Density"
         << " |" << std::setw(10) << "Volume"
         << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
-    for (long unsigned int i=0; i<carg.size(); i++)
+    for (long unsigned int i=0; i<md.size(); i++)
     {
         out << " |" << std::setw(12) << UnitVec[md[i]].u_name
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_TCG
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_VCG
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_density
-            << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_volume
-            << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_fsm << " |" <<std::endl;
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[md[i]].u_LCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[md[i]].u_TCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[md[i]].u_VCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[md[i]].u_density
+            << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[md[i]].u_volume
+            << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[md[i]].u_fsm << " |" <<std::endl;
             if ((i+1)%5==0)out<<dummy3<<std::endl;
+    }out << std::endl << std::endl;
     }
-    if (bal.size()>0) out << std::setw(15) << "Fresh Water" << std::endl << std::endl << dummy3 <<std::endl
+    if (fw.size()>0){ out << std::setw(15) << "Fresh Water" << std::endl << std::endl << dummy3 <<std::endl
         << " |" << std::setw(12) << "Name"
         << " |" << std::setw(7) << "LCG"
         << " |" << std::setw(7) << "TCG"
@@ -240,18 +251,19 @@ void Ship::text_print(){
         << " |" << std::setw(7) << "Density"
         << " |" << std::setw(10) << "Volume"
         << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
-    for (long unsigned int i=0; i<carg.size(); i++)
+    for (long unsigned int i=0; i<fw.size(); i++)
     {
         out << " |" << std::setw(12) << UnitVec[fw[i]].u_name
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_TCG
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_VCG
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_density
-            << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_volume
-            << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_fsm << " |" <<std::endl;
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[fw[i]].u_LCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[fw[i]].u_TCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[fw[i]].u_VCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[fw[i]].u_density
+            << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[fw[i]].u_volume
+            << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[fw[i]].u_fsm << " |" <<std::endl;
             if ((i+1)%5==0)out<<dummy3<<std::endl;
+    }out << std::endl << std::endl;
     }
-    if (bal.size()>0) out << std::setw(15) << "Lube Oil" << std::endl << std::endl << dummy3 <<std::endl
+    if (lo.size()>0){ out << std::setw(15) << "Lube Oil" << std::endl << std::endl << dummy3 <<std::endl
         << " |" << std::setw(12) << "Name"
         << " |" << std::setw(7) << "LCG"
         << " |" << std::setw(7) << "TCG"
@@ -259,18 +271,19 @@ void Ship::text_print(){
         << " |" << std::setw(7) << "Density"
         << " |" << std::setw(10) << "Volume"
         << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
-    for (long unsigned int i=0; i<carg.size(); i++)
+    for (long unsigned int i=0; i<lo.size(); i++)
     {
         out << " |" << std::setw(12) << UnitVec[lo[i]].u_name
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_TCG
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_VCG
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_density
-            << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_volume
-            << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_fsm << " |" <<std::endl;
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[lo[i]].u_LCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[lo[i]].u_TCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[lo[i]].u_VCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[lo[i]].u_density
+            << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[lo[i]].u_volume
+            << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[lo[i]].u_fsm << " |" <<std::endl;
             if ((i+1)%5==0)out<<dummy3<<std::endl;
+    }out << std::endl << std::endl;
     }
-    if (bal.size()>0) out << std::setw(15) << "Various" << std::endl << std::endl << dummy3 <<std::endl
+    if (va.size()>0){ out << std::setw(15) << "Various" << std::endl << std::endl << dummy3 <<std::endl
         << " |" << std::setw(12) << "Name"
         << " |" << std::setw(7) << "LCG"
         << " |" << std::setw(7) << "TCG"
@@ -278,17 +291,17 @@ void Ship::text_print(){
         << " |" << std::setw(7) << "Density"
         << " |" << std::setw(10) << "Volume"
         << " |" << std::setw(5) << "FSM" << std::endl << dummy3 << std::endl;
-    for (long unsigned int i=0; i<carg.size(); i++)
+    for (long unsigned int i=0; i<va.size(); i++)
     {
         out << " |" << std::setw(12) << UnitVec[va[i]].u_name
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_LCG
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_TCG
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_VCG
-            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_density
-            << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_volume
-            << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[bal[i]].u_fsm << " |" <<std::endl;
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[va[i]].u_LCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[va[i]].u_TCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[va[i]].u_VCG
+            << " |" << std::setw(7) << std::setprecision(2) << std::fixed << UnitVec[va[i]].u_density
+            << " |" << std::setw(10) << std::setprecision(2) << std::fixed << UnitVec[va[i]].u_volume
+            << " |" << std::setw(5) << std::setprecision(2) << std::fixed << UnitVec[va[i]].u_fsm << " |" <<std::endl;
             if ((i+1)%5==0)out<<dummy3<<std::endl;
-    }
+    }}
 
     out.close();
 }
@@ -368,8 +381,10 @@ float Ship::find_draft()
     float dsp = disp();
     for (long unsigned int i=0; i<HydroVec.size()-1; i++)
     {
+   //     std::cout << HydroVec[i].h_draft << std::endl;
         if (dsp > HydroVec[i].h_weight && dsp < HydroVec[i+1].h_weight)
         {
+  //          std::cout << HydroVec[i].h_draft << std::endl;
             return HydroVec[i].h_draft;
         }
     }
@@ -379,49 +394,62 @@ float Ship::find_draft()
 
 float Ship::stabi(int heel)
 {
-    calculate();
+    sectionlength = s_LOA/10; // Divides the length of the ship into 10 compartments
+    section_beam = {0.23f*s_beam, 0.6f*s_beam, s_beam, s_beam, s_beam, s_beam, s_beam, 0.75f*s_beam, 0.5f*s_beam, 0.25f*s_beam}; // The breadth of each compartment
+    section_height = {0.9f*s_height, s_height, s_height, s_height, s_height, s_height, s_height, 0.8f*s_height, 0.7f*s_height, 0.5f*s_height};
+    hull_KM=0;
+    hull_VCG=0;
     float draft = find_draft();
+
     float gz=0;
-    float hull_B;
-        float hull_F;
-        float floating_area;
-        for (int section=0; section!=10; section++)
+    float hull_B=0;
+    float hull_F=0;
+    float floating_area=0;
+    hull_BM=0;
+    s_volume=0;
+    for (int section=0; section!=10; section++)
+    {
+        if (s_height - section_height[section] < draft)
         {
-            if (s_height - section_height[section] < draft)
-            {
-                section_area[section]=section_beam[section]*(draft-s_height+section_height[section]); // A_sec = Beam_sec * draft
-                floating_area+=sectionlength *section_beam[section];
-                section_vol[section]=section_area[section]*sectionlength; // Area * section length
-                section_LCG[section]=section * sectionlength + sectionlength/2; //n*section + 1/2 section length
-                section_G[section]=s_height-section_height[section]/2; // Maximum draft - section draft /2
-                s_volume += section_vol[section]; // Total underwater volume
+            section_area[section]=section_beam[section]*(draft-s_height+section_height[section]); // A_sec = Beam_sec * draft
+            floating_area+=sectionlength *section_beam[section];
+            section_vol[section]=section_area[section]*sectionlength; // Area * section length
+            section_LCG[section]=section * sectionlength + sectionlength/2; //n*section + 1/2 section length
+            section_G[section]=s_height-section_height[section]/2; // Maximum draft - section draft /2
+            s_volume += section_vol[section]; // Total underwater volume
 
 
-                section_B[section]=(draft-s_height+section_height[section])/2 +s_height-section_height[section];
-                hull_B+=section_B[section]*section_vol[section];
-                hull_F+=section_LCG[section]*sectionlength*section_beam[section];
-                section_BM[section]=(sectionlength*pow(section_B[section],3))/(12*section_vol[section]);
-                section_KM[section]=section_B[section]+section_BM[section];
-                hull_KM+=section_KM[section]*section_vol[section];
-            }
+            section_B[section]=(draft-s_height+section_height[section])/2 +s_height-section_height[section];
+            hull_B+=section_B[section]*section_vol[section];
+            hull_F+=section_LCG[section]*sectionlength*section_beam[section];
+            section_BM[section]=(sectionlength*pow(section_beam[section],3))/(12*section_vol[section]);
+            section_KM[section]=section_B[section]+section_BM[section];
+            hull_BM+=section_BM[section]*section_vol[section];
+            hull_KM+=section_KM[section]*section_vol[section];
+            hull_VCG+=section_G[section]*section_vol[section];
+            hull_LCG+=section_LCG[section]*section_vol[section];
+ //           std::cout << section << ".: " << sectionlength << "  " << section_beam[section] << "  " << " " << section_B[section] << "  " << section_BM[section] << "  "<< section_KM[section] << "  " << section_vol[section] << std::endl;
         }
-        float km = hull_KM/s_volume;
-        gz=km*hull_VCG*sin(heel*PI/180);
+    }
+//    std::cout << draft << "  " << heel << std::endl;
+    s_VCG = hull_VCG/s_volume;
+    s_bm = hull_BM/s_volume;
+    s_km = hull_KM/s_volume;
+    s_gm = s_km-s_VCG;
+
+    gz=s_gm*sin(heel*PI/180);
+    std::cout << heel << ".:  " << gz << "  " << s_km << "  " << s_bm << "  " << s_gm << "  " << draft << std::endl;
     return gz;
-}
-
-void Ship::gz_curve()
-{
-
 }
 
 float Ship::gm()
 {
-
+    return s_gm;
 }
 
-float Ship::trim(float draft)
+float Ship::trim()
 {
+    float draft = find_draft();
     float trim_moment;
     float hull_B;
     float hull_F;
@@ -675,8 +703,8 @@ bool Ship::set_s_strengthTank(std::string in_t){
 bool Ship::set_s_strengthCover(std::string in_t){
     return Ship::assign_val(in_t, s_strengthCover);
 }
-bool Ship::set_s_minDraft(std::string in_t){
-    return Ship::assign_val(in_t, s_minDraft);
+bool Ship::set_s_minDraft(){
+    return true;
 }
 bool Ship::set_s_maxDraft(std::string in_t){
     return Ship::assign_val(in_t, s_maxDraft);
@@ -789,7 +817,7 @@ bool Ship::set_u_weight(int row, std::string val)
 
 bool Ship::set_u_pvol(int row, std::string val)
 {
-    if (::atof(val.c_str())<100)
+    if (::atof(val.c_str())<=100)
     {
         UnitVec[row].u_weight=Ship::read_u_maxvol(row)*UnitVec[row].u_density*::atof(val.c_str())/100;
         return true;

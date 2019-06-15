@@ -29,7 +29,7 @@ public:
     bool set_s_height(std::string);
     bool set_s_strengthTank(std::string);
     bool set_s_strengthCover(std::string);
-    bool set_s_minDraft(std::string);
+    bool set_s_minDraft();
     bool set_s_maxDraft(std::string);
     bool set_s_maxDWT();
     bool set_s_lightShip(std::string);
@@ -127,7 +127,7 @@ public:
     bool set_car_height(int, std::string);
 
     float init_heel();
-    float trim(float);
+    float trim();
 
     void variable_update();
     int unit_count();
@@ -164,11 +164,14 @@ private:
     float s_LCGLight;
     float s_TCGLight;
     float s_VCGLight;
+    float s_VCG, s_bm;
     float s_waterCondition;
     float s_volume;
+    float s_gm;
+    float s_km;
     float hull_LCG;
     float hull_VCG;
-    float hull_KM;
+    float hull_KM, hull_BM;
     float sectionlength;
     std::array<float, 10> section_area;
     std::array<float, 10> section_vol;
