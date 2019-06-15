@@ -206,11 +206,10 @@
 				<option>1</option>
 			</object>
 			<object class="sizeritem">
-				<object class="wxTextCtrl" name="ID_TEXTCTRL11" variable="MinDrText" member="yes">
-					<value>Text</value>
-					<handler function="Change" entry="EVT_TEXT" />
+				<object class="wxStaticText" name="ID_STATICTEXT15" variable="MinDrText" member="yes">
+					<label>Label</label>
 				</object>
-				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 				<border>5</border>
 				<option>1</option>
 			</object>

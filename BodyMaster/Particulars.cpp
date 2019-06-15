@@ -27,7 +27,7 @@ const long Particulars::ID_TEXTCTRL9 = wxNewId();
 const long Particulars::ID_STATICTEXT10 = wxNewId();
 const long Particulars::ID_TEXTCTRL10 = wxNewId();
 const long Particulars::ID_STATICTEXT11 = wxNewId();
-const long Particulars::ID_TEXTCTRL11 = wxNewId();
+const long Particulars::ID_STATICTEXT15 = wxNewId();
 const long Particulars::ID_STATICTEXT12 = wxNewId();
 const long Particulars::ID_TEXTCTRL12 = wxNewId();
 const long Particulars::ID_STATICTEXT13 = wxNewId();
@@ -95,8 +95,8 @@ Particulars::Particulars(wxWindow* parent,wxWindowID id,const wxPoint& pos,const
 	FlexGridSizer1->Add(TankStrText, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText11 = new wxStaticText(this, ID_STATICTEXT11, _("Minimal Draft, m"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT11"));
 	FlexGridSizer1->Add(StaticText11, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
-	MinDrText = new wxTextCtrl(this, ID_TEXTCTRL11, _("Text"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL11"));
-	FlexGridSizer1->Add(MinDrText, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	MinDrText = new wxStaticText(this, ID_STATICTEXT15, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT15"));
+	FlexGridSizer1->Add(MinDrText, 1, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText12 = new wxStaticText(this, ID_STATICTEXT12, _("Maximal Draft, m"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT12"));
 	FlexGridSizer1->Add(StaticText12, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	MaxDrText = new wxTextCtrl(this, ID_TEXTCTRL12, _("Text"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL12"));
@@ -121,7 +121,6 @@ Particulars::Particulars(wxWindow* parent,wxWindowID id,const wxPoint& pos,const
 	Connect(ID_TEXTCTRL8,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&Particulars::Change);
 	Connect(ID_TEXTCTRL9,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&Particulars::Change);
 	Connect(ID_TEXTCTRL10,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&Particulars::Change);
-	Connect(ID_TEXTCTRL11,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&Particulars::Change);
 	Connect(ID_TEXTCTRL12,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&Particulars::Change);
 	Connect(ID_OK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Particulars::OnOKClick);
 	//*)
@@ -152,7 +151,7 @@ void Particulars::load()
     TCGText->SetValue(wxString::Format(wxT("%.2f"),ShipBody->read_s_TCGLight()));
     LightShipText->SetValue(wxString::Format(wxT("%i"),ShipBody->read_s_lightShip()));
     MaxDrText->SetValue(wxString::Format(wxT("%.2f"),ShipBody->read_s_maxDraft()));
-    MinDrText->SetValue(wxString::Format(wxT("%.2f"),ShipBody->read_s_minDraft()));
+    MinDrText->SetLabel(wxString::Format(wxT("%.2f"),ShipBody->read_s_minDraft()));
     MaxDWTText->SetLabel(wxString::Format(wxT("%.0f"),ShipBody->read_s_maxDWT()));
     DeckStrText->SetValue(wxString::Format(wxT("%.2f"),ShipBody->read_s_strengthCover()));
     TankStrText->SetValue(wxString::Format(wxT("%.2f"),ShipBody->read_s_strengthTank()));
@@ -174,10 +173,11 @@ void Particulars::Change(wxCommandEvent& event)
     ShipBody->set_s_TCGLight(TCGText->GetValue().ToStdString());
     ShipBody->set_s_lightShip(LightShipText->GetValue().ToStdString());
     ShipBody->set_s_maxDraft(MaxDrText->GetValue().ToStdString());
-    ShipBody->set_s_minDraft(MinDrText->GetValue().ToStdString());
     ShipBody->set_s_strengthCover(DeckStrText->GetValue().ToStdString());
     ShipBody->set_s_strengthTank(TankStrText->GetValue().ToStdString());
+    ShipBody->set_s_minDraft();
     ShipBody->calculate();
     ShipBody->set_s_maxDWT();
     MaxDWTText->SetLabel(wxString::Format(wxT("%.0f"), ShipBody->read_s_maxDWT()));
+    MinDrText->SetLabel(wxString::Format(wxT("%.2f"), ShipBody->read_s_minDraft()));
 }

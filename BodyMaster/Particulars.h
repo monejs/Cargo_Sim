@@ -22,6 +22,7 @@ class Particulars: public wxDialog
 		//(*Declarations(Particulars)
 		wxButton* OK;
 		wxStaticText* MaxDWTText;
+		wxStaticText* MinDrText;
 		wxStaticText* StaticText10;
 		wxStaticText* StaticText11;
 		wxStaticText* StaticText12;
@@ -42,7 +43,6 @@ class Particulars: public wxDialog
 		wxTextCtrl* LOAText;
 		wxTextCtrl* LightShipText;
 		wxTextCtrl* MaxDrText;
-		wxTextCtrl* MinDrText;
 		wxTextCtrl* ShipNameText;
 		wxTextCtrl* TCGText;
 		wxTextCtrl* TankStrText;
@@ -73,7 +73,7 @@ class Particulars: public wxDialog
 		static const long ID_STATICTEXT10;
 		static const long ID_TEXTCTRL10;
 		static const long ID_STATICTEXT11;
-		static const long ID_TEXTCTRL11;
+		static const long ID_STATICTEXT15;
 		static const long ID_STATICTEXT12;
 		static const long ID_TEXTCTRL12;
 		static const long ID_STATICTEXT13;
