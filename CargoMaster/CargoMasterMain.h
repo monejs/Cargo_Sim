@@ -13,6 +13,8 @@
 #include "wx/filedlg.h"
 #include "Particulars.h"
 #include <iostream>
+#include <wx/pen.h>
+#include <wx/brush.h>
 
 //(*Headers(CargoMasterFrame)
 #include "mathplot.h"
@@ -45,6 +47,7 @@ class CargoMasterFrame: public wxFrame
         void OnBallastGridCellChanged(wxGridEvent& event);
         void OnTankGridCellChanged(wxGridEvent& event);
         void OnSaveItemSelected(wxCommandEvent& event);
+        void OnHydroItemSelected(wxCommandEvent& event);
         //*)
 
         //(*Identifiers(CargoMasterFrame)
@@ -65,6 +68,7 @@ class CargoMasterFrame: public wxFrame
         static const long ID_MENUITEM1;
         static const long idMenuQuit;
         static const long ID_MENUITEM3;
+        static const long HydroStats;
         static const long idMenuAbout;
         static const long ID_STATUSBAR1;
         //*)
@@ -79,6 +83,7 @@ class CargoMasterFrame: public wxFrame
         wxGrid* Grid1;
         wxGrid* StabilityGrid;
         wxMenu* Menu3;
+        wxMenuItem* HydroItem;
         wxMenuItem* LoadButton;
         wxMenuItem* ParticularsOpen;
         wxMenuItem* SaveItem;
@@ -95,6 +100,10 @@ class CargoMasterFrame: public wxFrame
         mpFXYVector* vectorLayer;
         std::vector<double> strvectorx, strvectory;
         mpFXYVector* strvectorLayer;
+        std::vector<double> bendvectorx, bendvectory;
+        mpFXYVector* bendvectorLayer;
+        std::vector<double> shearvectorx, shearvectory;
+        mpFXYVector* shearvectorLayer;
         void update();
         void rowColor(int, const wxColour&);
         DECLARE_EVENT_TABLE()

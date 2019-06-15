@@ -46,6 +46,7 @@ const long CargoMasterFrame::ID_MENUITEM2 = wxNewId();
 const long CargoMasterFrame::ID_MENUITEM1 = wxNewId();
 const long CargoMasterFrame::idMenuQuit = wxNewId();
 const long CargoMasterFrame::ID_MENUITEM3 = wxNewId();
+const long CargoMasterFrame::HydroStats = wxNewId();
 const long CargoMasterFrame::idMenuAbout = wxNewId();
 const long CargoMasterFrame::ID_STATUSBAR1 = wxNewId();
 //*)
@@ -152,7 +153,7 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     BoxSiz->Add(m_plot, 1, wxALL|wxEXPAND, 5);
     StabilityGrid = new wxGrid(Panel5, ID_GRID3, wxDefaultPosition, wxDefaultSize, 0, _T("ID_GRID3"));
     StabilityGrid->CreateGrid(6,2);
-    StabilityGrid->EnableEditing(true);
+    StabilityGrid->EnableEditing(false);
     StabilityGrid->EnableGridLines(true);
     StabilityGrid->SetRowLabelSize(500);
     StabilityGrid->SetDefaultColSize(120, true);
@@ -175,16 +176,17 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     n_plot = new mpWindow(Panel6, wxID_ANY);
     BoxSizer3->Add(n_plot, 1, wxALL|wxEXPAND, 5);
     Grid1 = new wxGrid(Panel6, ID_GRID5, wxDefaultPosition, wxDefaultSize, 0, _T("ID_GRID5"));
-    Grid1->CreateGrid(3,2);
-    Grid1->EnableEditing(true);
+    Grid1->CreateGrid(4,2);
+    Grid1->EnableEditing(false);
     Grid1->EnableGridLines(true);
     Grid1->SetRowLabelSize(500);
     Grid1->SetDefaultColSize(150, true);
     Grid1->SetColLabelValue(0, _("Value"));
     Grid1->SetColLabelValue(1, _("Unit"));
-    Grid1->SetRowLabelValue(0, _("Shereforce"));
-    Grid1->SetRowLabelValue(1, _("Bendingmoment"));
-    Grid1->SetRowLabelValue(2, _("Torsion"));
+    Grid1->SetRowLabelValue(0, _("Weight"));
+    Grid1->SetRowLabelValue(1, _("Displacement"));
+    Grid1->SetRowLabelValue(2, _("Shearforce"));
+    Grid1->SetRowLabelValue(3, _("Bendingmoment"));
     Grid1->SetDefaultCellFont( Grid1->GetFont() );
     Grid1->SetDefaultCellTextColour( Grid1->GetForegroundColour() );
     BoxSizer3->Add(Grid1, 1, wxALL|wxEXPAND, 5);
@@ -230,6 +232,8 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     Menu3 = new wxMenu();
     ParticularsOpen = new wxMenuItem(Menu3, ID_MENUITEM3, _("Particulars"), wxEmptyString, wxITEM_NORMAL);
     Menu3->Append(ParticularsOpen);
+    HydroItem = new wxMenuItem(Menu3, HydroStats, _("Hydrostatics"), wxEmptyString, wxITEM_NORMAL);
+    Menu3->Append(HydroItem);
     MenuBar1->Append(Menu3, _("&Ship"));
     Menu2 = new wxMenu();
     MenuItem2 = new wxMenuItem(Menu2, idMenuAbout, _("About\tF1"), _("Show info about this application"), wxITEM_NORMAL);
@@ -250,6 +254,7 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     Connect(ID_MENUITEM1,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnLoadButtonSelected);
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnQuit);
     Connect(ID_MENUITEM3,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnParticularsOpenSelected);
+    Connect(HydroStats,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnHydroItemSelected);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnAbout);
     //*)
     vectorLayer = new mpFXYVector(wxT(""), mpALIGN_CENTER);
@@ -281,10 +286,13 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     m_plot->EnableDoubleBuffer(true);
     m_plot->SetMPScrollbars(false);
     m_plot->Fit();
-    m_plot->SetMargins(30, 30, 50, 100);
+    n_plot->SetMargins(30, 30, 50, 100);
     n_plot->AddLayer(     strxaxis );
     n_plot->AddLayer(     stryaxis );
     n_plot->AddLayer(     strvectorLayer );
+    n_plot->AddLayer(bendvectorLayer);
+    n_plot->AddLayer(shearvectorLayer);
+
     n_plot->EnableDoubleBuffer(true);
     n_plot->SetMPScrollbars(false);
     n_plot->Fit();
@@ -314,19 +322,32 @@ void CargoMasterFrame::update()
     GeneralGrid->SetCellValue(5,2,wxString::Format(wxT("%.2f"), ShipBody.disp_vcg()));
     GeneralGrid->SetCellValue(5,3,wxString::Format(wxT("%.2f"), ShipBody.disp_tcg()));
     GeneralGrid->SetCellValue(6,0,wxString::Format(wxT("%.2f"), ShipBody.rest_dwt()));
+    StabilityGrid->SetCellValue(0,0, wxString::Format(wxT("%.2f"), ShipBody.gm()));
+
+    wxString statbar=wxT("");
+    StatusBar1->SetLabel(statbar);
 
     vectorLayer->Clear();
     vectory.clear();
     vectorx.clear();
-    for (int i=0; i<91; i++)
+    float gz_max=0;
+    for (int i=0; i<81; i++)
     {
         vectorx.push_back(i);
         vectory.push_back(ShipBody.stabi(i));
+        if(ShipBody.stabi(i)>gz_max) gz_max = ShipBody.stabi(i);
     }
+    StabilityGrid->SetCellValue(1,0, wxString::Format(wxT("%.2f"), gz_max));
     vectorLayer->SetData(vectorx, vectory);
     vectorLayer->SetContinuity(true);
     m_plot->Update();
     m_plot->Fit();
+
+    strvectorLayer->Clear();
+    strvectorx.clear();
+    strvectory.clear();
+
+
 }
 
 CargoMasterFrame::~CargoMasterFrame()
@@ -401,12 +422,15 @@ void CargoMasterFrame::OnLoadButtonSelected(wxCommandEvent& event)
         StabilityGrid->SetCellValue(3,1, "m*rad");
         StabilityGrid->SetCellValue(4,1, "m*rad");
         StabilityGrid->SetCellValue(5,1, "m*rad");
+        ShipBody.calculate();
         update();
         GeneralGrid->SetCellValue(4,0,wxString::Format(wxT("%i"), ShipBody.read_s_lightShip()));
         GeneralGrid->SetCellValue(4,1,wxString::Format(wxT("%.2f"), ShipBody.read_s_LCGLight()));
         GeneralGrid->SetCellValue(4,2,wxString::Format(wxT("%.2f"), ShipBody.read_s_VCGLight()));
         GeneralGrid->SetCellValue(4,3,wxString::Format(wxT("%.2f"), ShipBody.read_s_TCGLight()));
-        wxMessageBox("File loaded!");}
+        wxMessageBox("File loaded!");
+        }
+
     }
 }
 
@@ -618,4 +642,9 @@ void CargoMasterFrame::OnCargoTankGridCellChanged(wxGridEvent& event)
 void CargoMasterFrame::OnSaveItemSelected(wxCommandEvent& event)
 {
      ShipBody.save(ShipBody.read_s_name()+" Condition at ");
+}
+
+void CargoMasterFrame::OnHydroItemSelected(wxCommandEvent& event)
+{
+    ShipBody.text_print();
 }

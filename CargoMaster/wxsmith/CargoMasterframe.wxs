@@ -74,10 +74,11 @@
 						<orient>wxVERTICAL</orient>
 						<object class="sizeritem">
 							<object class="wxGrid" name="ID_GRID4" variable="CargoTankGrid" member="yes">
-								<cols>10</cols>
+								<cols>11</cols>
 								<defaultcolsize>120</defaultcolsize>
 								<collabels>
 									<item>Name</item>
+									<item>Type</item>
 									<item>Weight, t</item>
 									<item>LCG, m</item>
 									<item>VCG, m</item>
@@ -114,7 +115,25 @@
 							<option>1</option>
 						</object>
 						<object class="sizeritem">
-							<object class="wxGrid" name="ID_GRID3" variable="Grid1" member="yes" />
+							<object class="wxGrid" name="ID_GRID3" variable="StabilityGrid" member="yes">
+								<cols>2</cols>
+								<rows>6</rows>
+								<readonly>1</readonly>
+								<labelcolwidth>500</labelcolwidth>
+								<defaultcolsize>120</defaultcolsize>
+								<collabels>
+									<item>Value</item>
+									<item>Unit</item>
+								</collabels>
+								<rowlabels>
+									<item>GM</item>
+									<item>Max GZ</item>
+									<item>Angle of max GZ</item>
+									<item>Area up to 30</item>
+									<item>Area up to 40</item>
+									<item>Area between 30 &amp; 40</item>
+								</rowlabels>
+							</object>
 							<flag>wxALL|wxEXPAND</flag>
 							<border>5</border>
 							<option>1</option>
@@ -124,7 +143,44 @@
 				<label>Stability</label>
 			</object>
 			<object class="notebookpage">
-				<object class="wxPanel" name="ID_PANEL6" variable="Panel6" member="yes" />
+				<object class="wxPanel" name="ID_PANEL6" variable="Panel6" member="yes">
+					<object class="wxBoxSizer" variable="BoxSizer3" member="no">
+						<orient>wxVERTICAL</orient>
+						<object class="sizeritem">
+							<object class="Custom" name="wxID_ANY" subclass="mpWindow" variable="n_plot" member="yes">
+								<creating_code>n__plot = new mpWindow(Panel6, wxID__ANY);</creating_code>
+								<include_file>mathplot.h</include_file>
+								<local_include>1</local_include>
+								<style></style>
+							</object>
+							<flag>wxALL|wxEXPAND</flag>
+							<border>5</border>
+							<option>1</option>
+						</object>
+						<object class="sizeritem">
+							<object class="wxGrid" name="ID_GRID5" variable="Grid1" member="yes">
+								<cols>2</cols>
+								<rows>4</rows>
+								<readonly>1</readonly>
+								<labelcolwidth>500</labelcolwidth>
+								<defaultcolsize>150</defaultcolsize>
+								<collabels>
+									<item>Value</item>
+									<item>Unit</item>
+								</collabels>
+								<rowlabels>
+									<item>Weight</item>
+									<item>Displacement</item>
+									<item>Shearforce</item>
+									<item>Bendingmoment</item>
+								</rowlabels>
+							</object>
+							<flag>wxALL|wxEXPAND</flag>
+							<border>5</border>
+							<option>1</option>
+						</object>
+					</object>
+				</object>
 				<label>Strength</label>
 			</object>
 			<object class="notebookpage">
@@ -181,6 +237,10 @@
 				<object class="wxMenuItem" name="ID_MENUITEM3" variable="ParticularsOpen" member="yes">
 					<label>Particulars</label>
 					<handler function="OnParticularsOpenSelected" entry="EVT_MENU" />
+				</object>
+				<object class="wxMenuItem" name="HydroStats" variable="HydroItem" member="yes">
+					<label>Hydrostatics</label>
+					<handler function="OnHydroItemSelected" entry="EVT_MENU" />
 				</object>
 			</object>
 			<object class="wxMenu" variable="Menu2" member="no">
