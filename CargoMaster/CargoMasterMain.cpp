@@ -13,6 +13,8 @@
 
 #define CellVal(n) n->GetCellValue(n->GetGridCursorRow(), n->GetGridCursorCol())
 
+#define PI 3.14159265
+
 //(*InternalHeaders(CargoMasterFrame)
 #include <wx/bitmap.h>
 #include <wx/icon.h>
@@ -322,7 +324,7 @@ void CargoMasterFrame::update()
     GeneralGrid->SetCellValue(5,2,wxString::Format(wxT("%.2f"), ShipBody.disp_vcg()));
     GeneralGrid->SetCellValue(5,3,wxString::Format(wxT("%.2f"), ShipBody.disp_tcg()));
     GeneralGrid->SetCellValue(6,0,wxString::Format(wxT("%.2f"), ShipBody.rest_dwt()));
-    StabilityGrid->SetCellValue(0,0, wxString::Format(wxT("%.2f"), ShipBody.gm()));
+
 
     wxString statbar=wxT("");
     StatusBar1->SetLabel(statbar);
@@ -330,14 +332,29 @@ void CargoMasterFrame::update()
     vectorLayer->Clear();
     vectory.clear();
     vectorx.clear();
-    float gz_max=0;
+    float gz_max=0, gz_max_heel=0;
     for (int i=0; i<81; i++)
     {
         vectorx.push_back(i);
         vectory.push_back(ShipBody.stabi(i));
-        if(ShipBody.stabi(i)>gz_max) gz_max = ShipBody.stabi(i);
+        if(vectory[i]>gz_max)
+        {
+            gz_max = vectory[i];
+            gz_max_heel = i;
+        }
+    }
+    float at3=0, a3t4=0; // Area til 30° and Area between 30° & 40°
+    for (int i=0; i<41; i++)
+    {
+        if (i<31) at3+=vectory[i]*PI/180;
+        a3t4+=vectory[i]*PI/180;
     }
     StabilityGrid->SetCellValue(1,0, wxString::Format(wxT("%.2f"), gz_max));
+    StabilityGrid->SetCellValue(2,0, wxString::Format(wxT("%.0f"), gz_max_heel));
+    StabilityGrid->SetCellValue(3,0, wxString::Format(wxT("%.2f"), at3));
+    StabilityGrid->SetCellValue(4,0, wxString::Format(wxT("%.2f"), a3t4));
+    StabilityGrid->SetCellValue(5,0, wxString::Format(wxT("%.2f"), a3t4-at3));
+    StabilityGrid->SetCellValue(0,0, wxString::Format(wxT("%.2f"), ShipBody.gm()));
     vectorLayer->SetData(vectorx, vectory);
     vectorLayer->SetContinuity(true);
     m_plot->Update();
