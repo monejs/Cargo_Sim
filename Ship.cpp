@@ -39,9 +39,9 @@ void Ship::calculate()
         Hydrostatistics stats; // Makes a new class object for the stats to push back at end of the Hydrostatic vector
         stats.h_draft = draft; // Assigns a draft
 
-        float hull_B;
-        float hull_F, hull_BMl_vol, hull_BMl;
-        float floating_area;
+        float hull_B=0;
+        float hull_F=0, hull_BMl_vol=0, hull_BMl=0;
+        float floating_area=0;
         for (int section=0; section!=10; section++)
         {
             if (s_height - section_height[section] < draft)
@@ -52,7 +52,6 @@ void Ship::calculate()
                 section_LCG[section]=section * sectionlength + sectionlength/2; //n*section + 1/2 section length
                 section_G[section]=s_height-section_height[section]/2; // Maximum draft - section draft /2
                 stats.h_volume += section_vol[section]; // Total underwater volume
-
 
                 section_B[section]=(draft-s_height+section_height[section])/2 +s_height-section_height[section];
                 hull_B+=section_B[section]*section_vol[section];
@@ -66,7 +65,7 @@ void Ship::calculate()
 
         hull_VCG=(cal(0)+cal(1)+cal(2)+cal(3)+cal(4)+cal(5)+cal(6)+cal(7)+cal(8)+cal(9))/stats.h_volume;
         hull_LCG=(calL(0)+calL(1)+calL(2)+calL(3)+calL(4)+calL(5)+calL(6)+calL(7)+calL(8)+calL(9))/stats.h_volume;
-        stats.h_lcb=hull_B/stats.h_volume;
+   //     stats.h_lcb=hull_B/stats.h_volume;
         stats.h_lcf=hull_F/floating_area;
         hull_BMl=hull_BMl_vol/stats.h_volume;
         stats.h_mct=hull_BMl*1.025/s_LOA;
@@ -74,7 +73,7 @@ void Ship::calculate()
         i++;
         stats.h_weight = stats.h_volume * s_waterCondition;
         if (HydroVec.size()>0) HydroVec[HydroVec.size()-1].h_tpc=(stats.h_weight-HydroVec[HydroVec.size()-1].h_weight)/10;
-
+        stats.h_lcb=hull_LCG;
 
         HydroVec.push_back(stats);
     }
