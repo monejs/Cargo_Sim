@@ -4,6 +4,8 @@
 
 #define calL(x) section_LCG[x]*section_vol[x]
 
+#define PI 3.14159265
+
 
 //Declares the possible types of units a user can make
 const std::string Ship::u_type_strings[8] = {"Ballast", "Cargo Tank", "Cargo Hold", "HFO", "DO", "LO", "FW", "Various"};
@@ -390,7 +392,7 @@ float Ship::find_draft()
     }
 }
 
-#define PI 3.14159265
+
 
 float Ship::stabi(int heel)
 {
