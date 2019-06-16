@@ -175,8 +175,8 @@ void Particulars::Change(wxCommandEvent& event)
     ShipBody->set_s_maxDraft(MaxDrText->GetValue().ToStdString());
     ShipBody->set_s_strengthCover(DeckStrText->GetValue().ToStdString());
     ShipBody->set_s_strengthTank(TankStrText->GetValue().ToStdString());
+    ShipBody->shipSize();
     ShipBody->set_s_minDraft();
-    ShipBody->calculate();
     ShipBody->set_s_maxDWT();
     MaxDWTText->SetLabel(wxString::Format(wxT("%.0f"), ShipBody->read_s_maxDWT()));
     MinDrText->SetLabel(wxString::Format(wxT("%.2f"), ShipBody->read_s_minDraft()));
