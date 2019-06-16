@@ -72,9 +72,10 @@ void Ship::calculate()
         stats.h_mct=hull_BMl*1.025/s_LOA;
         std::cout <<draft<<"  "<< i << std::endl;
         i++;
-
-
         stats.h_weight = stats.h_volume * s_waterCondition;
+        if (HydroVec.size()>0) HydroVec[HydroVec.size()-1].h_tpc=(stats.h_weight-HydroVec[HydroVec.size()-1].h_weight)/10;
+
+
         HydroVec.push_back(stats);
     }
     std::cout << "Calculations done" << std::endl;
