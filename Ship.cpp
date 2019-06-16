@@ -27,9 +27,7 @@ void Ship::calculate()
     section_beam = {0.23f*s_beam, 0.6f*s_beam, s_beam, s_beam, s_beam, s_beam, s_beam, 0.75f*s_beam, 0.5f*s_beam, 0.25f*s_beam}; // The breadth of each compartment
     section_height = {0.9f*s_height, s_height, s_height, s_height, s_height, s_height, s_height, 0.8f*s_height, 0.5f*s_height, 0.3f*s_height};
     HydroVec.clear();
-    hull_KM=0;
-    hull_LCG=0;
-    hull_VCG=0;
+
     int i=0;
     std::cout << s_minDraft << s_maxDraft << std::endl;
      //The height of each compartment
@@ -40,7 +38,11 @@ void Ship::calculate()
         stats.h_draft = draft; // Assigns a draft
 
         float hull_B=0;
-        float hull_F=0, hull_BMl_vol=0, hull_BMl=0;
+        float hull_F=0, hull_BMl_vol=0, hull_BMl=0, hull_KM_vol=0;
+        hull_KM=0;
+        hull_LCG=0;
+        hull_VCG=0;
+        hull_BM=0;
         float floating_area=0;
         for (int section=0; section!=10; section++)
         {
@@ -56,10 +58,12 @@ void Ship::calculate()
                 section_B[section]=(draft-s_height+section_height[section])/2 +s_height-section_height[section];
                 hull_B+=section_B[section]*section_vol[section];
                 hull_F+=section_LCG[section]*sectionlength*section_beam[section];
-                section_BM[section]=(sectionlength*pow(section_B[section],3))/(12*section_vol[section]);
+                section_BM[section]=(sectionlength*pow(section_beam[section],3))/(12*section_vol[section]);
                 section_KM[section]=section_B[section]+section_BM[section];
-                section_BMl[section]=(section_beam[section]*pow(sectionlength,3))/(12*section_vol[section]);
-                hull_BMl+=section_BMl[section]*section_vol[section];
+                section_BMl[section]=(section_beam[section]*pow(sectionlength,3)*1.025)/(sectionlength);
+                hull_BMl_vol+=section_BMl[section]*section_vol[section];
+                hull_KM_vol+=section_KM[section]*section_vol[section];
+                std::cout << section_KM[section] << std::endl;
             }
         }
 
@@ -67,13 +71,14 @@ void Ship::calculate()
         hull_LCG=(calL(0)+calL(1)+calL(2)+calL(3)+calL(4)+calL(5)+calL(6)+calL(7)+calL(8)+calL(9))/stats.h_volume;
    //     stats.h_lcb=hull_B/stats.h_volume;
         stats.h_lcf=hull_F/floating_area;
-        hull_BMl=hull_BMl_vol/stats.h_volume;
-        stats.h_mct=hull_BMl*1.025/s_LOA;
-        std::cout <<draft<<"  "<< i << std::endl;
+        stats.h_mct=hull_BMl_vol/stats.h_volume;
+     //   stats.h_mct=hull_BMl*1.025/s_LOA;
+        std::cout << std::endl;
         i++;
         stats.h_weight = stats.h_volume * s_waterCondition;
         if (HydroVec.size()>0) HydroVec[HydroVec.size()-1].h_tpc=(stats.h_weight-HydroVec[HydroVec.size()-1].h_weight)/10;
         stats.h_lcb=hull_LCG;
+        stats.h_kmt=hull_KM_vol/stats.h_volume;
 
         HydroVec.push_back(stats);
     }
@@ -100,7 +105,7 @@ void Ship::calculate()
 
 
 void Ship::text_print(){
-    std::string filename = s_name + "Hydrostatics.txt";
+    std::string filename = s_name + " Hydrostatics.txt";
     std::ofstream out(filename,  std::ofstream::out | std::ofstream::trunc);
 
     out << std::setw(20) << "Ship Name"<<std::setw(5) << ":"<<std::setw(15)<< s_name << std::endl;
@@ -440,7 +445,7 @@ float Ship::stabi(int heel)
     s_gm = s_km-s_VCG;
 
     gz=s_gm*sin(heel*PI/180);
-    std::cout << heel << ".:  " << gz << "  " << s_km << "  " << s_bm << "  " << s_gm << "  " << draft << std::endl;
+//    std::cout << heel << ".:  " << gz << "  " << s_km << "  " << s_bm << "  " << s_gm << "  " << draft << std::endl;
     return gz;
 }
 
