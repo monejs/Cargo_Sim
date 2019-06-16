@@ -85,6 +85,7 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
     GeneralGrid = new wxGrid(Panel1, ID_GRID1, wxDefaultPosition, wxDefaultSize, 0, _T("ID_GRID1"));
     GeneralGrid->CreateGrid(7,5);
+    GeneralGrid->SetBackgroundColour(wxColour(255,255,255));
     GeneralGrid->EnableEditing(false);
     GeneralGrid->EnableGridLines(true);
     GeneralGrid->SetRowLabelSize(200);
@@ -111,6 +112,7 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
     ConstantsGrid = new wxGrid(Panel2, ID_GRID2, wxDefaultPosition, wxDefaultSize, 0, _T("ID_GRID2"));
     ConstantsGrid->CreateGrid(50,5);
+    ConstantsGrid->SetBackgroundColour(wxColour(255,255,255));
     ConstantsGrid->EnableEditing(true);
     ConstantsGrid->EnableGridLines(true);
     ConstantsGrid->SetDefaultColSize(150, true);
@@ -326,8 +328,8 @@ void CargoMasterFrame::update()
     GeneralGrid->SetCellValue(6,0,wxString::Format(wxT("%.2f"), ShipBody.rest_dwt()));
 
 
-    wxString statbar=wxT("");
-    StatusBar1->SetLabel(statbar);
+    wxString statbar=wxString::Format(wxT("GZ: %.2f \t Draft: %.2f"), ShipBody.gm(), ShipBody.find_draft(ShipBody.disp()));
+    StatusBar1->SetStatusText(statbar,0);
 
     vectorLayer->Clear();
     vectory.clear();

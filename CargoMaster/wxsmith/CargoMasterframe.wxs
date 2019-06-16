@@ -34,6 +34,7 @@
 									<item>Displacement</item>
 									<item>Deadw. Reserve</item>
 								</rowlabels>
+								<bg>#FFFFFF</bg>
 							</object>
 							<flag>wxALL|wxEXPAND</flag>
 							<border>5</border>
@@ -58,6 +59,7 @@
 									<item>VCG, m</item>
 									<item>TCG, m</item>
 								</collabels>
+								<bg>#FFFFFF</bg>
 								<handler function="OnConstantsGridCellChanged" entry="EVT_CMD_GRID_CELL_CHANGED" />
 							</object>
 							<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
