@@ -130,13 +130,14 @@ public:
     float trim();
 
     void variable_update();
+    void shipSize();
     int unit_count();
     void autoParticulars();
     void text_print();
     void clear_data();
     const std::string currentDateTime();
     float stabi(int);
-    float find_draft();
+    float find_draft(float);
     void gz_curve();
 
     void new_unit(u_types);
@@ -151,6 +152,7 @@ public:
 private:
 
     bool assign_val(std::string&, float&);
+
     std::string s_name;
     float s_LOA;
     float s_beam;
@@ -203,6 +205,7 @@ private:
         float u_weight;
         float u_fsm;
         float u_maxfsm;
+        float u_xmin, u_xmax;
     };
     class BulkCargo : public Unit
     {

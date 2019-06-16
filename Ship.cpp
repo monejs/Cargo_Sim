@@ -10,6 +10,13 @@
 //Declares the possible types of units a user can make
 const std::string Ship::u_type_strings[8] = {"Ballast", "Cargo Tank", "Cargo Hold", "HFO", "DO", "LO", "FW", "Various"};
 
+void Ship::shipSize()
+{
+    sectionlength = s_LOA/10; // Divides the length of the ship into 10 compartments
+    section_beam = {0.23f*s_beam, 0.6f*s_beam, s_beam, s_beam, s_beam, s_beam, s_beam, 0.75f*s_beam, 0.5f*s_beam, 0.25f*s_beam}; // The breadth of each compartment
+    section_height = {0.9f*s_height, s_height, s_height, s_height, s_height, s_height, s_height, 0.8f*s_height, 0.5f*s_height, 0.3f*s_height};
+}
+
 // Function to check, if the input from user is valid and returns false, if not
 bool Ship::assign_val(std::string& in_t, float& var)
 {
@@ -23,13 +30,11 @@ bool Ship::assign_val(std::string& in_t, float& var)
 // TODO: TCP, KMT, VHM
 void Ship::calculate()
 {
-    sectionlength = s_LOA/10; // Divides the length of the ship into 10 compartments
-    section_beam = {0.23f*s_beam, 0.6f*s_beam, s_beam, s_beam, s_beam, s_beam, s_beam, 0.75f*s_beam, 0.5f*s_beam, 0.25f*s_beam}; // The breadth of each compartment
-    section_height = {0.9f*s_height, s_height, s_height, s_height, s_height, s_height, s_height, 0.8f*s_height, 0.5f*s_height, 0.3f*s_height};
-    HydroVec.clear();
 
+    HydroVec.clear();
+    shipSize();
     int i=0;
-    std::cout << s_minDraft << s_maxDraft << std::endl;
+//    std::cout << s_minDraft << s_maxDraft << std::endl;
      //The height of each compartment
     for (float draft=s_minDraft; draft<s_maxDraft+0.1; draft+=0.1f)
     {
@@ -63,17 +68,17 @@ void Ship::calculate()
                 section_BMl[section]=(section_beam[section]*pow(sectionlength,3)*1.025)/(sectionlength);
                 hull_BMl_vol+=section_BMl[section]*section_vol[section];
                 hull_KM_vol+=section_KM[section]*section_vol[section];
-                std::cout << section_KM[section] << std::endl;
+ //               std::cout << section_KM[section] << std::endl;
             }
         }
 
         hull_VCG=(cal(0)+cal(1)+cal(2)+cal(3)+cal(4)+cal(5)+cal(6)+cal(7)+cal(8)+cal(9))/stats.h_volume;
         hull_LCG=(calL(0)+calL(1)+calL(2)+calL(3)+calL(4)+calL(5)+calL(6)+calL(7)+calL(8)+calL(9))/stats.h_volume;
-   //     stats.h_lcb=hull_B/stats.h_volume;
+//      stats.h_lcb=hull_B/stats.h_volume;
         stats.h_lcf=hull_F/floating_area;
         stats.h_mct=hull_BMl_vol/stats.h_volume;
-     //   stats.h_mct=hull_BMl*1.025/s_LOA;
-        std::cout << std::endl;
+//      stats.h_mct=hull_BMl*1.025/s_LOA;
+//      std::cout << std::endl;
         i++;
         stats.h_weight = stats.h_volume * s_waterCondition;
         if (HydroVec.size()>0) HydroVec[HydroVec.size()-1].h_tpc=(stats.h_weight-HydroVec[HydroVec.size()-1].h_weight)/10;
@@ -383,30 +388,28 @@ void Ship::text_print(){
     }
 }*/
 
-float Ship::find_draft()
+float Ship::find_draft(float dsp)
 {
-    float dsp = disp();
-    for (long unsigned int i=0; i<HydroVec.size()-1; i++)
+
+    std::array<float, 10> sumb, sumhb; // This will be the sums for the equation, to set the draft
+    shipSize();
+    for (int i=0; i!=10; i++)
     {
-   //     std::cout << HydroVec[i].h_draft << std::endl;
-        if (dsp > HydroVec[i].h_weight && dsp < HydroVec[i+1].h_weight)
-        {
-  //          std::cout << HydroVec[i].h_draft << std::endl;
-            return HydroVec[i].h_draft;
-        }
+        sumb[i]=section_beam[i];
+        sumhb[i]=-section_beam[i]*section_height[i]+section_beam[i]*s_height;
     }
+//    std::cout << dsp << "  " << sumb << "  " << sumhb << std::endl;
+    return (((dsp/sectionlength)-sumhb[0]-sumhb[1]-sumhb[2]-sumhb[3]-sumhb[4]-sumhb[5]-sumhb[6]-sumhb[7]-sumhb[8]-sumhb[9]))/((sumb[0]+sumb[1]+
+            sumb[2]+sumb[3]+sumb[4]+sumb[5]+sumb[6]+sumb[7]+sumb[8]+sumb[9]));
 }
 
 
 
 float Ship::stabi(int heel)
 {
-    sectionlength = s_LOA/10; // Divides the length of the ship into 10 compartments
-    section_beam = {0.23f*s_beam, 0.6f*s_beam, s_beam, s_beam, s_beam, s_beam, s_beam, 0.75f*s_beam, 0.5f*s_beam, 0.25f*s_beam}; // The breadth of each compartment
-    section_height = {0.9f*s_height, s_height, s_height, s_height, s_height, s_height, s_height, 0.8f*s_height, 0.7f*s_height, 0.5f*s_height};
     hull_KM=0;
     hull_VCG=0;
-    float draft = find_draft();
+    float draft = find_draft(disp());
 
     float gz=0;
     float hull_B=0;
@@ -445,7 +448,7 @@ float Ship::stabi(int heel)
     s_gm = s_km-s_VCG;
 
     gz=s_gm*sin(heel*PI/180);
-//    std::cout << heel << ".:  " << gz << "  " << s_km << "  " << s_bm << "  " << s_gm << "  " << draft << std::endl;
+    std::cout << heel << ".:  " << gz << "  " << s_km << "  " << s_bm << "  " << s_gm << "  " << draft << std::endl;
     return gz;
 }
 
@@ -456,7 +459,7 @@ float Ship::gm()
 
 float Ship::trim()
 {
-    float draft = find_draft();
+    float draft = find_draft(disp());
     float trim_moment;
     float hull_B;
     float hull_F;
@@ -600,7 +603,7 @@ bool Ship::load(std::string file) // Load the protobuf file in the program.
         s_TCGLight = body.tcglight();
         s_waterCondition = body.watercondition();
         s_maxDWT = body.maxdwt();
-        std::cout << "Read Ships particulats" << std::endl;
+ //       std::cout << "Read Ships particulats" << std::endl;
         for (int i=0; i<BodyOfShip.unit_size(); i++)
         {
             Unit unit;
@@ -642,7 +645,7 @@ bool Ship::load(std::string file) // Load the protobuf file in the program.
                     UnitVec[i].u_type = u_types::Various;
                     break;
             }
-            std::cout << "Unit nr. " << i << std::endl;
+//            std::cout << "Unit nr. " << i << std::endl;
         } // Unit Loop
         for (int i=0; i<BodyOfShip.bulk_size(); i++)
         {
@@ -711,6 +714,8 @@ bool Ship::set_s_strengthCover(std::string in_t){
     return Ship::assign_val(in_t, s_strengthCover);
 }
 bool Ship::set_s_minDraft(){
+    s_minDraft=find_draft(s_lightShip);
+
     return true;
 }
 bool Ship::set_s_maxDraft(std::string in_t){
@@ -720,7 +725,10 @@ bool Ship::set_s_maxDWT(){
     s_maxDWT=0;
     for (int i=0; i!=10; i++)
     {
+        if (s_maxDraft>s_height-section_height[i])
+        {
         s_maxDWT+=sectionlength*section_beam[i]*(s_maxDraft-(s_height-section_height[i]));
+        }
     }
     return true;
 }
