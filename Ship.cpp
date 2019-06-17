@@ -6,6 +6,8 @@
 
 #define PI 3.14159265
 
+#define cot(x) cos(x)/sin(x)
+
 
 //Declares the possible types of units a user can make
 const std::string Ship::u_type_strings[8] = {"Ballast", "Cargo Tank", "Cargo Hold", "HFO", "DO", "LO", "FW", "Various"};
@@ -55,7 +57,7 @@ void Ship::calculate()
             {
                 section_area[section]=section_beam[section]*(draft-s_height+section_height[section]); // A_sec = Beam_sec * draft
                 floating_area+=sectionlength *section_beam[section];
-                section_vol[section]=section_area[section]*sectionlength; // Area * section length
+                section_vol[section]=sectionlength*section_beam[section]*(draft-s_height+section_height[section]); // Area * section length
                 section_LCG[section]=section * sectionlength + sectionlength/2; //n*section + 1/2 section length
                 section_G[section]=s_height-section_height[section]/2; // Maximum draft - section draft /2
                 stats.h_volume += section_vol[section]; // Total underwater volume
@@ -69,6 +71,8 @@ void Ship::calculate()
                 hull_BMl_vol+=section_BMl[section]*section_vol[section];
                 hull_KM_vol+=section_KM[section]*section_vol[section];
  //               std::cout << section_KM[section] << std::endl;
+            }else{
+
             }
         }
 
@@ -391,16 +395,17 @@ void Ship::text_print(){
 float Ship::find_draft(float dsp)
 {
 
-    std::array<float, 10> sumb, sumhb; // This will be the sums for the equation, to set the draft
+    std::array<float, 10> sumhb; // This will be the sums for the equation, to set the draft
     shipSize();
+    float draft, sumb=0;
     for (int i=0; i!=10; i++)
     {
-        sumb[i]=section_beam[i];
-        sumhb[i]=-section_beam[i]*section_height[i]+section_beam[i]*s_height;
+        sumb+=section_beam[i];
+        sumhb[i]=section_beam[i]*s_height-section_beam[i]*section_height[i];
     }
-//    std::cout << dsp << "  " << sumb << "  " << sumhb << std::endl;
-    return (((dsp/sectionlength)-sumhb[0]-sumhb[1]-sumhb[2]-sumhb[3]-sumhb[4]-sumhb[5]-sumhb[6]-sumhb[7]-sumhb[8]-sumhb[9]))/((sumb[0]+sumb[1]+
-            sumb[2]+sumb[3]+sumb[4]+sumb[5]+sumb[6]+sumb[7]+sumb[8]+sumb[9]));
+//    std::cout << dsp << "  " << sumb << "  " << s_waterCondition << std::endl;
+    draft=(((dsp/sectionlength)-sumhb[0]-sumhb[1]-sumhb[2]-sumhb[3]-sumhb[4]-sumhb[5]-sumhb[6]-sumhb[7]-sumhb[8]-sumhb[9]))/(sumb);
+    return draft;
 }
 
 
@@ -410,7 +415,7 @@ float Ship::stabi(int heel)
     hull_KM=0;
     hull_VCG=0;
     float draft = find_draft(disp());
-
+    float beta=0, gamma=0, areaS=0, perS=0, ha=0, c=0, d=0, g=0, k=0, j=0,m=0, n=0, o=0, p=0, s=0, b1=0, a1=0, y=0, z=0, Nc=0, kn;
     float gz=0;
     float hull_B=0;
     float hull_F=0;
@@ -442,14 +447,47 @@ float Ship::stabi(int heel)
         }
     }
 //    std::cout << draft << "  " << heel << std::endl;
-    s_VCG = hull_VCG/s_volume;
+    s_VCG = disp_vcg();
     s_bm = hull_BM/s_volume;
     s_km = hull_KM/s_volume;
     s_gm = s_km-s_VCG;
 
-    gz=s_gm*sin(heel*PI/180);
-    std::cout << heel << ".:  " << gz << "  " << s_km << "  " << s_bm << "  " << s_gm << "  " << draft << std::endl;
-    return gz;
+    c=s_beam/(2*cot(heel*PI/180));
+
+    beta=90-heel;
+    gamma=90-beta;
+
+    if(c<draft)
+    {
+        b1=draft-c;
+        a1=draft+c;
+        y=(s_beam*(b1+2*a1))/(3*(a1+b1));
+        z=(pow(a1,2)+a1*b1+pow(b1,2))/(3*(a1+b1));
+        k=b1-z;
+        j=sqrt(pow(s_beam-y, 2)+pow(k, 2));
+
+        m=c/sin(heel*PI/180);
+        d=sqrt(pow(y-s_beam/2,2)+pow(draft-z, 2));
+        p=(d+j+m)/2;
+        areaS=sqrt(p*(p-d)*(p-m)*(p-j));
+        ha=2*areaS/m;
+        n=sqrt(pow(j,2)-pow(ha,2));
+        o=m-n;
+        s=o/cot(beta*PI/180);
+        Nc=s/cos(gamma*PI/180);
+        kn=draft+Nc;
+        gz=kn*sin(heel*PI/180)-disp_vcg()*sin(heel*PI/180);
+ //       std::cout << heel << ".:  a1:" << a1 << "  b1:" << b1 << "  y:" << y << "  z:" << z << "  g:" << g << "  k:" << k <<  "  j:" << j << "  c:" << c << "  m:" << m << "  d:" << d << "  p:" << p << "  Strij:" << areaS <<
+ //    "  ha:" << ha << "  n:" << n << "  o:" << o << "  s:" << s << "  Nc:" << Nc << "  kn:" << kn << "  km:" << s_km << "  gz:" << gz << std::endl;
+     if(isnan(gz))
+     {
+         return 0.0f;
+     }
+     return gz;
+    }
+    return 0.0f;
+
+
 }
 
 float Ship::gm()
@@ -494,7 +532,17 @@ float Ship::trim()
 
 float Ship::init_heel()
 {
+    float A=0, b=0, a=0, c=0, d, alfa;
+    A = find_draft(disp())*s_beam;
+    b=(4*A/s_beam)-(6*A*(disp_tcg()+s_beam/2)/pow(s_beam, 2));
+    a=2*A/s_beam -b;
+    c=(a-b)/2;
+    d=s_beam/2;
+    alfa=atan(c/d)*57.3;
 
+    std::cout << "A:" << A << "  a:" << a << "  b:" << b << "  alpha:" << alfa << std::endl;
+
+    return alfa;
 }
 
 const std::string Ship::currentDateTime() {
@@ -567,7 +615,7 @@ bool Ship::save(std::string filename)
         cargo->set_height(BulkVec[i].u_height);
         cargo->set_weight(BulkVec[i].u_weight);
     }
-    filename += Ship::currentDateTime() + ".ship"; // Program specific filename
+    filename += ".ship"; // Program specific filename
     std::fstream output(filename,  std::ios::out | std::ios::trunc | std::ios::binary); // Creating file
     if (SaveShip.SerializeToOstream(&output)){
         output.close(); // File closed
@@ -914,6 +962,12 @@ bool Ship::set_con_vcg(int row, std::string val){
 bool Ship::set_con_weight(int row, std::string val){
     return Ship::assign_val(val, ConVec[row].con_weight);}
 
+bool Ship::set_con_start(int row, std::string val){
+    return Ship::assign_val(val, ConVec[row].con_start);}
+
+bool Ship::set_con_end(int row, std::string val){
+    return Ship::assign_val(val, ConVec[row].con_end);}
+
 float Ship::constants_weight()
 {
     float weight=0;
@@ -932,7 +986,12 @@ float Ship::constants_LCG()
         weight+=ConVec[i].con_weight;
         xweight+=ConVec[i].con_weight*ConVec[i].con_lcg;
     }
+    if (weight == 0)
+    {
+        return 0;
+    }else {
     return xweight/weight;
+    }
 }
 
 float Ship::constants_VCG()
@@ -943,7 +1002,12 @@ float Ship::constants_VCG()
         weight+=ConVec[i].con_weight;
         xweight+=ConVec[i].con_weight*ConVec[i].con_vcg;
     }
+    if (weight == 0)
+    {
+        return 0;
+    }else {
     return xweight/weight;
+    }
 }
 
 float Ship::constants_TCG()
@@ -954,7 +1018,12 @@ float Ship::constants_TCG()
         weight+=ConVec[i].con_weight;
         xweight+=ConVec[i].con_weight*ConVec[i].con_tcg;
     }
+    if (weight == 0)
+    {
+        return 0;
+    }else {
     return xweight/weight;
+    }
 }
 
 float Ship::unit_weight()
@@ -975,7 +1044,12 @@ float Ship::unit_LCG()
         weight+=UnitVec[i].u_weight;
         xweight+=UnitVec[i].u_weight*UnitVec[i].u_LCG;
     }
+    if (weight == 0)
+    {
+        return 0;
+    }else {
     return xweight/weight;
+    }
 }
 
 float Ship::unit_VCG()
@@ -986,7 +1060,12 @@ float Ship::unit_VCG()
         weight+=UnitVec[i].u_weight;
         xweight+=UnitVec[i].u_weight*UnitVec[i].u_VCG;
     }
+    if (weight == 0)
+    {
+        return 0;
+    }else {
     return xweight/weight;
+    }
 }
 
 float Ship::unit_TCG()
@@ -997,7 +1076,12 @@ float Ship::unit_TCG()
         weight+=UnitVec[i].u_weight;
         xweight+=UnitVec[i].u_weight*UnitVec[i].u_TCG;
     }
+    if (weight == 0)
+    {
+        return 0;
+    }else {
     return xweight/weight;
+    }
 }
 
 float Ship::deadLoad_weight()
@@ -1018,7 +1102,12 @@ float Ship::deadLoad_lcg()
         weight+=BulkVec[i].u_weight;
         xweight+=BulkVec[i].u_weight*BulkVec[i].u_LCG;
     }
+    if (weight == 0)
+    {
+        return 0;
+    }else {
     return xweight/weight;
+    }
 }
 
 float Ship::deadLoad_vcg()
@@ -1029,7 +1118,12 @@ float Ship::deadLoad_vcg()
         weight+=BulkVec[i].u_weight;
         xweight+=BulkVec[i].u_weight*BulkVec[i].u_VCG;
     }
+    if (weight == 0)
+    {
+        return 0;
+    }else {
     return xweight/weight;
+    }
 }
 
 float Ship::deadLoad_tcg()
@@ -1040,7 +1134,12 @@ float Ship::deadLoad_tcg()
         weight+=BulkVec[i].u_weight;
         xweight+=BulkVec[i].u_weight*BulkVec[i].u_TCG;
     }
+    if (weight == 0)
+    {
+        return 0;
+    }else {
     return xweight/weight;
+    }
 }
 
 float Ship::deadweight()
@@ -1052,17 +1151,35 @@ float Ship::deadweight()
 
 float Ship::deadweight_lcg()
 {
-    return (deadLoad_lcg()*deadLoad_weight()+unit_LCG()*unit_weight()+constants_LCG()*constants_weight())/(deadLoad_weight()+unit_weight()+constants_weight());
+    if (deadLoad_weight()+unit_weight()+constants_weight() == 0)
+        {
+            return 0;
+
+        }else{
+            return (deadLoad_lcg()*deadLoad_weight()+unit_LCG()*unit_weight()+constants_LCG()*constants_weight())/(deadLoad_weight()+unit_weight()+constants_weight());
+        }
 }
 
 float Ship::deadweight_vcg()
 {
-    return (deadLoad_vcg()*deadLoad_weight()+unit_VCG()*unit_weight()+constants_VCG()*constants_weight())/(deadLoad_weight()+unit_weight()+constants_weight());
+    if (deadLoad_weight()+unit_weight()+constants_weight() == 0)
+        {
+            return 0;
+
+        }else{
+            return (deadLoad_vcg()*deadLoad_weight()+unit_VCG()*unit_weight()+constants_VCG()*constants_weight())/(deadLoad_weight()+unit_weight()+constants_weight());
+        }
 }
 
 float Ship::deadweight_tcg()
 {
-    return (deadLoad_tcg()*deadLoad_weight()+unit_TCG()*unit_weight()+constants_TCG()*constants_weight())/(deadLoad_weight()+unit_weight()+constants_weight());
+    if (deadLoad_weight()+unit_weight()+constants_weight() == 0)
+        {
+            return 0;
+
+        }else{
+            return (deadLoad_tcg()*deadLoad_weight()+unit_TCG()*unit_weight()+constants_TCG()*constants_weight())/(deadLoad_weight()+unit_weight()+constants_weight());
+        }
 }
 
 float Ship::disp()

@@ -87,6 +87,8 @@ public:
     bool set_con_tcg(int, std::string);
     bool set_con_vcg(int, std::string);
     bool set_con_weight(int, std::string);
+    bool set_con_start(int, std::string);
+    bool set_con_end(int, std::string);
 
     float gm();
 
@@ -263,6 +265,9 @@ private:
         float con_tcg;
         float con_vcg;
         float con_weight;
+        float con_start;
+        float con_end;
+
     };
 //    std::vector<std::vector<float>> points;
     std::vector<Unit> UnitVec;
