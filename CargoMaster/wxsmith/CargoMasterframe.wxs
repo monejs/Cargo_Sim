@@ -49,7 +49,7 @@
 					<object class="wxBoxSizer" variable="BoxSizer2" member="no">
 						<object class="sizeritem">
 							<object class="wxGrid" name="ID_GRID2" variable="ConstantsGrid" member="yes">
-								<cols>5</cols>
+								<cols>7</cols>
 								<rows>50</rows>
 								<defaultcolsize>150</defaultcolsize>
 								<collabels>
@@ -58,6 +58,8 @@
 									<item>LCG, m</item>
 									<item>VCG, m</item>
 									<item>TCG, m</item>
+									<item>X1 f. Ap., m</item>
+									<item>X2 f. Ap., m</item>
 								</collabels>
 								<bg>#FFFFFF</bg>
 								<handler function="OnConstantsGridCellChanged" entry="EVT_CMD_GRID_CELL_CHANGED" />
