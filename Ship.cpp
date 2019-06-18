@@ -394,18 +394,21 @@ void Ship::text_print(){
 
 float Ship::find_draft(float dsp)
 {
-
-    std::array<float, 10> sumhb; // This will be the sums for the equation, to set the draft
     shipSize();
-    float draft, sumb=0;
-    for (int i=0; i!=10; i++)
+    float vol=0;
+    for (float i=0; i<50; i+=0.01)
     {
-        sumb+=section_beam[i];
-        sumhb[i]=section_beam[i]*s_height-section_beam[i]*section_height[i];
+        for (int section=0; section!=10; section++)
+        {
+            if (s_height - section_height[section] < i)
+                {
+                    vol+=sectionlength*section_beam[section]*(i-s_height+section_height[section]);
+                }
+        }
+        std::cout << vol << std::endl;
+        if (vol>=dsp/s_waterCondition) return i;
+        vol=0;
     }
-//    std::cout << dsp << "  " << sumb << "  " << s_waterCondition << std::endl;
-    draft=(((dsp/sectionlength)-sumhb[0]-sumhb[1]-sumhb[2]-sumhb[3]-sumhb[4]-sumhb[5]-sumhb[6]-sumhb[7]-sumhb[8]-sumhb[9]))/(sumb);
-    return draft;
 }
 
 
@@ -497,37 +500,12 @@ float Ship::gm()
 
 float Ship::trim()
 {
-    float draft = find_draft(disp());
-    float trim_moment;
-    float hull_B;
-    float hull_F;
-    float lcb, lcf;
-    float floating_area;
-    for (int section=0; section!=10; section++)
-    {
-        if (s_height - section_height[section] < draft)
-        {
-            section_area[section]=section_beam[section]*(draft-s_height+section_height[section]); // A_sec = Beam_sec * draft
-            floating_area+=sectionlength *section_beam[section];
-            section_vol[section]=section_area[section]*sectionlength; // Area * section length
-            section_LCG[section]=section * sectionlength + sectionlength/2; //n*section + 1/2 section length
-            section_G[section]=s_height-section_height[section]/2; // Maximum draft - section draft /2
-            s_volume += section_vol[section]; // Total underwater volume
-
-
-            section_B[section]=(draft-s_height+section_height[section])/2 +s_height-section_height[section];
-            hull_B+=section_B[section]*section_vol[section];
-            hull_F+=section_LCG[section]*sectionlength*section_beam[section];
-            section_BM[section]=(sectionlength*pow(section_B[section],3))/(12*section_vol[section]);
-            section_KM[section]=section_B[section]+section_BM[section];
-
-        }
-    }
-    hull_VCG=(cal(0)+cal(1)+cal(2)+cal(3)+cal(4)+cal(5)+cal(6)+cal(7)+cal(8)+cal(9))/s_volume;
-    hull_LCG=(calL(0)+calL(1)+calL(2)+calL(3)+calL(4)+calL(5)+calL(6)+calL(7)+calL(8)+calL(9))/s_volume;
-    lcb=hull_B/s_volume;
-    lcf=hull_F/floating_area;
-    trim_moment = (hull_LCG-lcb)*disp();
+    float A,a,b,c,d;
+    A=find_draft(disp())*s_LOA;
+    b=(4*A/s_LOA)-(6*A*(disp_lcg()+s_LOA/2)/pow(s_LOA, 2));
+    a=2*A/s_LOA -b;
+//    std::cout << "A:" << A << "  a:" << a << "  b:" << b << std::endl;
+    return a-b;
 }
 
 float Ship::init_heel()
@@ -540,7 +518,7 @@ float Ship::init_heel()
     d=s_beam/2;
     alfa=atan(c/d)*57.3;
 
-    std::cout << "A:" << A << "  a:" << a << "  b:" << b << "  alpha:" << alfa << std::endl;
+
 
     return alfa;
 }
