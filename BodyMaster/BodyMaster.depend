@@ -1026,7 +1026,7 @@
 	<google/protobuf/port_def.inc>
 	<google/protobuf/port_undef.inc>
 
-1560786462 source:/home/vilis/Cargo_Sim/Ship.cpp
+1560812803 source:/home/vilis/Cargo_Sim/Ship.cpp
 	"Ship.h"
 
 1558452029 source:/home/vilis/Cargo_Sim/Ship.pb.cc
