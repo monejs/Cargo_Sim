@@ -32,7 +32,6 @@ const long BodyMasterFrame::ID_GRID1 = wxNewId();
 const long BodyMasterFrame::ID_BUTTON4 = wxNewId();
 const long BodyMasterFrame::ID_BUTTON3 = wxNewId();
 const long BodyMasterFrame::ID_BUTTON2 = wxNewId();
-const long BodyMasterFrame::ID_BUTTON1 = wxNewId();
 const long BodyMasterFrame::idMenuSave = wxNewId();
 const long BodyMasterFrame::idMenuLoad = wxNewId();
 const long BodyMasterFrame::idMenuQuit = wxNewId();
@@ -87,8 +86,6 @@ BodyMasterFrame::BodyMasterFrame(wxWindow* parent,wxWindowID id)
     BoxSizer1->Add(DeleteButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     ParticularsButton = new wxButton(this, ID_BUTTON2, _("Particulars"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON2"));
     BoxSizer1->Add(ParticularsButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    CalculateButton = new wxButton(this, ID_BUTTON1, _("Calculate"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
-    BoxSizer1->Add(CalculateButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer1->Add(BoxSizer1, 1, wxALL|wxALIGN_RIGHT, 5);
     SetSizer(FlexGridSizer1);
     MenuBar1 = new wxMenuBar();
@@ -121,7 +118,6 @@ BodyMasterFrame::BodyMasterFrame(wxWindow* parent,wxWindowID id)
     Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&BodyMasterFrame::OnAddButtonClick);
     Connect(ID_BUTTON3,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&BodyMasterFrame::OnDeleteButtonClick1);
     Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&BodyMasterFrame::OnParticularsButtonClick);
-    Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&BodyMasterFrame::OnCalculateButtonClick1);
     Connect(idMenuSave,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&BodyMasterFrame::OnSaveItemSelected);
     Connect(idMenuLoad,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&BodyMasterFrame::OnLoadItemSelected);
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&BodyMasterFrame::OnQuit);

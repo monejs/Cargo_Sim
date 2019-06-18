@@ -52,7 +52,6 @@ class BodyMasterFrame: public wxFrame
         static const long ID_BUTTON4;
         static const long ID_BUTTON3;
         static const long ID_BUTTON2;
-        static const long ID_BUTTON1;
         static const long idMenuSave;
         static const long idMenuLoad;
         static const long idMenuQuit;
@@ -63,7 +62,6 @@ class BodyMasterFrame: public wxFrame
 
         //(*Declarations(BodyMasterFrame)
         wxButton* AddButton;
-        wxButton* CalculateButton;
         wxButton* DeleteButton;
         wxButton* ParticularsButton;
         wxFlexGridSizer* FlexGridSizer1;
