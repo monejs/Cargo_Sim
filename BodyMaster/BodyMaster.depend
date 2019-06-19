@@ -1026,7 +1026,7 @@
 	<google/protobuf/port_def.inc>
 	<google/protobuf/port_undef.inc>
 
-1560812803 source:/home/vilis/Cargo_Sim/Ship.cpp
+1560846536 source:/home/vilis/Cargo_Sim/Ship.cpp
 	"Ship.h"
 
 1558452029 source:/home/vilis/Cargo_Sim/Ship.pb.cc
@@ -1043,7 +1043,7 @@
 	<google/protobuf/port_def.inc>
 	<google/protobuf/port_undef.inc>
 
-1559823071 source:/home/vilis/Cargo_Sim/BodyMaster/BodyMasterMain.cpp
+1560845993 source:/home/vilis/Cargo_Sim/BodyMaster/BodyMasterMain.cpp
 	"BodyMasterMain.h"
 	<wx/bitmap.h>
 	<wx/icon.h>
