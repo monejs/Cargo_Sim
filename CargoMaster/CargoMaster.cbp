@@ -15,13 +15,9 @@
 				<Compiler>
 					<Add option="-lprotobuf" />
 					<Add option="-g" />
-					<Add directory="../ChartDirector/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-lprotobuf" />
-					<Add option="-lchartdir" />
-					<Add library="../ChartDirector/lib/libchartdir.so" />
-					<Add directory="../ChartDirector/lib" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -33,14 +29,10 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-lprotobuf" />
-					<Add directory="../ChartDirector/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
 					<Add option="-lprotobuf" />
-					<Add option="-lchartdir" />
-					<Add library="../ChartDirector/lib/libchartdir.so" />
-					<Add directory="../ChartDirector/lib" />
 				</Linker>
 			</Target>
 		</Build>

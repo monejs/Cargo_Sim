@@ -158,7 +158,7 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     m_plot = new mpWindow(Panel5, wxID_ANY);
     BoxSiz->Add(m_plot, 1, wxALL|wxEXPAND, 5);
     StabilityGrid = new wxGrid(Panel5, ID_GRID3, wxDefaultPosition, wxDefaultSize, 0, _T("ID_GRID3"));
-    StabilityGrid->CreateGrid(6,2);
+    StabilityGrid->CreateGrid(8,2);
     StabilityGrid->EnableEditing(false);
     StabilityGrid->EnableGridLines(true);
     StabilityGrid->SetRowLabelSize(500);
@@ -171,6 +171,8 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     StabilityGrid->SetRowLabelValue(3, _("Area up to 30"));
     StabilityGrid->SetRowLabelValue(4, _("Area up to 40"));
     StabilityGrid->SetRowLabelValue(5, _("Area between 30 & 40"));
+    StabilityGrid->SetRowLabelValue(6, _("Displacement"));
+    StabilityGrid->SetRowLabelValue(7, _("VCG"));
     StabilityGrid->SetDefaultCellFont( StabilityGrid->GetFont() );
     StabilityGrid->SetDefaultCellTextColour( StabilityGrid->GetForegroundColour() );
     BoxSiz->Add(StabilityGrid, 1, wxALL|wxEXPAND, 5);
@@ -330,8 +332,7 @@ void CargoMasterFrame::update()
     GeneralGrid->SetCellValue(6,0,wxString::Format(wxT("%.2f"), ShipBody.rest_dwt()));
 
 
-    wxString statbar=wxString::Format(wxT("GM: %.2f \t Draft: %.2f \t List: %.1f \t Trim: %.2f \t Dead Weight reserve: %.0f"), ShipBody.gm(), ShipBody.find_draft(ShipBody.disp()), ShipBody.init_heel(), ShipBody.trim(), ShipBody.rest_dwt());
-    StatusBar1->SetStatusText(statbar,0);
+
 
     vectorLayer->Clear();
     vectory.clear();
@@ -359,6 +360,8 @@ void CargoMasterFrame::update()
     StabilityGrid->SetCellValue(4,0, wxString::Format(wxT("%.2f"), a3t4));
     StabilityGrid->SetCellValue(5,0, wxString::Format(wxT("%.2f"), a3t4-at3));
     StabilityGrid->SetCellValue(0,0, wxString::Format(wxT("%.2f"), ShipBody.gm()));
+    StabilityGrid->SetCellValue(6,0, wxString::Format(wxT("%.0f"), ShipBody.disp()));
+    StabilityGrid->SetCellValue(7,0, wxString::Format(wxT("%.2f"), ShipBody.disp_vcg()));
     vectorLayer->SetData(vectorx, vectory);
     vectorLayer->SetContinuity(true);
     m_plot->Update();
@@ -368,7 +371,8 @@ void CargoMasterFrame::update()
     strvectorx.clear();
     strvectory.clear();
 
-
+    wxString statbar=wxString::Format(wxT("GM: %.2f \t Draft: %.2f \t List: %.1f \t Trim: %.2f \t Dead Weight reserve: %.0f"), ShipBody.gm(), ShipBody.find_draft(ShipBody.disp()), ShipBody.init_heel(), ShipBody.trim(), ShipBody.rest_dwt());
+    StatusBar1->SetStatusText(statbar,0);
 }
 
 CargoMasterFrame::~CargoMasterFrame()
@@ -474,6 +478,8 @@ void CargoMasterFrame::OnLoadButtonSelected(wxCommandEvent& event)
         StabilityGrid->SetCellValue(3,1, "m*rad");
         StabilityGrid->SetCellValue(4,1, "m*rad");
         StabilityGrid->SetCellValue(5,1, "m*rad");
+        StabilityGrid->SetCellValue(6,1, "t");
+        StabilityGrid->SetCellValue(7,1, "m");
         ShipBody.calculate();
         update();
         GeneralGrid->SetCellValue(4,0,wxString::Format(wxT("%i"), ShipBody.read_s_lightShip()));

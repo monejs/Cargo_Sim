@@ -121,7 +121,7 @@
 						<object class="sizeritem">
 							<object class="wxGrid" name="ID_GRID3" variable="StabilityGrid" member="yes">
 								<cols>2</cols>
-								<rows>6</rows>
+								<rows>8</rows>
 								<readonly>1</readonly>
 								<labelcolwidth>500</labelcolwidth>
 								<defaultcolsize>120</defaultcolsize>
@@ -136,6 +136,8 @@
 									<item>Area up to 30</item>
 									<item>Area up to 40</item>
 									<item>Area between 30 &amp; 40</item>
+									<item>Displacement</item>
+									<item>VCG</item>
 								</rowlabels>
 							</object>
 							<flag>wxALL|wxEXPAND</flag>
