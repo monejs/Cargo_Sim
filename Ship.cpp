@@ -405,10 +405,11 @@ float Ship::find_draft(float dsp)
                     vol+=sectionlength*section_beam[section]*(i-s_height+section_height[section]);
                 }
         }
-        std::cout << vol << std::endl;
+ //       std::cout << vol << std::endl;
         if (vol>=dsp/s_waterCondition) return i;
         vol=0;
     }
+    return 0.0f;
 }
 
 
@@ -418,7 +419,8 @@ float Ship::stabi(int heel)
     hull_KM=0;
     hull_VCG=0;
     float draft = find_draft(disp());
-    float beta=0, gamma=0, areaS=0, perS=0, ha=0, c=0, d=0, g=0, k=0, j=0,m=0, n=0, o=0, p=0, s=0, b1=0, a1=0, y=0, z=0, Nc=0, kn;
+    float beta=0, gamma=0, areaS=0, perS=0, ha=0, c=0, d=0, g=0, k=0, j=0,m=0, n=0, o=0, p=0, s=0, b=0, a=0, y=0, z=0, Nc=0, kn;
+    float A,I,J,E,W,F;
     float gz=0;
     float hull_B=0;
     float hull_F=0;
@@ -433,8 +435,6 @@ float Ship::stabi(int heel)
             floating_area+=sectionlength *section_beam[section];
             section_vol[section]=section_area[section]*sectionlength; // Area * section length
             section_LCG[section]=section * sectionlength + sectionlength/2; //n*section + 1/2 section length
-            section_G[section]=s_height-section_height[section]/2; // Maximum draft - section draft /2
-            s_volume += section_vol[section]; // Total underwater volume
 
 
             section_B[section]=(draft-s_height+section_height[section])/2 +s_height-section_height[section];
@@ -444,53 +444,64 @@ float Ship::stabi(int heel)
             section_KM[section]=section_B[section]+section_BM[section];
             hull_BM+=section_BM[section]*section_vol[section];
             hull_KM+=section_KM[section]*section_vol[section];
-            hull_VCG+=section_G[section]*section_vol[section];
             hull_LCG+=section_LCG[section]*section_vol[section];
- //           std::cout << section << ".: " << sectionlength << "  " << section_beam[section] << "  " << " " << section_B[section] << "  " << section_BM[section] << "  "<< section_KM[section] << "  " << section_vol[section] << std::endl;
+ //           std::cout << section << ".: " << section_BM[section] << "  " << section_KM[section] << "  " << " " << section_B[section] << "  " << section_BM[section] << "  "<< section_KM[section] << "  " << section_vol[section] << std::endl;
         }
     }
 //    std::cout << draft << "  " << heel << std::endl;
-    s_VCG = disp_vcg();
-    s_bm = hull_BM/s_volume;
-    s_km = hull_KM/s_volume;
-    s_gm = s_km-s_VCG;
 
-    c=s_beam/(2*cot(heel*PI/180));
 
-    beta=90-heel;
-    gamma=90-beta;
+        c=(s_beam/2)*tan(heel*PI/180);
+        s_km=hull_KM/read_s_volume();
+        s_gm=s_km-disp_vcg();
 
-    if(c<draft)
+        d=find_draft(disp());
+
+   if(draft+c<s_height && draft>c)
     {
-        b1=draft-c;
-        a1=draft+c;
-        y=(s_beam*(b1+2*a1))/(3*(a1+b1));
-        z=(pow(a1,2)+a1*b1+pow(b1,2))/(3*(a1+b1));
-        k=b1-z;
-        j=sqrt(pow(s_beam-y, 2)+pow(k, 2));
+        beta=90-heel;
+        gamma=90-beta;
 
-        m=c/sin(heel*PI/180);
-        d=sqrt(pow(y-s_beam/2,2)+pow(draft-z, 2));
-        p=(d+j+m)/2;
-        areaS=sqrt(p*(p-d)*(p-m)*(p-j));
-        ha=2*areaS/m;
-        n=sqrt(pow(j,2)-pow(ha,2));
-        o=m-n;
-        s=o/cot(beta*PI/180);
-        Nc=s/cos(gamma*PI/180);
-        kn=draft+Nc;
-        gz=kn*sin(heel*PI/180)-disp_vcg()*sin(heel*PI/180);
- //       std::cout << heel << ".:  a1:" << a1 << "  b1:" << b1 << "  y:" << y << "  z:" << z << "  g:" << g << "  k:" << k <<  "  j:" << j << "  c:" << c << "  m:" << m << "  d:" << d << "  p:" << p << "  Strij:" << areaS <<
- //    "  ha:" << ha << "  n:" << n << "  o:" << o << "  s:" << s << "  Nc:" << Nc << "  kn:" << kn << "  km:" << s_km << "  gz:" << gz << std::endl;
-     if(isnan(gz))
-     {
-         return 0.0f;
-     }
-     return gz;
+        a=d-c;
+        b=d+c;
+
+        y=(a+2*b)*s_beam/(3*(a+b));
+        z=(pow(a,2)+a*b+pow(b,2))/(3*(a+b));
+        o=y-s_beam/2;
+        p=o/tan(heel*PI/180);
+        kn=p+z;
+        std::cout << "Pirmais: " << o;
+
+//        std::cout << heel << ".:  a1:" << a1 << "  b1:" << b1 << "  y:" << y << "  z:" << z << "  g:" << g << "  k:" << k <<  "  j:" << j << "  c:" << c << "  m:" << m << "  d:" << d << "  p:" << p << "  Strij:" << areaS <<
+//     "  ha:" << ha << "  n:" << n << "  o:" << o << "  s:" << s << "  Nc:" << Nc << "  kn:" << kn << "  km:" << s_km << "  gz:" << gz << std::endl;
+    }else{
+        // TODO: Naakoshas
+
+        areaS=draft*s_beam;
+        I=sqrt(2*areaS*cot(heel*PI/180));
+        J=2*areaS/sqrt(2*areaS/tan(heel*PI/180));
+        if (I<=s_beam && J<=s_height)
+        {
+            W=J/3;
+            E=I/3;
+            A=s_beam/2-E;
+            if (A>0)
+            {
+                F=A/tan(heel*PI/180);
+                kn = W+F;
+                std::cout << "Otrais: " << A;
+            }else{
+            std::cout << "A ir mazaaks par 0" << std::endl;
+            }
+        }else{
+            kn=disp_vcg();
+            std::cout << "Naakoshais" ;}
     }
-    return 0.0f;
-
-
+    gz=(kn-disp_vcg())*sin(heel*PI/180);
+    std::cout<<"  " << gz << "  " << a << "  " << I << std::endl;
+    if (isnan(gz)) gz= 0.0f;
+ //   std::cout << "  " << A << "  " << o << "  " << gz <<  "  " << heel <<  std::endl;
+    return gz;
 }
 
 float Ship::gm()
@@ -500,12 +511,30 @@ float Ship::gm()
 
 float Ship::trim()
 {
-    float A,a,b,c,d;
-    A=find_draft(disp())*s_LOA;
-    b=(4*A/s_LOA)-(6*A*(disp_lcg()+s_LOA/2)/pow(s_LOA, 2));
-    a=2*A/s_LOA -b;
-//    std::cout << "A:" << A << "  a:" << a << "  b:" << b << std::endl;
-    return a-b;
+    float ht, draft, areaS, l, teta, Mt, GMl, ETM, t, BVol=0, B, BM, BMVol=0;
+    draft=find_draft(disp());
+    for (int section=0; section!=10; section++)
+    {
+        if (draft > s_height-section_height[section])
+        {
+            BVol+=(sectionlength*section+sectionlength/2)*section_vol[section];
+     //       BMVol+=(section_beam[section]*pow(sectionlength,3))/(12*section_vol[section]);
+        }
+
+    }
+    B=BVol/read_s_volume();
+    BM=(s_beam*pow(s_LOA,3))/(12*read_s_volume());
+    ht = disp_lcg()-B;
+    areaS=BM*ht/2;
+    l=4*BM*areaS/pow(BM, 2);
+    teta=asin(ht/BM);
+    Mt=disp()*ht;
+    GMl=Mt/(disp()*tan(teta));
+    ETM=GMl*disp()/s_LOA;
+    t=disp()*ht/ETM;
+//    std::cout << B << "  " << BM << "  " << ht << "  " << areaS << "  " << l << "  " << teta << std::endl;
+    return t;
+
 }
 
 float Ship::init_heel()
@@ -817,6 +846,11 @@ float& Ship::read_s_LCGLight(){return s_LCGLight;}
 float& Ship::read_s_TCGLight(){return s_TCGLight;}
 
 float& Ship::read_s_VCGLight(){return s_VCGLight;}
+
+float Ship::read_s_volume()
+{
+    return disp()/s_waterCondition;
+}
 
 bool Ship::set_u_name(int row, std::string val){
     UnitVec[row].u_name = val;

@@ -53,6 +53,7 @@ public:
     float& read_s_TCGLight();
     float& read_s_VCGLight();
     float& read_s_waterCondition();
+    float read_s_volume();
 
     bool set_u_name(int, std::string);
     bool set_u_type(int, std::string);
