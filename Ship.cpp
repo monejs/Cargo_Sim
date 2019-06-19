@@ -456,7 +456,7 @@ float Ship::stabi(int heel)
         s_gm=s_km-disp_vcg();
 
         d=find_draft(disp());
-
+    std::cout << heel;
    if(draft+c<s_height && draft>c)
     {
         beta=90-heel;
@@ -470,38 +470,73 @@ float Ship::stabi(int heel)
         o=y-s_beam/2;
         p=o/tan(heel*PI/180);
         kn=p+z;
-        std::cout << "Pirmais: " << o;
+        std::cout << " Pirmais ";
 
 //        std::cout << heel << ".:  a1:" << a1 << "  b1:" << b1 << "  y:" << y << "  z:" << z << "  g:" << g << "  k:" << k <<  "  j:" << j << "  c:" << c << "  m:" << m << "  d:" << d << "  p:" << p << "  Strij:" << areaS <<
 //     "  ha:" << ha << "  n:" << n << "  o:" << o << "  s:" << s << "  Nc:" << Nc << "  kn:" << kn << "  km:" << s_km << "  gz:" << gz << std::endl;
     }else{
         // TODO: Naakoshas
-
-        areaS=draft*s_beam;
-        I=sqrt(2*areaS*cot(heel*PI/180));
-        J=2*areaS/sqrt(2*areaS/tan(heel*PI/180));
-        if (I<=s_beam && J<=s_height)
+        if (draft<s_height/2)
         {
-            W=J/3;
-            E=I/3;
-            A=s_beam/2-E;
-            if (A>0)
+            areaS=draft*s_beam;
+            I=sqrt(2*areaS*cot(heel*PI/180));
+            J=2*areaS/sqrt(2*areaS/tan(heel*PI/180));
+            if (I<=s_beam && J<=s_height)
             {
+                W=J/3;
+                E=I/3;
+                A=s_beam/2-E;
                 F=A/tan(heel*PI/180);
                 kn = W+F;
-                std::cout << "Otrais: " << A;
-            }else{
-            std::cout << "A ir mazaaks par 0" << std::endl;
+            std::cout << " Seklais ";
+            }else {
+                kn=last_kn(heel, draft);
             }
         }else{
-            kn=disp_vcg();
-            std::cout << "Naakoshais" ;}
+            float Ad, ha, hb, B0x, B0y, Bx, By;
+            areaS=draft*s_beam;
+            Ad=s_beam*s_height-areaS;
+            a=sqrt(2*Ad/tan(heel*PI/180));
+            b=a*tan(heel*PI/180);
+            if (b<s_height)
+            {
+                ha=a/3;
+                hb=b/3;
+                B0x=s_beam/2;
+                B0y=s_height/2;
+ /*               Bx=Ad/(s_beam*s_height*s_beam/2)-(Ad/(s_beam*s_height))*(a/3);
+                By=Ad/(s_beam*s_height*s_height/2)-(Ad/(s_beam*s_height))*(s_height-b/3); */
+                Bx=(s_height*s_beam*s_beam/2-Ad*a/3)/areaS;
+                By=(s_height*s_beam*s_height/2-Ad*(s_height-b/3))/areaS;
+                o=Bx-s_beam/2;
+                s=o/tan(heel*PI/180);
+                kn=s+By;
+                std::cout << " Dziljais: " << "  " << Ad/(s_beam*s_height) << "  " <<  a << "  " << b << "  " << B0x << "  " << B0y << "  " << Bx << "  " << By << "  " << o << "  " << s;
+            }else{
+                kn =last_kn(heel, draft);
+            }
+
+        }
     }
     gz=(kn-disp_vcg())*sin(heel*PI/180);
-    std::cout<<"  " << gz << "  " << a << "  " << I << std::endl;
+    std::cout << "  " << gz << "  " << kn << std::endl;
     if (isnan(gz)) gz= 0.0f;
  //   std::cout << "  " << A << "  " << o << "  " << gz <<  "  " << heel <<  std::endl;
     return gz;
+}
+
+float Ship::last_kn(int heel, float draft)
+{
+    float A, a, b, y, x, o, u;
+    A=draft*s_beam;
+    b=A/s_height-s_height/(2*tan(heel*PI/180));
+    a=b+s_height/tan(heel*PI/180);
+    x=(pow(a,2)+a*b+pow(b,2))/(3*(a+b));
+    o=s_beam/2-x;
+    u=o/tan(heel*PI/180);
+    y=(a+2*b)*s_height/(3*(a+b));
+    std::cout << " Peedeejais ";
+    return u+y;
 }
 
 float Ship::gm()
