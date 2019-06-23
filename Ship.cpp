@@ -29,7 +29,25 @@ bool Ship::assign_val(std::string& in_t, float& var)
     }else{ return false; }
 }
 
-// TODO: TCP, KMT, VHM
+float Ship::find_draft(float dsp)
+{
+    shipSize(); // This is a function to set the ships block sizes using the variables. This function is necessary when calculating the minimal draft
+    float vol=0; // Declares a volume variable as a dummy to sum up the volumes as the algorithm goes through the 10 blocks.
+    for (float i=0; i<50; i+=0.01) // A loop, which goes through centimeter by centimeter through the ships hull until the displacement is reached.
+    {
+        for (int section=0; section!=10; section++) // A loop to go through all 10 blocks of the ship
+        {
+            if (s_height - section_height[section] < i) // Checks, if the block is submerged
+                {
+                    vol+=sectionlength*section_beam[section]* (i-s_height+section_height[section]); // Adds the block volume to the total volume
+                }
+        }
+        if (vol>=dsp/s_waterCondition) return i; // Checks, if the desired volume is reached and returns it
+        vol=0; // Resets the total volume for the next loop
+    }
+    return 0.0f; // Just in case an error accrues, the value 0 is returned, so the program doesn't crash.
+}
+
 void Ship::calculate()
 {
 
@@ -45,11 +63,8 @@ void Ship::calculate()
         stats.h_draft = draft; // Assigns a draft
 
         float hull_B=0;
-        float hull_F=0, hull_BMl_vol=0, hull_BMl=0, hull_KM_vol=0;
-        hull_KM=0;
+        float hull_F=0, hull_BMl_vol=0, hull_KM_vol=0;
         hull_LCG=0;
-        hull_VCG=0;
-        hull_BM=0;
         float floating_area=0;
         for (int section=0; section!=10; section++)
         {
@@ -75,8 +90,6 @@ void Ship::calculate()
 
             }
         }
-
-        hull_VCG=(cal(0)+cal(1)+cal(2)+cal(3)+cal(4)+cal(5)+cal(6)+cal(7)+cal(8)+cal(9))/stats.h_volume;
         hull_LCG=(calL(0)+calL(1)+calL(2)+calL(3)+calL(4)+calL(5)+calL(6)+calL(7)+calL(8)+calL(9))/stats.h_volume;
 //      stats.h_lcb=hull_B/stats.h_volume;
         stats.h_lcf=hull_F/floating_area;
@@ -137,7 +150,7 @@ void Ship::text_print(){
     <<" |" << std::setw(7) << "LCB"
     <<" |" << std::setw(7) << "Draft |"<<std::endl << dummy << std::endl;
 
-    for (int i=0; i<HydroVec.size(); i++)
+    for (long unsigned int i=0; i<HydroVec.size(); i++)
     {
     out <<" |" << std::setw(5) << std::setprecision(2) << std::fixed << HydroVec[i].h_draft
         <<" |" << std::setw(10) << std::setprecision(0) << std::fixed << HydroVec[i].h_volume
@@ -392,184 +405,116 @@ void Ship::text_print(){
     }
 }*/
 
-float Ship::find_draft(float dsp)
-{
-    shipSize();
-    float vol=0;
-    for (float i=0; i<50; i+=0.01)
-    {
-        for (int section=0; section!=10; section++)
-        {
-            if (s_height - section_height[section] < i)
-                {
-                    vol+=sectionlength*section_beam[section]*(i-s_height+section_height[section]);
-                }
-        }
- //       std::cout << vol << std::endl;
-        if (vol>=dsp/s_waterCondition) return i;
-        vol=0;
-    }
-    return 0.0f;
-}
-
-
-
 float Ship::stabi(int heel)
 {
-    hull_KM=0;
-    hull_VCG=0;
     float draft = find_draft(disp());
-    float beta=0, gamma=0, areaS=0, perS=0, ha=0, c=0, d=0, g=0, k=0, j=0,m=0, n=0, o=0, p=0, s=0, b=0, a=0, y=0, z=0, Nc=0, kn;
+    float c, o, p, s, b, a, x, y, z, kn;
     float A,I,J,E,W,F;
     float gz=0;
-    float hull_B=0;
-    float hull_F=0;
-    float floating_area=0;
-    hull_BM=0;
-    s_volume=0;
+    float under_water_area=draft*s_beam;
     for (int section=0; section!=10; section++)
     {
         if (s_height - section_height[section] < draft)
         {
             section_area[section]=section_beam[section]*(draft-s_height+section_height[section]); // A_sec = Beam_sec * draft
-            floating_area+=sectionlength *section_beam[section];
             section_vol[section]=section_area[section]*sectionlength; // Area * section length
-            section_LCG[section]=section * sectionlength + sectionlength/2; //n*section + 1/2 section length
-
-
-            section_B[section]=(draft-s_height+section_height[section])/2 +s_height-section_height[section];
-            hull_B+=section_B[section]*section_vol[section];
-            hull_F+=section_LCG[section]*sectionlength*section_beam[section];
-            section_BM[section]=(sectionlength*pow(section_beam[section],3))/(12*section_vol[section]);
-            section_KM[section]=section_B[section]+section_BM[section];
-            hull_BM+=section_BM[section]*section_vol[section];
-            hull_KM+=section_KM[section]*section_vol[section];
-            hull_LCG+=section_LCG[section]*section_vol[section];
- //           std::cout << section << ".: " << section_BM[section] << "  " << section_KM[section] << "  " << " " << section_B[section] << "  " << section_BM[section] << "  "<< section_KM[section] << "  " << section_vol[section] << std::endl;
         }
     }
-//    std::cout << draft << "  " << heel << std::endl;
-
-
-        c=(s_beam/2)*tan(heel*PI/180);
-        s_km=hull_KM/read_s_volume();
-        s_gm=s_km-disp_vcg();
-
-        d=find_draft(disp());
-    std::cout << heel;
-   if(draft+c<s_height && draft>c)
+        c=(s_beam/2)*tan(heel*PI/180); // Calculates the amount one side is in/out of water
+        draft=find_draft(disp()); // Finding the draft to current displacement
+    if(draft+c<s_height && draft>c) // Checks, if all the heel is small enough
     {
-        beta=90-heel;
-        gamma=90-beta;
-
-        a=d-c;
-        b=d+c;
-
-        y=(a+2*b)*s_beam/(3*(a+b));
-        z=(pow(a,2)+a*b+pow(b,2))/(3*(a+b));
-        o=y-s_beam/2;
-        p=o/tan(heel*PI/180);
-        kn=p+z;
-        std::cout << " Pirmais ";
-
-//        std::cout << heel << ".:  a1:" << a1 << "  b1:" << b1 << "  y:" << y << "  z:" << z << "  g:" << g << "  k:" << k <<  "  j:" << j << "  c:" << c << "  m:" << m << "  d:" << d << "  p:" << p << "  Strij:" << areaS <<
-//     "  ha:" << ha << "  n:" << n << "  o:" << o << "  s:" << s << "  Nc:" << Nc << "  kn:" << kn << "  km:" << s_km << "  gz:" << gz << std::endl;
+        a=draft-c; // Setting the height of the trapezoid sides.
+        b=draft+c;
+        x=(a+2*b)*s_beam/(3*(a+b)); // Calculating the distance from the shortest side of the trapezoid till the projected B on the x axis.
+        z=(pow(a,2)+a*b+pow(b,2))/(3*(a+b)); // Calculating the distance from the bottom till the center of buoyancy
+        o=x-s_beam/2; // The distance between the ships center line till the B projection on x axis
+        p=o/tan(heel*PI/180); // Distance between the BN on y axis
+        kn=p+z; // KN = KB+BN
     }else{
-        // TODO: Naakoshas
-        if (draft<s_height/2)
+        if (draft<s_height/2) // Checks, if the draft is less then a half of the board height
         {
-            areaS=draft*s_beam;
-            I=sqrt(2*areaS*cot(heel*PI/180));
-            J=2*areaS/sqrt(2*areaS/tan(heel*PI/180));
-            if (I<=s_beam && J<=s_height)
+            I=sqrt(2*under_water_area*cot(heel*PI/180)); // One side of the triangle
+            J=2*under_water_area/sqrt(2*under_water_area/tan(heel*PI/180)); // Other side of the triangle
+            if (I<=s_beam && J<=s_height) // Checks, if the triangle sides are in the boundaries of the ships hull
             {
-                W=J/3;
+                W=J/3;// Coordinates of the center of buoyancy
                 E=I/3;
-                A=s_beam/2-E;
-                F=A/tan(heel*PI/180);
+                A=s_beam/2-E; // Distance between the center of buoyancy to the ships central line
+                F=A/tan(heel*PI/180); // Distance between N and the center of buoyancy projection on the y axis
                 kn = W+F;
-            std::cout << " Seklais ";
-            }else {
+            }else{
                 kn=last_kn(heel, draft);
             }
         }else{
-            float Ad, ha, hb, B0x, B0y, Bx, By;
-            areaS=draft*s_beam;
-            Ad=s_beam*s_height-areaS;
-            a=sqrt(2*Ad/tan(heel*PI/180));
+            float Ad, Bx, By; // The necessary variables
+            Ad=s_beam*s_height-under_water_area; // Area of the upper triangle
+            a=sqrt(2*Ad/tan(heel*PI/180)); // The triangle sides
             b=a*tan(heel*PI/180);
-            if (b<s_height)
+            if (b<s_height) // Checks if the triangle side is not grater than the whole board height
             {
-                ha=a/3;
-                hb=b/3;
-                B0x=s_beam/2;
-                B0y=s_height/2;
- /*               Bx=Ad/(s_beam*s_height*s_beam/2)-(Ad/(s_beam*s_height))*(a/3);
-                By=Ad/(s_beam*s_height*s_height/2)-(Ad/(s_beam*s_height))*(s_height-b/3); */
-                Bx=(s_height*s_beam*s_beam/2-Ad*a/3)/areaS;
-                By=(s_height*s_beam*s_height/2-Ad*(s_height-b/3))/areaS;
-                o=Bx-s_beam/2;
-                s=o/tan(heel*PI/180);
-                kn=s+By;
-                std::cout << " Dziljais: " << "  " << Ad/(s_beam*s_height) << "  " <<  a << "  " << b << "  " << B0x << "  " << B0y << "  " << Bx << "  " << By << "  " << o << "  " << s;
+                Bx=(s_height*s_beam*s_beam/2-Ad*a/3)/under_water_area; // Finds the coordinates of the center of buoyancy
+                By=(s_height*s_beam*s_height/2-Ad*(s_height-b/3))/under_water_area;
+                o=Bx-s_beam/2; // The distance from center of buoyancy to the ships center line
+                s=o/tan(heel*PI/180); // B`N
+                kn=s+By; // KN
             }else{
                 kn =last_kn(heel, draft);
             }
-
         }
     }
     gz=(kn-disp_vcg())*sin(heel*PI/180);
-    std::cout << "  " << gz << "  " << kn << std::endl;
     if (isnan(gz)) gz= 0.0f;
- //   std::cout << "  " << A << "  " << o << "  " << gz <<  "  " << heel <<  std::endl;
     return gz;
 }
 
 float Ship::last_kn(int heel, float draft)
 {
-    float A, a, b, y, x, o, u;
+    float A, a, b, z, x, o, u;
     A=draft*s_beam;
     b=A/s_height-s_height/(2*tan(heel*PI/180));
     a=b+s_height/tan(heel*PI/180);
     x=(pow(a,2)+a*b+pow(b,2))/(3*(a+b));
     o=s_beam/2-x;
     u=o/tan(heel*PI/180);
-    y=(a+2*b)*s_height/(3*(a+b));
-    std::cout << " Peedeejais ";
-    return u+y;
+    z=(a+2*b)*s_height/(3*(a+b));
+    return u+z;
 }
 
 float Ship::gm()
 {
-    return s_gm;
+    float draft=find_draft(disp()); // Finds the present draft
+    float hull_KM=0; // Resets the variable
+    for (int section=0; section!=10; section++) // Iterates through the sections
+    {
+        if(s_height - section_height[section] > draft) // Checks, if the section is submerged
+        {
+            section_vol[section]=section_beam[section]*sectionlength*(draft-(s_height-section_height[section])); // Calculates the underwater volume of current section
+            section_B[section]=(draft-s_height+section_height[section])/2 +s_height-section_height[section]; // Calculates the height of center of buoyancy above the keel.
+            section_BM[section]=(sectionlength*pow(section_beam[section],3))/(12*section_vol[section]); // Calculates the distance between the buoyancy and metacenter
+            section_KM[section]=section_B[section]+section_BM[section]; // Calculates the height of metacenter above the keel of the given section
+            hull_KM+=section_KM[section]*section_vol[section]; // Sums all the KM*V together
+        }
+    }
+    return hull_KM/(disp()*s_waterCondition)-disp_vcg(); // Returning the GM value
 }
 
 float Ship::trim()
 {
-    float ht, draft, areaS, l, teta, Mt, GMl, ETM, t, BVol=0, B, BM, BMVol=0;
-    draft=find_draft(disp());
-    for (int section=0; section!=10; section++)
+    float ht, draft, ETM, BVol=0, B, BM; // Declaring the variables
+    draft=find_draft(disp()); // Finding the draft for the current displacement
+    for (int section=0; section!=10; section++) // Iterating through all blocks
     {
-        if (draft > s_height-section_height[section])
+        if (draft > s_height-section_height[section]) // Checking if the block is submerged
         {
-            BVol+=(sectionlength*section+sectionlength/2)*section_vol[section];
-     //       BMVol+=(section_beam[section]*pow(sectionlength,3))/(12*section_vol[section]);
+            BVol+=(sectionlength*section+sectionlength/2)*section_vol[section]; // Finding the center of buoyancy of each block and multiplying it by the volume of the block
         }
-
     }
-    B=BVol/read_s_volume();
-    BM=(s_beam*pow(s_LOA,3))/(12*read_s_volume());
-    ht = disp_lcg()-B;
-    areaS=BM*ht/2;
-    l=4*BM*areaS/pow(BM, 2);
-    teta=asin(ht/BM);
-    Mt=disp()*ht;
-    GMl=Mt/(disp()*tan(teta));
-    ETM=GMl*disp()/s_LOA;
-    t=disp()*ht/ETM;
-//    std::cout << B << "  " << BM << "  " << ht << "  " << areaS << "  " << l << "  " << teta << std::endl;
-    return t;
-
+    B=BVol/read_s_volume(); // Getting the center of buoyancy of the whole ship.
+    BM=(s_beam*pow(s_LOA,3))/(12*read_s_volume()); // The BM is through the beam and length of ship
+    ht = disp_lcg()-B; // Calculating the trimming arm
+    ETM=BM*disp()/s_LOA; // Calculating the trimming moment per meter
+    return disp()*ht/ETM; // Returns the trim
 }
 
 float Ship::init_heel()
@@ -767,12 +712,11 @@ Ship::Ship() // Declaration of the Ships null state.
     s_LOA = 100.0f;     // Same as the model ship for LOA, beam and height, min draft and max draft
     s_beam = 16.4f;
     s_height = 10.0f;
-    s_lightShip = 5600;
+    s_lightShip = 1920;
     s_strengthTank = 20.0f;
     s_strengthCover = 5.0f;
     s_minDraft = 0.5f;
     s_maxDraft = 7.5f;
-    s_maxDWT = 15000;
     s_waterCondition = 1.025;
     s_LCGLight = 40.0f;
     s_TCGLight = 0.0f;
@@ -1251,7 +1195,7 @@ float Ship::disp_tcg()
 
 float Ship::rest_dwt()
 {
-    return (s_maxDWT-deadweight());
+    return (s_maxDWT-disp());
 }
 
 

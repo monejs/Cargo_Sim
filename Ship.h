@@ -176,8 +176,6 @@ private:
     float s_gm;
     float s_km;
     float hull_LCG;
-    float hull_VCG;
-    float hull_KM, hull_BM;
     float sectionlength;
     std::array<float, 10> section_area;
     std::array<float, 10> section_vol;
