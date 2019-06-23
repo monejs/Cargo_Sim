@@ -992,7 +992,7 @@
 	"wx/defs.h"
 	"wx/window.h"
 
-1560757543 /home/vilis/Cargo_Sim/Ship.h
+1561070489 /home/vilis/Cargo_Sim/Ship.h
 	<string>
 	<vector>
 	<fstream>
@@ -1026,7 +1026,7 @@
 	<google/protobuf/port_def.inc>
 	<google/protobuf/port_undef.inc>
 
-1560846536 source:/home/vilis/Cargo_Sim/Ship.cpp
+1561201458 source:/home/vilis/Cargo_Sim/Ship.cpp
 	"Ship.h"
 
 1558452029 source:/home/vilis/Cargo_Sim/Ship.pb.cc
