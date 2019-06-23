@@ -48,6 +48,7 @@ class CargoMasterFrame: public wxFrame
         void OnTankGridCellChanged(wxGridEvent& event);
         void OnSaveItemSelected(wxCommandEvent& event);
         void OnHydroItemSelected(wxCommandEvent& event);
+        void OnNotebook1PageChanged(wxNotebookEvent& event);
         //*)
 
         //(*Identifiers(CargoMasterFrame)

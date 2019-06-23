@@ -226,7 +226,7 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     Notebook1->AddPage(Panel2, _("Constants"), false);
     Notebook1->AddPage(Panel8, _("Tanks/Holds"), false);
     Notebook1->AddPage(Panel5, _("Stability"), false);
-    Notebook1->AddPage(Panel6, _("Strength"), false);
+    Notebook1->AddPage(Panel6, _("Stress"), false);
     Notebook1->AddPage(Panel7, _("Dead Load"), false);
     MenuBar1 = new wxMenuBar();
     Menu1 = new wxMenu();
@@ -258,6 +258,7 @@ CargoMasterFrame::CargoMasterFrame(wxWindow* parent,wxWindowID id)
     Connect(ID_GRID2,wxEVT_GRID_CELL_CHANGED,(wxObjectEventFunction)&CargoMasterFrame::OnConstantsGridCellChanged);
     Connect(ID_GRID4,wxEVT_GRID_CELL_CHANGED,(wxObjectEventFunction)&CargoMasterFrame::OnCargoTankGridCellChanged);
     Connect(ID_GRID6,wxEVT_GRID_CELL_CHANGED,(wxObjectEventFunction)&CargoMasterFrame::OnDeadLoadGridCellChanged);
+    Connect(ID_NOTEBOOK1,wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,(wxObjectEventFunction)&CargoMasterFrame::OnNotebook1PageChanged);
     Connect(ID_MENUITEM2,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnSaveItemSelected);
     Connect(ID_MENUITEM1,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnLoadButtonSelected);
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&CargoMasterFrame::OnQuit);
@@ -727,4 +728,8 @@ void CargoMasterFrame::OnSaveItemSelected(wxCommandEvent& event)
 void CargoMasterFrame::OnHydroItemSelected(wxCommandEvent& event)
 {
     ShipBody.text_print();
+}
+
+void CargoMasterFrame::OnNotebook1PageChanged(wxNotebookEvent& event)
+{
 }
