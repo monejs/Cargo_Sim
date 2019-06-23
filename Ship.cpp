@@ -470,13 +470,13 @@ float Ship::stabi(int heel)
 
 float Ship::last_kn(int heel, float draft)
 {
-    float A, a, b, z, x, o, u;
-    A=draft*s_beam;
-    b=A/s_height-s_height/(2*tan(heel*PI/180));
+    float A, a, b, z, x, o, u; // Necessary variables
+    A=draft*s_beam; // Underwater area
+    b=A/s_height-s_height/(2*tan(heel*PI/180)); // Sides of the trapezoid
     a=b+s_height/tan(heel*PI/180);
-    x=(pow(a,2)+a*b+pow(b,2))/(3*(a+b));
-    o=s_beam/2-x;
-    u=o/tan(heel*PI/180);
+    x=(pow(a,2)+a*b+pow(b,2))/(3*(a+b)); // Distance from the outside wall to the center of buoyancy
+    o=s_beam/2-x; // From center of buoyancy to the midships line
+    u=o/tan(heel*PI/180); 
     z=(a+2*b)*s_height/(3*(a+b));
     return u+z;
 }
