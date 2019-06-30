@@ -132,6 +132,8 @@ public:
 
     float init_heel();
     float trim();
+    float belasstung(float);
+    float auftrieb(float);
 
     void variable_update();
     void shipSize();

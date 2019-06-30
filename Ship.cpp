@@ -16,7 +16,7 @@ void Ship::shipSize()
 {
     sectionlength = s_LOA/10; // Divides the length of the ship into 10 compartments
     section_beam = {0.23f*s_beam, 0.6f*s_beam, s_beam, s_beam, s_beam, s_beam, s_beam, 0.75f*s_beam, 0.5f*s_beam, 0.25f*s_beam}; // The breadth of each compartment
-    section_height = {0.9f*s_height, s_height, s_height, s_height, s_height, s_height, s_height, 0.8f*s_height, 0.5f*s_height, 0.3f*s_height};
+    section_height = {0.9f*s_height, s_height, s_height, s_height, s_height, s_height, s_height, 0.8f*s_height, 0.6f*s_height, 0.5f*s_height};
 }
 
 // Function to check, if the input from user is valid and returns false, if not
@@ -476,7 +476,7 @@ float Ship::last_kn(int heel, float draft)
     a=b+s_height/tan(heel*PI/180);
     x=(pow(a,2)+a*b+pow(b,2))/(3*(a+b)); // Distance from the outside wall to the center of buoyancy
     o=s_beam/2-x; // From center of buoyancy to the midships line
-    u=o/tan(heel*PI/180); 
+    u=o/tan(heel*PI/180);
     z=(a+2*b)*s_height/(3*(a+b));
     return u+z;
 }
@@ -487,7 +487,7 @@ float Ship::gm()
     float hull_KM=0; // Resets the variable
     for (int section=0; section!=10; section++) // Iterates through the sections
     {
-        if(s_height - section_height[section] > draft) // Checks, if the section is submerged
+        if(s_height - section_height[section] < draft) // Checks, if the section is submerged
         {
             section_vol[section]=section_beam[section]*sectionlength*(draft-(s_height-section_height[section])); // Calculates the underwater volume of current section
             section_B[section]=(draft-s_height+section_height[section])/2 +s_height-section_height[section]; // Calculates the height of center of buoyancy above the keel.
@@ -526,9 +526,6 @@ float Ship::init_heel()
     c=(a-b)/2;
     d=s_beam/2;
     alfa=atan(c/d)*57.3;
-
-
-
     return alfa;
 }
 
@@ -542,6 +539,49 @@ const std::string Ship::currentDateTime() {
     strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
 
     return buf;
+}
+float Ship::belasstung(float x) // Function to calculate the gravitational force on one specific spot of the ship
+{
+    float last=0.0f;
+    for (long unsigned int i=0; i<UnitVec.size(); i++)
+    {
+        if (UnitVec[i].u_LCG+UnitVec[i].u_length/2>x && UnitVec[i].u_LCG-UnitVec[i].u_length<=x)
+        {
+            last+=UnitVec[i].u_weight/UnitVec[i].u_length;
+        }
+    }
+    for (long unsigned int i=0; i<ConVec.size(); i++)
+    {
+        if (ConVec[i].con_start <= x && ConVec[i].con_end > x)
+        {
+            last+=ConVec[i].con_weight/(ConVec[i].con_end - ConVec[i].con_start);
+        }
+    }
+    for (long unsigned int i=0; i<BulkVec.size(); i++)
+    {
+        if (BulkVec[i].u_LCG-BulkVec[i].u_length/2<x && BulkVec[i].u_LCG+BulkVec[i].u_length/2 > x)
+        {
+            last+=BulkVec[i].u_LCG/BulkVec[i].u_length;
+        }
+    }
+    return last;
+}
+
+float Ship::auftrieb(float x)
+{
+    shipSize();
+    for (int i=0; i!=10; i++)
+    {
+        if (x>=sectionlength*i && x<sectionlength*(i+1))
+        {
+            if(s_height - section_height[i] < find_draft(disp()))
+            {
+                float auf = (sectionlength*section_beam[i]*(find_draft(disp())-(s_height-section_height[i])))/sectionlength;
+                return auf;
+            }
+            return 3.01f;
+        }
+    }
 }
 // Saves all the data to file using the google protobuf protocol.
 // Quite easy to use and can be generates automatically.
