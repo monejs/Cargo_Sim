@@ -564,6 +564,7 @@ float Ship::belasstung(float x) // Function to calculate the gravitational force
             last+=BulkVec[i].u_LCG/BulkVec[i].u_length;
         }
     }
+    last += s_lightShip/s_LOA;
     return last;
 }
 
@@ -579,7 +580,7 @@ float Ship::auftrieb(float x)
                 float auf = (sectionlength*section_beam[i]*(find_draft(disp())-(s_height-section_height[i])))/sectionlength;
                 return auf;
             }
-            return 3.01f;
+            return 0.0f;
         }
     }
 }
@@ -641,6 +642,17 @@ bool Ship::save(std::string filename)
         cargo->set_breadth(BulkVec[i].u_breadth);
         cargo->set_height(BulkVec[i].u_height);
         cargo->set_weight(BulkVec[i].u_weight);
+    }
+    for (long unsigned int i=0; i<ConVec.size(); i++)
+    {
+        ship::Constants* cons = SaveShip.add_constants();
+        cons->set_name(ConVec[i].con_name);
+        cons->set_weight(ConVec[i].con_weight);
+        cons->set_lcg(ConVec[i].con_lcg);
+        cons->set_tcg(ConVec[i].con_tcg);
+        cons->set_vcg(ConVec[i].con_vcg);
+        cons->set_start(ConVec[i].con_start);
+        cons->set_end(ConVec[i].con_end);
     }
     filename += ".ship"; // Program specific filename
     std::fstream output(filename,  std::ios::out | std::ios::trunc | std::ios::binary); // Creating file
@@ -734,6 +746,17 @@ bool Ship::load(std::string file) // Load the protobuf file in the program.
             BulkVec[i].u_height = cargo.height();
             BulkVec[i].u_weight = cargo.weight();
         }
+        for (int i=0; i<BodyOfShip.constants_size(); i++)
+        {
+            const ship::Constants& cons = BodyOfShip.constants(i);
+            ConVec[i].con_name = cons.name();
+            ConVec[i].con_weight = cons.weight();
+            ConVec[i].con_lcg = cons.lcg();
+            ConVec[i].con_vcg = cons.vcg();
+            ConVec[i].con_tcg = cons.tcg();
+            ConVec[i].con_start = cons.start();
+            ConVec[i].con_end = cons.end();
+            }
         return true; // At the end returns true
     }
 }
@@ -1285,6 +1308,82 @@ bool Ship::set_car_breadth(int row, std::string val){
 
 bool Ship::set_car_height(int row, std::string val){
     return Ship::assign_val(val, BulkVec[row].u_height);}
+
+std::string& Ship::read_car_name(int i)
+{
+    return BulkVec[i].u_name;
+}
+
+float& Ship::read_car_lcg(int i)
+{
+    return BulkVec[i].u_LCG;
+}
+
+float& Ship::read_car_vcg(int i)
+{
+    return BulkVec[i].u_VCG;
+}
+
+float& Ship::read_car_tcg(int i)
+{
+    return BulkVec[i].u_TCG;
+}
+
+float& Ship::read_car_length(int i)
+{
+    return BulkVec[i].u_length;
+}
+
+float& Ship::read_car_breadth(int i)
+{
+    return BulkVec[i].u_breadth;
+}
+
+float& Ship::read_car_height(int i)
+{
+    return BulkVec[i].u_breadth;
+}
+
+float& Ship::read_car_weight(int i)
+{
+    return BulkVec[i].u_weight;
+}
+
+std::string& Ship::read_con_name(int i)
+{
+    return ConVec[i].con_name;
+}
+
+float& Ship::read_con_weight(int i)
+{
+    return ConVec[i].con_weight;
+}
+
+float& Ship::read_con_lcg(int i)
+{
+    return ConVec[i].con_lcg;
+}
+
+float& Ship::read_con_tcg(int i)
+{
+    return ConVec[i].con_tcg;
+}
+
+float& Ship::read_con_vcg(int i)
+{
+    return ConVec[i].con_vcg;
+}
+
+float& Ship::read_con_start(int i)
+{
+    return ConVec[i].con_start;
+}
+
+float& Ship::read_con_end(int i)
+{
+    return ConVec[i].con_end;
+}
+
 
 // Ship deconstructor
 Ship::~Ship(){}

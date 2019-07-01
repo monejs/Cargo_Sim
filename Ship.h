@@ -92,6 +92,14 @@ public:
     bool set_con_start(int, std::string);
     bool set_con_end(int, std::string);
 
+    std::string& read_con_name(int);
+    float& read_con_lcg(int);
+    float& read_con_tcg(int);
+    float& read_con_vcg(int);
+    float& read_con_weight(int);
+    float& read_con_start(int);
+    float& read_con_end(int);
+
     float gm();
 
     float constants_weight();
@@ -129,6 +137,15 @@ public:
     bool set_car_length(int, std::string);
     bool set_car_breadth(int, std::string);
     bool set_car_height(int, std::string);
+
+    std::string& read_car_name(int);
+    float& read_car_weight(int);
+    float& read_car_lcg(int);
+    float& read_car_vcg(int);
+    float& read_car_tcg(int);
+    float& read_car_length(int);
+    float& read_car_breadth(int);
+    float& read_car_height(int);
 
     float init_heel();
     float trim();
