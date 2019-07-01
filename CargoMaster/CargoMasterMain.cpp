@@ -372,6 +372,10 @@ void CargoMasterFrame::update()
     strvectorx.clear();
     strvectory.clear();
 
+    for (float i=0; i<ShipBody.read_s_LOA(); i+=1)
+    {std::cout << ShipBody.auftrieb(i) << std::endl;}
+    std::cout << "Next" << std::endl;
+
     wxString statbar=wxString::Format(wxT("GM: %.2f \t Draft: %.2f \t List: %.1f \t Trim: %.2f \t Dead Weight reserve: %.0f"), ShipBody.gm(), ShipBody.find_draft(ShipBody.disp()), ShipBody.init_heel(), ShipBody.trim(), ShipBody.rest_dwt());
     StatusBar1->SetStatusText(statbar,0);
 }
@@ -410,86 +414,107 @@ void CargoMasterFrame::OnLoadButtonSelected(wxCommandEvent& event)
         {
             wxMessageBox(wxT("Error loading file"), wxT("Error"));
         }else{
-        ShipBody.variable_update();
-        for (int i=0; i<ShipBody.unit_count(); i++)
-        {
-            CargoTankGrid->AppendRows();
-            if (ShipBody.read_unit_type(i) == "Ballast")
+            ShipBody.variable_update();
+            for (int i=0; i<ShipBody.unit_count(); i++)
             {
-                rowColor(i, *wxGREEN);
-                CargoTankGrid->SetCellValue(i,7, wxString::Format(wxT("%.2f"), ShipBody.read_u_fsmax(i)));
-            }
-            else if (ShipBody.read_unit_type(i) == "Cargo Tank")
-            {
-                rowColor(i, *wxYELLOW);
-                CargoTankGrid->SetCellValue(i,7, wxString::Format(wxT("%.2f"), ShipBody.read_u_fsmax(i)));
-            }
-            else if (ShipBody.read_unit_type(i) == "Cargo Hold")
-            {
-                rowColor(i, *wxYELLOW);
-            }
-            else if (ShipBody.read_unit_type(i) == "HFO")
-            {
-                rowColor(i, *wxRED);
-                 CargoTankGrid->SetCellValue(i,7, wxString::Format(wxT("%.2f"), ShipBody.read_u_fsmax(i)));
-            }
-            else if (ShipBody.read_unit_type(i) == "DO")
-            {
-                rowColor(i, *wxLIGHT_GREY);
-                 CargoTankGrid->SetCellValue(i,7, wxString::Format(wxT("%.2f"), ShipBody.read_u_fsmax(i)));
-            }
-            else if (ShipBody.read_unit_type(i) == "LO")
-            {
-                rowColor(i, *wxCYAN);
-                 CargoTankGrid->SetCellValue(i,7, wxString::Format(wxT("%.2f"), ShipBody.read_u_fsmax(i)));
-            }
-            else if (ShipBody.read_unit_type(i) == "FW")
-            {
-                rowColor(i, *wxBLUE);
-                 CargoTankGrid->SetCellValue(i,7, wxString::Format(wxT("%.2f"), ShipBody.read_u_fsmax(i)));
-            }
-            else if (ShipBody.read_unit_type(i) == "Various")
-            {
-                rowColor(i, *wxBLUE);
-                 CargoTankGrid->SetCellValue(i,7, wxString::Format(wxT("%.2f"), ShipBody.read_u_fsmax(i)));
-            }
-            CargoTankGrid->SetCellValue(i,0, ShipBody.read_unit_name(i));
-            CargoTankGrid->SetCellValue(i,1, ShipBody.read_unit_type(i));
-            CargoTankGrid->SetCellValue(i,2, wxString::Format(wxT("%.2f"), ShipBody.read_u_weight(i)));
-            CargoTankGrid->SetCellValue(i,3, wxString::Format(wxT("%.2f"), ShipBody.read_u_LCG(i)));
-            CargoTankGrid->SetCellValue(i,4, wxString::Format(wxT("%.2f"), ShipBody.read_u_VCG(i)));
-            CargoTankGrid->SetCellValue(i,5, wxString::Format(wxT("%.2f"), ShipBody.read_u_TCG(i)));
-            CargoTankGrid->SetCellValue(i,6, wxString::Format(wxT("%.2f"), ShipBody.read_u_density(i)));
+                CargoTankGrid->AppendRows();
+                if (ShipBody.read_unit_type(i) == "Ballast")
+                {
+                    rowColor(i, *wxGREEN);
+                    CargoTankGrid->SetCellValue(i,7, wxString::Format(wxT("%.2f"), ShipBody.read_u_fsmax(i)));
+                }
+                else if (ShipBody.read_unit_type(i) == "Cargo Tank")
+                {
+                    rowColor(i, *wxYELLOW);
+                    CargoTankGrid->SetCellValue(i,7, wxString::Format(wxT("%.2f"), ShipBody.read_u_fsmax(i)));
+                }
+                else if (ShipBody.read_unit_type(i) == "Cargo Hold")
+                {
+                    rowColor(i, *wxYELLOW);
+                }
+                else if (ShipBody.read_unit_type(i) == "HFO")
+                {
+                    rowColor(i, *wxRED);
+                     CargoTankGrid->SetCellValue(i,7, wxString::Format(wxT("%.2f"), ShipBody.read_u_fsmax(i)));
+                }
+                else if (ShipBody.read_unit_type(i) == "DO")
+                {
+                    rowColor(i, *wxLIGHT_GREY);
+                     CargoTankGrid->SetCellValue(i,7, wxString::Format(wxT("%.2f"), ShipBody.read_u_fsmax(i)));
+                }
+                else if (ShipBody.read_unit_type(i) == "LO")
+                {
+                    rowColor(i, *wxCYAN);
+                     CargoTankGrid->SetCellValue(i,7, wxString::Format(wxT("%.2f"), ShipBody.read_u_fsmax(i)));
+                }
+                else if (ShipBody.read_unit_type(i) == "FW")
+                {
+                    rowColor(i, *wxBLUE);
+                     CargoTankGrid->SetCellValue(i,7, wxString::Format(wxT("%.2f"), ShipBody.read_u_fsmax(i)));
+                }
+                else if (ShipBody.read_unit_type(i) == "Various")
+                {
+                    rowColor(i, *wxBLUE);
+                     CargoTankGrid->SetCellValue(i,7, wxString::Format(wxT("%.2f"), ShipBody.read_u_fsmax(i)));
+                }
+                CargoTankGrid->SetCellValue(i,0, ShipBody.read_unit_name(i));
+                CargoTankGrid->SetCellValue(i,1, ShipBody.read_unit_type(i));
+                CargoTankGrid->SetCellValue(i,2, wxString::Format(wxT("%.2f"), ShipBody.read_u_weight(i)));
+                CargoTankGrid->SetCellValue(i,3, wxString::Format(wxT("%.2f"), ShipBody.read_u_LCG(i)));
+                CargoTankGrid->SetCellValue(i,4, wxString::Format(wxT("%.2f"), ShipBody.read_u_VCG(i)));
+                CargoTankGrid->SetCellValue(i,5, wxString::Format(wxT("%.2f"), ShipBody.read_u_TCG(i)));
+                CargoTankGrid->SetCellValue(i,6, wxString::Format(wxT("%.2f"), ShipBody.read_u_density(i)));
 
-            CargoTankGrid->SetCellValue(i,8, wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(i)/ShipBody.read_u_volume(i)*100));
-            CargoTankGrid->SetCellValue(i,9, wxString::Format(wxT("%.2f"), ShipBody.read_u_volume(i)));
-            CargoTankGrid->SetCellValue(i,10, wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(i)));
+                CargoTankGrid->SetCellValue(i,8, wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(i)/ShipBody.read_u_volume(i)*100));
+                CargoTankGrid->SetCellValue(i,9, wxString::Format(wxT("%.2f"), ShipBody.read_u_volume(i)));
+                CargoTankGrid->SetCellValue(i,10, wxString::Format(wxT("%.2f"), ShipBody.read_u_maxvol(i)));
 
-            CargoTankGrid->SetReadOnly(i,0);
-            CargoTankGrid->SetReadOnly(i,1);
-            CargoTankGrid->SetReadOnly(i,3);
-            CargoTankGrid->SetReadOnly(i,4);
-            CargoTankGrid->SetReadOnly(i,5);
-            CargoTankGrid->SetReadOnly(i,6);
-            CargoTankGrid->SetReadOnly(i,10);
+                CargoTankGrid->SetReadOnly(i,0);
+                CargoTankGrid->SetReadOnly(i,1);
+                CargoTankGrid->SetReadOnly(i,3);
+                CargoTankGrid->SetReadOnly(i,4);
+                CargoTankGrid->SetReadOnly(i,5);
+                CargoTankGrid->SetReadOnly(i,7);
+                CargoTankGrid->SetReadOnly(i,10);
+            }
+            StabilityGrid->SetCellValue(0,1, "m");
+            StabilityGrid->SetCellValue(1,1, "m");
+            StabilityGrid->SetCellValue(2,1, "degrees");
+            StabilityGrid->SetCellValue(3,1, "m*rad");
+            StabilityGrid->SetCellValue(4,1, "m*rad");
+            StabilityGrid->SetCellValue(5,1, "m*rad");
+            StabilityGrid->SetCellValue(6,1, "t");
+            StabilityGrid->SetCellValue(7,1, "m");
+
+            GeneralGrid->SetCellValue(4,0,wxString::Format(wxT("%i"), ShipBody.read_s_lightShip()));
+            GeneralGrid->SetCellValue(4,1,wxString::Format(wxT("%.2f"), ShipBody.read_s_LCGLight()));
+            GeneralGrid->SetCellValue(4,2,wxString::Format(wxT("%.2f"), ShipBody.read_s_VCGLight()));
+            GeneralGrid->SetCellValue(4,3,wxString::Format(wxT("%.2f"), ShipBody.read_s_TCGLight()));
+            for(int i=0; i!=50; i++)
+            {
+                ConstantsGrid->SetCellValue(i,0,ShipBody.read_con_name(i));
+                ConstantsGrid->SetCellValue(i,1,wxString::Format(wxT("%.2f"),ShipBody.read_con_weight(i)));
+                ConstantsGrid->SetCellValue(i,2,wxString::Format(wxT("%.2f"),ShipBody.read_con_lcg(i)));
+                ConstantsGrid->SetCellValue(i,3,wxString::Format(wxT("%.2f"),ShipBody.read_con_vcg(i)));
+                ConstantsGrid->SetCellValue(i,4,wxString::Format(wxT("%.2f"),ShipBody.read_con_tcg(i)));
+                ConstantsGrid->SetCellValue(i,5,wxString::Format(wxT("%.2f"),ShipBody.read_con_start(i)));
+                ConstantsGrid->SetCellValue(i,6,wxString::Format(wxT("%.2f"),ShipBody.read_con_end(i)));
+            }
+            for (int i=0; i!=50; i++)
+            {
+                DeadLoadGrid->SetCellValue(i,0,ShipBody.read_car_name(i));
+                DeadLoadGrid->SetCellValue(i,1,wxString::Format(wxT("%.2f"), ShipBody.read_car_weight(i)));
+                DeadLoadGrid->SetCellValue(i,2,wxString::Format(wxT("%.2f"), ShipBody.read_car_lcg(i)));
+                DeadLoadGrid->SetCellValue(i,3,wxString::Format(wxT("%.2f"), ShipBody.read_car_vcg(i)));
+                DeadLoadGrid->SetCellValue(i,4,wxString::Format(wxT("%.2f"), ShipBody.read_car_tcg(i)));
+                DeadLoadGrid->SetCellValue(i,5,wxString::Format(wxT("%.2f"), ShipBody.read_car_length(i)));
+                DeadLoadGrid->SetCellValue(i,6,wxString::Format(wxT("%.2f"), ShipBody.read_car_breadth(i)));
+                DeadLoadGrid->SetCellValue(i,7,wxString::Format(wxT("%.2f"), ShipBody.read_car_height(i)));
+            }
+            wxMessageBox("File loaded!");
+            ShipBody.calculate();
+            update();
         }
-        StabilityGrid->SetCellValue(0,1, "m");
-        StabilityGrid->SetCellValue(1,1, "m");
-        StabilityGrid->SetCellValue(2,1, "degrees");
-        StabilityGrid->SetCellValue(3,1, "m*rad");
-        StabilityGrid->SetCellValue(4,1, "m*rad");
-        StabilityGrid->SetCellValue(5,1, "m*rad");
-        StabilityGrid->SetCellValue(6,1, "t");
-        StabilityGrid->SetCellValue(7,1, "m");
-        ShipBody.calculate();
-        update();
-        GeneralGrid->SetCellValue(4,0,wxString::Format(wxT("%i"), ShipBody.read_s_lightShip()));
-        GeneralGrid->SetCellValue(4,1,wxString::Format(wxT("%.2f"), ShipBody.read_s_LCGLight()));
-        GeneralGrid->SetCellValue(4,2,wxString::Format(wxT("%.2f"), ShipBody.read_s_VCGLight()));
-        GeneralGrid->SetCellValue(4,3,wxString::Format(wxT("%.2f"), ShipBody.read_s_TCGLight()));
-        wxMessageBox("File loaded!");
-        }
-
     }
 }
 
@@ -705,7 +730,7 @@ void CargoMasterFrame::OnCargoTankGridCellChanged(wxGridEvent& event)
             update();
         }else{CargoTankGrid->SetCellTextColour(CargoTankGrid->GetGridCursorRow(), 9, *wxRED);}
     }
-    if (CargoTankGrid->GetGridCursorCol()==7)
+    if (CargoTankGrid->GetGridCursorCol()==6)
     {
         if(ShipBody.set_u_density(CargoTankGrid->GetGridCursorRow(), CellVal(CargoTankGrid).ToStdString()))
         {
