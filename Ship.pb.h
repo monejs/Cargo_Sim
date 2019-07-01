@@ -900,6 +900,18 @@ class Constants :
   float weight() const;
   void set_weight(float value);
 
+  // float start = 6;
+  void clear_start();
+  static const int kStartFieldNumber = 6;
+  float start() const;
+  void set_start(float value);
+
+  // float end = 7;
+  void clear_end();
+  static const int kEndFieldNumber = 7;
+  float end() const;
+  void set_end(float value);
+
   // @@protoc_insertion_point(class_scope:ship.Constants)
  private:
   class HasBitSetters;
@@ -910,6 +922,8 @@ class Constants :
   float tcg_;
   float vcg_;
   float weight_;
+  float start_;
+  float end_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Ship_2eproto;
 };
@@ -1771,6 +1785,34 @@ inline void Constants::set_weight(float value) {
   
   weight_ = value;
   // @@protoc_insertion_point(field_set:ship.Constants.weight)
+}
+
+// float start = 6;
+inline void Constants::clear_start() {
+  start_ = 0;
+}
+inline float Constants::start() const {
+  // @@protoc_insertion_point(field_get:ship.Constants.start)
+  return start_;
+}
+inline void Constants::set_start(float value) {
+  
+  start_ = value;
+  // @@protoc_insertion_point(field_set:ship.Constants.start)
+}
+
+// float end = 7;
+inline void Constants::clear_end() {
+  end_ = 0;
+}
+inline float Constants::end() const {
+  // @@protoc_insertion_point(field_get:ship.Constants.end)
+  return end_;
+}
+inline void Constants::set_end(float value) {
+  
+  end_ = value;
+  // @@protoc_insertion_point(field_set:ship.Constants.end)
 }
 
 // -------------------------------------------------------------------

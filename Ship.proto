@@ -59,6 +59,8 @@ message Constants {
     float tcg = 3;
     float vcg = 4;
     float weight = 5;
+    float start = 6;
+    float end = 7;
 }
 message ShipBodyData {
     repeated ShipData shipdata = 1;

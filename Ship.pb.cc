@@ -177,6 +177,8 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Ship_2eproto::offsets[] PROTOB
   PROTOBUF_FIELD_OFFSET(::ship::Constants, tcg_),
   PROTOBUF_FIELD_OFFSET(::ship::Constants, vcg_),
   PROTOBUF_FIELD_OFFSET(::ship::Constants, weight_),
+  PROTOBUF_FIELD_OFFSET(::ship::Constants, start_),
+  PROTOBUF_FIELD_OFFSET(::ship::Constants, end_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::ship::ShipBodyData, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -192,7 +194,7 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 19, -1, sizeof(::ship::Unit)},
   { 34, -1, sizeof(::ship::BulkCargo)},
   { 47, -1, sizeof(::ship::Constants)},
-  { 57, -1, sizeof(::ship::ShipBodyData)},
+  { 59, -1, sizeof(::ship::ShipBodyData)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -221,12 +223,13 @@ const char descriptor_table_protodef_Ship_2eproto[] =
   "rgo\022\014\n\004Name\030\001 \001(\t\022\013\n\003lcg\030\002 \001(\002\022\013\n\003tcg\030\003 "
   "\001(\002\022\013\n\003vcg\030\004 \001(\002\022\016\n\006length\030\005 \001(\002\022\017\n\007brea"
   "dth\030\006 \001(\002\022\016\n\006height\030\007 \001(\002\022\016\n\006weight\030\t \001("
-  "\002\"P\n\tConstants\022\014\n\004Name\030\001 \001(\t\022\013\n\003lcg\030\002 \001("
+  "\002\"l\n\tConstants\022\014\n\004Name\030\001 \001(\t\022\013\n\003lcg\030\002 \001("
   "\002\022\013\n\003tcg\030\003 \001(\002\022\013\n\003vcg\030\004 \001(\002\022\016\n\006weight\030\005 "
-  "\001(\002\"\215\001\n\014ShipBodyData\022 \n\010shipdata\030\001 \003(\0132\016"
-  ".ship.ShipData\022\030\n\004unit\030\002 \003(\0132\n.ship.Unit"
-  "\022\"\n\tconstants\030\003 \003(\0132\017.ship.Constants\022\035\n\004"
-  "bulk\030\006 \003(\0132\017.ship.BulkCargob\006proto3"
+  "\001(\002\022\r\n\005start\030\006 \001(\002\022\013\n\003end\030\007 \001(\002\"\215\001\n\014Ship"
+  "BodyData\022 \n\010shipdata\030\001 \003(\0132\016.ship.ShipDa"
+  "ta\022\030\n\004unit\030\002 \003(\0132\n.ship.Unit\022\"\n\tconstant"
+  "s\030\003 \003(\0132\017.ship.Constants\022\035\n\004bulk\030\006 \003(\0132\017"
+  ".ship.BulkCargob\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Ship_2eproto_deps[1] = {
 };
@@ -240,7 +243,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Shi
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Ship_2eproto_once;
 static bool descriptor_table_Ship_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Ship_2eproto = {
-  &descriptor_table_Ship_2eproto_initialized, descriptor_table_protodef_Ship_2eproto, "Ship.proto", 915,
+  &descriptor_table_Ship_2eproto_initialized, descriptor_table_protodef_Ship_2eproto, "Ship.proto", 943,
   &descriptor_table_Ship_2eproto_once, descriptor_table_Ship_2eproto_sccs, descriptor_table_Ship_2eproto_deps, 5, 0,
   schemas, file_default_instances, TableStruct_Ship_2eproto::offsets,
   file_level_metadata_Ship_2eproto, 5, file_level_enum_descriptors_Ship_2eproto, file_level_service_descriptors_Ship_2eproto,
@@ -2324,6 +2327,8 @@ const int Constants::kLcgFieldNumber;
 const int Constants::kTcgFieldNumber;
 const int Constants::kVcgFieldNumber;
 const int Constants::kWeightFieldNumber;
+const int Constants::kStartFieldNumber;
+const int Constants::kEndFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Constants::Constants()
@@ -2340,8 +2345,8 @@ Constants::Constants(const Constants& from)
     name_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.name_);
   }
   ::memcpy(&lcg_, &from.lcg_,
-    static_cast<size_t>(reinterpret_cast<char*>(&weight_) -
-    reinterpret_cast<char*>(&lcg_)) + sizeof(weight_));
+    static_cast<size_t>(reinterpret_cast<char*>(&end_) -
+    reinterpret_cast<char*>(&lcg_)) + sizeof(end_));
   // @@protoc_insertion_point(copy_constructor:ship.Constants)
 }
 
@@ -2349,8 +2354,8 @@ void Constants::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Constants_Ship_2eproto.base);
   name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   ::memset(&lcg_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&weight_) -
-      reinterpret_cast<char*>(&lcg_)) + sizeof(weight_));
+      reinterpret_cast<char*>(&end_) -
+      reinterpret_cast<char*>(&lcg_)) + sizeof(end_));
 }
 
 Constants::~Constants() {
@@ -2379,8 +2384,8 @@ void Constants::Clear() {
 
   name_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   ::memset(&lcg_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&weight_) -
-      reinterpret_cast<char*>(&lcg_)) + sizeof(weight_));
+      reinterpret_cast<char*>(&end_) -
+      reinterpret_cast<char*>(&lcg_)) + sizeof(end_));
   _internal_metadata_.Clear();
 }
 
@@ -2424,6 +2429,20 @@ const char* Constants::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::
       case 5:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 45)) {
           weight_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else goto handle_unusual;
+        continue;
+      // float start = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 53)) {
+          start_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else goto handle_unusual;
+        continue;
+      // float end = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 61)) {
+          end_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else goto handle_unusual;
         continue;
@@ -2524,6 +2543,32 @@ bool Constants::MergePartialFromCodedStream(
         break;
       }
 
+      // float start = 6;
+      case 6: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (53 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   float, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &start_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float end = 7;
+      case 7: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (61 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   float, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &end_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -2581,6 +2626,16 @@ void Constants::SerializeWithCachedSizes(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloat(5, this->weight(), output);
   }
 
+  // float start = 6;
+  if (!(this->start() <= 0 && this->start() >= 0)) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloat(6, this->start(), output);
+  }
+
+  // float end = 7;
+  if (!(this->end() <= 0 && this->end() >= 0)) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloat(7, this->end(), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -2623,6 +2678,16 @@ void Constants::SerializeWithCachedSizes(
   // float weight = 5;
   if (!(this->weight() <= 0 && this->weight() >= 0)) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(5, this->weight(), target);
+  }
+
+  // float start = 6;
+  if (!(this->start() <= 0 && this->start() >= 0)) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(6, this->start(), target);
+  }
+
+  // float end = 7;
+  if (!(this->end() <= 0 && this->end() >= 0)) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(7, this->end(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -2673,6 +2738,16 @@ size_t Constants::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
+  // float start = 6;
+  if (!(this->start() <= 0 && this->start() >= 0)) {
+    total_size += 1 + 4;
+  }
+
+  // float end = 7;
+  if (!(this->end() <= 0 && this->end() >= 0)) {
+    total_size += 1 + 4;
+  }
+
   int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
@@ -2716,6 +2791,12 @@ void Constants::MergeFrom(const Constants& from) {
   if (!(from.weight() <= 0 && from.weight() >= 0)) {
     set_weight(from.weight());
   }
+  if (!(from.start() <= 0 && from.start() >= 0)) {
+    set_start(from.start());
+  }
+  if (!(from.end() <= 0 && from.end() >= 0)) {
+    set_end(from.end());
+  }
 }
 
 void Constants::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -2749,6 +2830,8 @@ void Constants::InternalSwap(Constants* other) {
   swap(tcg_, other->tcg_);
   swap(vcg_, other->vcg_);
   swap(weight_, other->weight_);
+  swap(start_, other->start_);
+  swap(end_, other->end_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Constants::GetMetadata() const {
