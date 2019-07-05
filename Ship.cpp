@@ -545,31 +545,27 @@ float Ship::belasstung(float x) // Function to calculate the gravitational force
     float last=0.0f;
     for (long unsigned int i=0; i<UnitVec.size(); i++)
     {
-        if (UnitVec[i].u_LCG+UnitVec[i].u_length/2>x && UnitVec[i].u_LCG-UnitVec[i].u_length<=x)
+        if (UnitVec[i].u_LCG+UnitVec[i].u_length/2>x && UnitVec[i].u_LCG-UnitVec[i].u_length/2<=x)
         {
             last+=UnitVec[i].u_weight/UnitVec[i].u_length;
         }
     }
     for (long unsigned int i=0; i<ConVec.size(); i++)
     {
-        if (ConVec[i].con_start <= x && ConVec[i].con_end > x)
+        if (ConVec[i].con_start <= x && ConVec[i].con_end > x && ConVec[i].con_weight>0)
         {
             last+=ConVec[i].con_weight/(ConVec[i].con_end - ConVec[i].con_start);
         }
     }
     for (long unsigned int i=0; i<BulkVec.size(); i++)
     {
-        if (BulkVec[i].u_LCG-BulkVec[i].u_length/2<x && BulkVec[i].u_LCG+BulkVec[i].u_length/2 > x)
+        if (BulkVec[i].u_LCG-BulkVec[i].u_length/2<x && BulkVec[i].u_LCG+BulkVec[i].u_length/2 > x && BulkVec[i].u_weight>0)
         {
             last+=BulkVec[i].u_LCG/BulkVec[i].u_length;
         }
     }
+    float auf;
     last += s_lightShip/s_LOA;
-    return last;
-}
-
-float Ship::auftrieb(float x)
-{
     shipSize();
     for (int i=0; i!=10; i++)
     {
@@ -577,12 +573,16 @@ float Ship::auftrieb(float x)
         {
             if(s_height - section_height[i] < find_draft(disp()))
             {
-                float auf = (sectionlength*section_beam[i]*(find_draft(disp())-(s_height-section_height[i])))/sectionlength;
-                return auf;
+                auf = (sectionlength*section_beam[i]*(find_draft(disp())-(s_height-section_height[i])))/sectionlength;
             }
-            return 0.0f;
         }
     }
+    return last-auf;
+}
+
+float Ship::auftrieb(float x)
+{
+
 }
 // Saves all the data to file using the google protobuf protocol.
 // Quite easy to use and can be generates automatically.
