@@ -372,9 +372,15 @@ void CargoMasterFrame::update()
     strvectorx.clear();
     strvectory.clear();
 
-    for (float i=0; i<ShipBody.read_s_LOA(); i+=1)
-    {std::cout << ShipBody.auftrieb(i) << std::endl;}
-    std::cout << "Next" << std::endl;
+    for (float i=0; i<ShipBody.read_s_LOA(); i+=0.1f)
+    {
+        strvectorx.push_back(i);
+        strvectory.push_back(ShipBody.belasstung(i));
+    }
+    strvectorLayer->SetData(strvectorx, strvectory);
+    strvectorLayer->SetContinuity(true);
+    n_plot->Update();
+    n_plot->Fit();
 
     wxString statbar=wxString::Format(wxT("GM: %.2f \t Draft: %.2f \t List: %.1f \t Trim: %.2f \t Dead Weight reserve: %.0f"), ShipBody.gm(), ShipBody.find_draft(ShipBody.disp()), ShipBody.init_heel(), ShipBody.trim(), ShipBody.rest_dwt());
     StatusBar1->SetStatusText(statbar,0);
